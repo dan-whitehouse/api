@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 @ControllerAdvice
 public class GlobalExceptionHandler 
 {
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) 
-    private @ResponseBody Error badRequest(HttpServletRequest request, HttpServletResponse response, Exception ex) 
-    {
-    	Error error = new Error();
-    	error.setUrl(request.getRequestURL().toString());
-    	error.setStatus(500);
-    	error.setMessage("Internal Server Error"); 
-        error.setDescription(ex.getMessage());
-        return error;
-    }
-
+	/**** 40X ****/
+	 @ExceptionHandler(UnauthorizedException.class)
+	    @ResponseStatus(value = HttpStatus.UNAUTHORIZED) 
+	    private @ResponseBody Error unauthorized(HttpServletRequest request, HttpServletResponse response, Exception ex) 
+	    {
+	    	Error error = new Error();
+	    	error.setUrl(request.getRequestURL().toString());
+	    	error.setStatus(401);
+	    	error.setMessage("Unauthorized"); 
+	        error.setDescription(ex.getMessage());
+	        return error;
+	    }
+	 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND) 
     private @ResponseBody Error notFound(HttpServletRequest request, HttpServletResponse response, Exception ex) 
@@ -35,6 +35,19 @@ public class GlobalExceptionHandler
     	error.setUrl(request.getRequestURL().toString());
     	error.setStatus(404);
     	error.setMessage("Not Found"); 
+        error.setDescription(ex.getMessage());
+        return error;
+    }
+    
+    /**** 50X ****/
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) 
+    private @ResponseBody Error badRequest(HttpServletRequest request, HttpServletResponse response, Exception ex) 
+    {
+    	Error error = new Error();
+    	error.setUrl(request.getRequestURL().toString());
+    	error.setStatus(500);
+    	error.setMessage("Internal Server Error"); 
         error.setDescription(ex.getMessage());
         return error;
     }
