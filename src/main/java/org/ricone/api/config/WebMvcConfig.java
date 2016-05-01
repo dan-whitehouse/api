@@ -30,7 +30,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter
 		return viewResolver;
 	}
 
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) 
     {
@@ -40,7 +39,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter
     @Override
     public void addInterceptors(InterceptorRegistry registry) 
     {   	
-    	HandlerInterceptor interceptor = new AuthHandler();
-		registry.addInterceptor(interceptor );
+    	HandlerInterceptor authHandler = new AuthHandler();
+		registry.addInterceptor(authHandler);
 	}
 }
