@@ -12,25 +12,48 @@ public class AuthHandler extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{
-		if(StringUtils.isBlank(request.getHeader("Authorization")))
-		{
-			throw new UnauthorizedException("No token!");
-		}
-		else if(StringUtils.isNotBlank(request.getHeader("Authorization")))
+		boolean header = StringUtils.isNotBlank(request.getHeader("Authorization"));
+		boolean param = StringUtils.isNotBlank(request.getParameter("access_token"));
+		if(header || param)
 		{
 			JWTVerifier verifier = new JWTVerifier();
-			boolean verified = verifier.verify(request.getHeader("Authorization"));
-			
+			boolean verified = false;
+			if(header)
+			{
+				verified = verifier.verify(request.getHeader("Authorization"));
+			}
+			else if(param)
+			{
+				verified = verifier.verify(request.getParameter("access_token"));
+			}		
 			if(!verified)
 			{
 				throw new UnauthorizedException("Validation with security service failed.");
 			}
 		}
-		
-		if("true".equals(request.getParameter("clearCache"))) 
+		else
 		{
-			System.out.println("hidden param... :P");
+			throw new UnauthorizedException("Validation with security service failed.");
 		}
 		return super.preHandle(request, response, handler);
 	}
 }
+
+//if(StringUtils.isBlank(request.getHeader("Authorization")))
+//{
+//	throw new UnauthorizedException("No token!");
+//}
+//else if(StringUtils.isNotBlank(request.getHeader("Authorization")))
+//{
+//	JWTVerifier verifier = new JWTVerifier();
+//	boolean verified = verifier.verify(request.getHeader("Authorization"));
+//	
+//	if(!verified)
+//	{
+//		throw new UnauthorizedException("Validation with security service failed.");
+//	}
+//}
+//else if(StringUtils.isBlank(request.getParameter("access_token")))
+//{
+//	JWTVerifier verifier = new JWTVerifier();
+//}
