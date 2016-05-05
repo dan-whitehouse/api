@@ -1,6 +1,4 @@
 package org.ricone.api.security;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 
 public class JWTVerifier 
@@ -11,18 +9,16 @@ public class JWTVerifier
 
 	public boolean verify(String token) 
 	{
-		ObjectMapper map = new ObjectMapper();	
-		String key = "";
+		String key = "thequickbrownfoxjumpedoverthelazydog"; //CastleLearningOnline - Test Config
 		try 
 		{
-			DecodedToken dt = map.readValue(Jwts.parser().parsePlaintextJws(token).getBody(), DecodedToken.class);
-			key = "";
-			//TODO - Use: dt.getApplication_id(); to get key
+			Jwts.parser().setSigningKey(key.getBytes()).requireIssuer("http://auth.ricone.org/").parseClaimsJws(token);	
+			return true;
 		} 
 		catch (Exception e) 
 		{
+			System.out.println("catch - " + e.getMessage());
 			return false;
 		}	
-		return Jwts.parser().setSigningKey(key).requireIssuer("http://security.oneapidev.org/").isSigned(token);
 	}	
 }

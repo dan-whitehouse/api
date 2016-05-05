@@ -2,12 +2,12 @@ package org.ricone.api.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class SpringMvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() 
 	{
-		return new Class[] { WebMvcConfig.class };
+		return new Class[] { Config.class };
 	}
  
 	@Override

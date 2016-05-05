@@ -1,9 +1,15 @@
 package org.ricone.api.config;
 
 import org.ricone.api.config.handler.AuthHandler;
+import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.EndpointWebMvcAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.HealthIndicatorAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.ManagementServerPropertiesAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -14,9 +20,16 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
-@EnableWebMvc
+
 @ComponentScan(basePackages = "org.ricone.api")
-public class WebMvcConfig extends WebMvcConfigurerAdapter 
+@Import({
+		EndpointWebMvcAutoConfiguration.class, 
+		ManagementServerPropertiesAutoConfiguration.class, 
+		EndpointAutoConfiguration.class, 
+		HealthIndicatorAutoConfiguration.class})
+@PropertySource("classpath:application.properties")
+@EnableWebMvc
+public class Config extends WebMvcConfigurerAdapter 
 {
 	
 	@Bean(name="viewProject")

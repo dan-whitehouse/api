@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GlobalController 
 {	
-    @RequestMapping(value = "*", method = RequestMethod.GET)
+    @RequestMapping(value = "/*", method = RequestMethod.GET)
     public void notFound() throws NotFoundException 
     { 
         throw new NotFoundException("Try again....");

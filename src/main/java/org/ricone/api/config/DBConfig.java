@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "org.ricone.api")
 @PropertySource("classpath:database.properties")
-public class DataBaseConfig {
+public class DBConfig {
 
     private static final String PROPERTY_NAME_DATABASE_DRIVER   = "db.driver";
     private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
