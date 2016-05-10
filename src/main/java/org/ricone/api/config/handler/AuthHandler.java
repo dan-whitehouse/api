@@ -1,23 +1,34 @@
 package org.ricone.api.config.handler;
+import java.io.IOException;
 import java.util.Date;
-
+import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.exception.ConfigException;
 import org.ricone.api.exception.UnauthorizedException;
 import org.ricone.api.security.DecodedToken;
 import org.ricone.api.security.JWTVerifier;
 import org.ricone.api.security.Session;
 import org.ricone.api.security.SessionManager;
 import org.ricone.api.security.TokenDecoder;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class AuthHandler extends HandlerInterceptorAdapter 
 {
+	private final String PROPERTY_ALLOW_TOKEN_PARAMETER = "security.auth.allowTokenParameter";
+	private final String PROPERTY_FILE = "config.properties";
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{	
+
+		boolean allowParam = allowTokenParams();
 		boolean header = StringUtils.isNotBlank(request.getHeader("Authorization"));
 		boolean param = StringUtils.isNotBlank(request.getParameter("access_token"));
 		String token = null;
@@ -28,15 +39,16 @@ public class AuthHandler extends HandlerInterceptorAdapter
 			{
 				token = request.getHeader("Authorization");				
 			}
-			else if(param)
+			else if(param) //Parameter tokens are allowed, and parameter is set
 			{
-				token = request.getParameter("access_token");
+				if(!allowParam) throw new UnauthorizedException("Token Parameter Not Allowed" );
+				else token = request.getParameter("access_token");
 			}
 			verified = JWTVerifier.verify(token);
 					
 			if(!verified)
 			{
-				throw new UnauthorizedException("Validation with security service failed: Invalid Token" );
+				throw new UnauthorizedException("Invalid Token" );
 			}
 			else if(verified)
 			{
@@ -56,11 +68,26 @@ public class AuthHandler extends HandlerInterceptorAdapter
 		}
 		else
 		{
-			throw new UnauthorizedException("Validation with security service failed: No Token Provided");
+			throw new UnauthorizedException("No Token Provided");
 		}
 		return super.preHandle(request, response, handler);
 	}
-
+	
+	private boolean allowTokenParams() throws ConfigException
+	{
+		Resource resource = new ClassPathResource(PROPERTY_FILE);
+		Properties props = null;
+		try 
+		{
+			props = PropertiesLoaderUtils.loadProperties(resource);
+			return BooleanUtils.toBoolean(props.getProperty(PROPERTY_ALLOW_TOKEN_PARAMETER));
+		}
+		catch (IOException e) 
+		{
+			throw new ConfigException("Could not load: " + PROPERTY_FILE);
+		}
+		
+	}
 	private void checkAgainstExisting(DecodedToken decodedToken, Session session) throws UnauthorizedException 
 	{
 		if(!StringUtils.equalsIgnoreCase(decodedToken.getTokenString(), session.getToken().getTokenString()))

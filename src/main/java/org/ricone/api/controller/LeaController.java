@@ -45,8 +45,8 @@ public class LeaController
     
     
     @RequestMapping(value= "/leas/{refId}", method = RequestMethod.GET)
-    public Lea getLeaByRefId(@PathVariable(value="refId") UUID refId) throws Exception
+    public Lea getLeaByRefId(@PathVariable(value="refId") String refId) throws Exception
     {
-        return service.getByRefId(refId.toString());
+        return service.getByRefId(refId);
     }   
 }

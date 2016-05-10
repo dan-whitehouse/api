@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ControllerAdvice
 public class GlobalExceptionHandler 
 {
+
 	/**** 40X ****/
 	 @ExceptionHandler(UnauthorizedException.class)
 	    @ResponseStatus(value = HttpStatus.UNAUTHORIZED) 
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler
 	    	error.setUrl(request.getRequestURL().toString());
 	    	error.setStatus(401);
 	    	error.setMessage("Unauthorized"); 
-	        error.setDescription(ex.getMessage());
+	        error.setDescription("Validation with security service failed: " + ex.getMessage());
 	        return error;
 	    }
 	 
@@ -49,6 +50,18 @@ public class GlobalExceptionHandler
     	error.setStatus(500);
     	error.setMessage("Internal Server Error"); 
         error.setDescription(ex.getMessage());
+        return error;
+    }
+    
+    @ExceptionHandler(ConfigException.class)
+    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE) 
+    private @ResponseBody Error configError(HttpServletRequest request, HttpServletResponse response, Exception ex) 
+    {
+    	Error error = new Error();
+    	error.setUrl(request.getRequestURL().toString());
+    	error.setStatus(503);
+    	error.setMessage("Service Unavailable"); 
+        error.setDescription("Configuration Error: " + ex.getMessage());
         return error;
     }
 }
