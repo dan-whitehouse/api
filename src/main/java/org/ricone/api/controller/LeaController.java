@@ -23,7 +23,12 @@ public class LeaController
     @RequestMapping(value = "/leas", method = RequestMethod.GET) 
     public List<Lea> getLeas() throws Exception
     { 
-        return service.getLeas();
+    	List<Lea> leas = service.getLeas(); 
+    	
+    	//http://www.dotnetperls.com/lambda-java
+    	//leas.stream().map((l) -> l.getLearefId() + "-000000001").forEach(System.out::println);
+    	//leas.removeIf((l) -> l.getLeaid().equalsIgnoreCase("12345"));
+        return leas;
     }
     
     @RequestMapping(value = "/leas", params = { "pageNum", "pageSize" }, method = RequestMethod.GET) 
@@ -31,6 +36,9 @@ public class LeaController
     { 
     	System.out.println(pageNum + " | " + pageSize);
     	 
+    	
+    	
+    	
         return service.getLeas();
     }
     

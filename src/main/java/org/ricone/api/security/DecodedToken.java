@@ -6,6 +6,7 @@ public class DecodedToken
 	private long iat;
 	private long exp;
 	private String iss;
+	private String tokenString;
 
 	
 	public DecodedToken()
@@ -35,7 +36,8 @@ public class DecodedToken
 	}
 	public void setExp(long exp)
 	{
-		this.exp = exp;
+		long milli = Long.parseLong(exp + "000");
+		this.exp = milli;
 	}
 	public String getIss()
 	{
@@ -44,5 +46,14 @@ public class DecodedToken
 	public void setIss(String iss)
 	{
 		this.iss = iss;
+	}
+
+	public String getTokenString() {
+		return tokenString;
+	}
+
+	public void setTokenString(String tokenString) {
+		this.tokenString = tokenString;
 	}	
+	
 }

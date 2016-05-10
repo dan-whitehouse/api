@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.view.JstlView;
 		HealthIndicatorAutoConfiguration.class})
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
+@EnableScheduling
 public class Config extends WebMvcConfigurerAdapter 
 {
 	

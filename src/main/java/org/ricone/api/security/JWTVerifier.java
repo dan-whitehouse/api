@@ -7,7 +7,7 @@ public class JWTVerifier
 	{		
 	}
 
-	public boolean verify(String token) 
+	public static boolean verify(String token) 
 	{
 		String key = "thequickbrownfoxjumpedoverthelazydog"; //CastleLearningOnline - Test Config
 		try 
@@ -15,10 +15,9 @@ public class JWTVerifier
 			Jwts.parser().setSigningKey(key.getBytes()).requireIssuer("http://auth.ricone.org/").parseClaimsJws(token);	
 			return true;
 		} 
-		catch (Exception e) 
+		catch (Exception e) //Failed to verify, return false
 		{
-			System.out.println("catch - " + e.getMessage());
 			return false;
 		}	
-	}	
+	}
 }
