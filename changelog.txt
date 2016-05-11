@@ -1,0 +1,20 @@
+NOTES: Need connection to config service, should try testing mapping, and better query writing which allows filtering.
+
+0.0.4
+	- Parameter Tokens being allowed is now configurable through config.properties.
+	- Created new Exception (ConfigException) which should be returned when something is configured improperly.
+	- Added changelog.txt to keep track of major changes, as well as writing up old improvements.
+	- Moved AuthHandler to security package.
+	
+0.0.3
+	- Created SessionManager to hold onto valid tokens associated with the application_id defined in the DecodedToken.
+	- Added logic to AuthHandler to invalidate tokens which are valid, but the expiry date is less then the token saved by the SessionManager.
+		- Tokens which value are equal are valid as long as the token continues to validate or is overwritten by a newer token.
+	- Created SessionTask which will remove expired sessions from the SessionManager.
+	
+0.0.2
+	- Created AuthHandler to check for tokens in the headers as well as query parameters globally.
+	- Added GlobalExceptionHandler to allow the API to return custom Exceptions which report proper HTTP status codes.
+	
+0.0.1
+	- Basic Setup of Controllers, Services, DAOs, and Models.

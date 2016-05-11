@@ -1,4 +1,4 @@
-package org.ricone.api.config.handler;
+package org.ricone.api.security;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
@@ -9,11 +9,6 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.exception.ConfigException;
 import org.ricone.api.exception.UnauthorizedException;
-import org.ricone.api.security.DecodedToken;
-import org.ricone.api.security.JWTVerifier;
-import org.ricone.api.security.Session;
-import org.ricone.api.security.SessionManager;
-import org.ricone.api.security.TokenDecoder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;

@@ -1,6 +1,6 @@
 package org.ricone.api.config;
 
-import org.ricone.api.config.handler.AuthHandler;
+import org.ricone.api.security.AuthHandler;
 import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.EndpointWebMvcAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.HealthIndicatorAutoConfiguration;
@@ -48,7 +48,8 @@ public class Config extends WebMvcConfigurerAdapter
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) 
     {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/resources/**")
+        		.addResourceLocations("/resources/");
     }
     
     @Override
