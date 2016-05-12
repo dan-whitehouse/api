@@ -1,13 +1,14 @@
 package org.ricone.api.security;
 
+import java.util.Date;
+
 public class DecodedToken
 {
 	private String application_id;
-	private long iat;
-	private long exp;
+	private Date iat;
+	private Date exp;
 	private String iss;
 	private String tokenString;
-
 	
 	public DecodedToken()
 	{
@@ -22,22 +23,21 @@ public class DecodedToken
 	{
 		this.application_id = application_id;
 	}
-	public long getIat()
+	public Date getIat()
 	{
 		return iat;
 	}
 	public void setIat(long iat)
 	{
-		this.iat = iat;
+		this.iat = new Date(Long.parseLong(iat + "000"));
 	}
-	public long getExp()
+	public Date getExp()
 	{
 		return exp;
 	}
 	public void setExp(long exp)
 	{
-		long milli = Long.parseLong(exp + "000");
-		this.exp = milli;
+		this.exp = new Date(Long.parseLong(exp + "000"));
 	}
 	public String getIss()
 	{

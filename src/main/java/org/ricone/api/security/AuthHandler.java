@@ -1,10 +1,8 @@
 package org.ricone.api.security;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.exception.ConfigException;
@@ -22,14 +20,14 @@ public class AuthHandler extends HandlerInterceptorAdapter
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{	
-
 		boolean allowParam = allowTokenParams();
 		boolean header = StringUtils.isNotBlank(request.getHeader("Authorization"));
-		boolean param = StringUtils.isNotBlank(request.getParameter("access_token"));
-		String token = null;
+		boolean param = StringUtils.isNotBlank(request.getParameter("access_token"));		
 		if(header || param)
-		{			
+		{		
+			String token = null;
 			boolean verified = false;
+			
 			if(header)
 			{
 				token = request.getHeader("Authorization");				
@@ -83,21 +81,19 @@ public class AuthHandler extends HandlerInterceptorAdapter
 		}
 		
 	}
+	
 	private void checkAgainstExisting(DecodedToken decodedToken, Session session) throws UnauthorizedException 
 	{
 		if(!StringUtils.equalsIgnoreCase(decodedToken.getTokenString(), session.getToken().getTokenString()))
-		{
-			Date d1 = new Date(decodedToken.getExp());
-			Date d2 = new Date(session.getToken().getExp());	
-			boolean isNewer = d1.after(d2);
-			
+		{	
+			boolean isNewer = decodedToken.getExp().after(session.getToken().getExp());		
 			if(isNewer)
 			{
 				session.setToken(decodedToken);
 			}
 			else
 			{
-				throw new UnauthorizedException("Validation with security service failed: Token Expired" );
+				throw new UnauthorizedException("Token Expired");
 			}
 		}
 	}

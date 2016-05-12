@@ -1,5 +1,6 @@
 package org.ricone.api.config;
 
+import org.ricone.api.controller.HeaderHandler;
 import org.ricone.api.security.AuthHandler;
 import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.EndpointWebMvcAutoConfiguration;
@@ -56,6 +57,9 @@ public class Config extends WebMvcConfigurerAdapter
     public void addInterceptors(InterceptorRegistry registry) 
     {   	
     	HandlerInterceptor authHandler = new AuthHandler();
+    	HandlerInterceptor headerHandler = new HeaderHandler();
+    	
 		registry.addInterceptor(authHandler);
+		registry.addInterceptor(headerHandler);
 	}
 }

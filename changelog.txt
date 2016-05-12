@@ -1,5 +1,9 @@
 NOTES: Need connection to config service, should try testing mapping, and better query writing which allows filtering.
 
+0.0.5
+	- Created HeaderHandler to globally return response headers.
+	- Created IController so all other Controllers follow the rules.
+
 0.0.4
 	- Parameter Tokens being allowed is now configurable through config.properties.
 	- Created new Exception (ConfigException) which should be returned when something is configured improperly.

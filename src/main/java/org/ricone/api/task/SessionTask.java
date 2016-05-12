@@ -16,7 +16,7 @@ public class SessionTask
     	Date now = new Date();
         for(Session session: SessionManager.getInstance().getSessions().values())
         {
-        	if(now.after(new Date(session.getToken().getExp())))
+        	if(now.after(session.getToken().getExp()))
         	{
         		SessionManager.getInstance().removeSession(session.getToken().getApplication_id());
         	}
