@@ -1,22 +1,16 @@
 package org.ricone.api.security;
-import java.io.IOException;
-import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.config.ConfigProperties;
 import org.ricone.api.exception.ConfigException;
 import org.ricone.api.exception.UnauthorizedException;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class AuthHandler extends HandlerInterceptorAdapter 
 {
 	private final String PROPERTY_ALLOW_TOKEN_PARAMETER = "security.auth.allowTokenParameter";
-	private final String PROPERTY_FILE = "config.properties";
-	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{	
@@ -37,15 +31,15 @@ public class AuthHandler extends HandlerInterceptorAdapter
 				if(!allowParam) throw new UnauthorizedException("Token Parameter Not Allowed" );
 				else token = request.getParameter("access_token");
 			}
-			verified = JWTVerifier.verify(token);
+			DecodedToken decodedToken = TokenDecoder.decodeToken(token);
+			verified = JWTVerifier.verify(decodedToken);
 					
 			if(!verified)
 			{
 				throw new UnauthorizedException("Invalid Token" );
 			}
 			else if(verified)
-			{
-				DecodedToken decodedToken = TokenDecoder.decodeToken(token);
+			{			
 				Session session = SessionManager.getInstance().getSessions().get(decodedToken.getApplication_id());
 				if(session != null)
 				{
@@ -68,18 +62,7 @@ public class AuthHandler extends HandlerInterceptorAdapter
 	
 	private boolean allowTokenParams() throws ConfigException
 	{
-		Resource resource = new ClassPathResource(PROPERTY_FILE);
-		Properties props = null;
-		try 
-		{
-			props = PropertiesLoaderUtils.loadProperties(resource);
-			return BooleanUtils.toBoolean(props.getProperty(PROPERTY_ALLOW_TOKEN_PARAMETER));
-		}
-		catch (IOException e) 
-		{
-			throw new ConfigException("Could not load: " + PROPERTY_FILE);
-		}
-		
+		return BooleanUtils.toBoolean(ConfigProperties.getInstance().getProperty(PROPERTY_ALLOW_TOKEN_PARAMETER));		
 	}
 	
 	private void checkAgainstExisting(DecodedToken decodedToken, Session session) throws UnauthorizedException 

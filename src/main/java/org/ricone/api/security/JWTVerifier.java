@@ -1,4 +1,7 @@
 package org.ricone.api.security;
+import org.ricone.api.component.config.ConfigService;
+import org.ricone.api.exception.ConfigException;
+
 import io.jsonwebtoken.Jwts;
 
 public class JWTVerifier 
@@ -7,12 +10,13 @@ public class JWTVerifier
 	{		
 	}
 
-	public static boolean verify(String token) 
+	public static boolean verify(DecodedToken token) throws ConfigException 
 	{
-		String key = "thequickbrownfoxjumpedoverthelazydog"; //CastleLearningOnline - Test Config
+		String key = ConfigService.getInstance().getApp(token.getApplication_id()).getProviderSecret(); 
+		//String key =  "thequickbrownfoxjumpedoverthelazydog"; //CastleLearningOnline
 		try 
 		{
-			Jwts.parser().setSigningKey(key.getBytes()).requireIssuer("http://auth.ricone.org/").parseClaimsJws(token);	
+			Jwts.parser().setSigningKey(key.getBytes()).requireIssuer("http://auth.ricone.org/").parseClaimsJws(token.getTokenString());	
 			return true;
 		} 
 		catch (Exception e) //Failed to verify, return false

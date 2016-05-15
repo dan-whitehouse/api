@@ -1,4 +1,4 @@
-package org.ricone.api.component.config;
+package org.ricone.api.component.config.model;
 
 public class Profile
 {

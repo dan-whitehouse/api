@@ -1,7 +1,7 @@
 package org.ricone.api.security;
 
-import org.ricone.api.component.config.App;
-import org.ricone.api.component.config.Profile;
+import org.ricone.api.component.config.model.App;
+import org.ricone.api.component.config.model.Profile;
 
 public class Session 
 {

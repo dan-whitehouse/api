@@ -1,11 +1,14 @@
 package org.ricone.api.config;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.ricone.api.component.config.ConfigService;
+import org.ricone.api.exception.ConfigException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -37,13 +40,31 @@ public class DBConfig {
 	private Environment env;
 	
 	@Bean
-	public DataSource dataSource() {
+	public DataSource dataSource() throws ConfigException
+	{
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		
 		dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-		dataSource.setUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
-		dataSource.setUsername(env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
-		dataSource.setPassword(env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
+//		dataSource.setUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
+//		dataSource.setUsername(env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
+//		dataSource.setPassword(env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
+		
+		dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
+		try 
+		{
+			dataSource.setUrl(ConfigProperties.getInstance().getProperty("db.core.url"));
+			dataSource.setUsername(ConfigProperties.getInstance().getProperty("db.core.username"));
+			dataSource.setPassword(ConfigProperties.getInstance().getProperty("db.core.password"));
+			
+			System.out.println(dataSource.getUrl());
+			System.out.println(dataSource.getUsername());
+			System.out.println(dataSource.getPassword());
+		} 
+		catch (ConfigException e) 
+		{
+			throw new ConfigException("test");
+		}
+		
 		
 		return dataSource;
 	}
@@ -57,14 +78,15 @@ public class DBConfig {
 	}
 	
 	@Bean
-	public HibernateTransactionManager transactionManager() {
+	public HibernateTransactionManager transactionManager() throws ConfigException {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(sessionFactory().getObject());
 		return transactionManager;
 	}
 	
 	@Bean
-	public LocalSessionFactoryBean sessionFactory() {
+	public LocalSessionFactoryBean sessionFactory() throws ConfigException 
+	{
 		LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
 		sessionFactoryBean.setDataSource(dataSource());
 		sessionFactoryBean.setPackagesToScan(env.getRequiredProperty(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN));

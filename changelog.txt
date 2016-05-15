@@ -1,5 +1,16 @@
-NOTES: Need connection to config service, should try testing mapping, and better query writing which allows filtering.
+NOTES: should try testing mapping, and better query writing which allows filtering.
 
+0.0.6
+	- Created ConfigProperties to easily store and access configurable information.
+	- Created Configure to load ConfigProperties at startup and add properties which come from the system environment variables.
+	- Added Provider, ProviderKV, and DistrictKV to component.config.model
+	- Added ConfigService to retrieve data from external configuration service.
+	- Small tweaks to other classes so they would work with the rest of the additions.
+		- Initializer now starts Configure.
+		- DBConfig now loads properties from ConfigProperties
+		- JWTVerifier now retrieves sharedSecret from ConfigService.
+		- Removed catalog annotation from Lea and LeaTelepohone.
+	
 0.0.5
 	- Created HeaderHandler to globally return response headers.
 	- Created IController so all other Controllers follow the rules.

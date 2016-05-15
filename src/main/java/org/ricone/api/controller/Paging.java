@@ -5,16 +5,20 @@ public class Paging
 	private int pageNum;
 	private int pageSize;
 	
-	public int getPageNum() {
+	public int getPageNum() 
+	{
 		return pageNum;
 	}
-	public void setPageNum(int pageNum) {
+	public void setPageNum(int pageNum) 
+	{
 		this.pageNum = pageNum;
 	}
-	public int getPageSize() {
+	public int getPageSize() 
+	{
 		return pageSize;
 	}
-	public void setPageSize(int pageSize) {
+	public void setPageSize(int pageSize) 
+	{
 		this.pageSize = pageSize;
 	}
 }

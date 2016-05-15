@@ -1,4 +1,4 @@
-package org.ricone.api.component.config;
+package org.ricone.api.component.config.model;
 
 public class Credential
 {
@@ -14,6 +14,12 @@ public class Credential
 		this.ttl = ttl;
 		this.created = created;
 		this.userId = userId;
+	}
+	
+	public Credential()
+	{
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	
 	public String getId()

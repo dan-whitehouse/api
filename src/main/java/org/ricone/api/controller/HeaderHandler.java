@@ -20,6 +20,7 @@ public class HeaderHandler extends HandlerInterceptorAdapter
 		return super.preHandle(request, response, handler);
 	}
 	
+	//Return proper paging headers based on request.
 	private void setPaging(HttpServletRequest request, HttpServletResponse response)
 	{
 		boolean pagingNumHeader = StringUtils.isNotBlank(request.getHeader(pageNum));
