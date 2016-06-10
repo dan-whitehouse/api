@@ -56,9 +56,9 @@ public class DBConfig {
 			dataSource.setUsername(ConfigProperties.getInstance().getProperty("db.core.username"));
 			dataSource.setPassword(ConfigProperties.getInstance().getProperty("db.core.password"));
 			
-			System.out.println(dataSource.getUrl());
-			System.out.println(dataSource.getUsername());
-			System.out.println(dataSource.getPassword());
+//			System.out.println(dataSource.getUrl());
+//			System.out.println(dataSource.getUsername());
+//			System.out.println(dataSource.getPassword());
 		} 
 		catch (ConfigException e) 
 		{

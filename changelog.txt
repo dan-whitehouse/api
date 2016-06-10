@@ -1,5 +1,10 @@
 NOTES: should try testing mapping, and better query writing which allows filtering.
 
+0.0.7
+	- Added setAdditionalHeaders method in HeaderHandler to now set any additional globally headers.
+	- Created LogHandler to globally return logs.
+	- Created Log to contain the log information.
+
 0.0.6
 	- Created ConfigProperties to easily store and access configurable information.
 	- Created Configure to load ConfigProperties at startup and add properties which come from the system environment variables.

@@ -18,7 +18,7 @@ public class LeaService {
 	@Autowired
 	LeaDao laeDao ;
 	
-	public List<Lea> getLeas()
+	public List<Lea> getLeas() throws NotFoundException
 	{
 		return laeDao.getLeas();
 	}

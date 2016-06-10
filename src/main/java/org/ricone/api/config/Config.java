@@ -1,5 +1,6 @@
 package org.ricone.api.config;
 
+import org.ricone.api.component.logging.LogHandler;
 import org.ricone.api.controller.HeaderHandler;
 import org.ricone.api.security.AuthHandler;
 import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
@@ -58,8 +59,10 @@ public class Config extends WebMvcConfigurerAdapter
     {   	
     	HandlerInterceptor authHandler = new AuthHandler();
     	HandlerInterceptor headerHandler = new HeaderHandler();
+    	HandlerInterceptor logHandler = new LogHandler();
     	
 		registry.addInterceptor(authHandler);
 		registry.addInterceptor(headerHandler);
+		registry.addInterceptor(logHandler);
 	}
 }

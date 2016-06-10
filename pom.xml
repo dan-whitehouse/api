@@ -6,7 +6,7 @@
 	<artifactId>api</artifactId>
 	<name>ricone</name>
 	<packaging>war</packaging>
-	<version>0.0.5-BUILD-SNAPSHOT</version>
+	<version>0.0.7-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.8</java-version>
 		<servlet-version>3.0.1</servlet-version>
@@ -24,7 +24,16 @@
 		<servletapi.version>3.1.0</servletapi.version>
 		<logback.version>1.1.3</logback.version>
 		<jcl.slf4j.version>1.7.12</jcl.slf4j.version>
+		<!-- QueryDSL -->
+		<querydsl.version>4.1.1</querydsl.version>
 	</properties>
+<!-- 	<repositories>  -->
+<!--         <repository>  -->
+<!--             <id>splunk-artifactory</id>  -->
+<!--             <name>Splunk Releases</name>  -->
+<!--             <url>http://splunk.artifactoryonline.com/splunk/ext-releases-local</url>  -->
+<!--         </repository>  -->
+<!--     </repositories>  -->
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -171,19 +180,69 @@
 			<version>1.9.13</version>
 		</dependency>
 		
-		<!-- Apache Commons -->
+		<!-- Apache -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.apache.logging.log4j</groupId>
+    		<artifactId>log4j-jcl</artifactId>
+    		<version>2.3</version>
+ 		</dependency>
+		
+		<!-- Splunk -->
+<!-- 		<dependency>  -->
+<!--             <groupId>com.splunk.logging</groupId>  -->
+<!--             <artifactId>splunk-library-javalogging</artifactId>  -->
+<!--             <version>1.5.0</version>  -->
+<!--         </dependency>  -->
 		
 		<!-- JWT -->
 		<dependency>
     		<groupId>io.jsonwebtoken</groupId>
     		<artifactId>jjwt</artifactId>
     		<version>0.6.0</version>
+		</dependency>	
+		
+		<!-- QueryDSL -->	
+		<dependency>
+		  <groupId>com.querydsl</groupId>
+		  <artifactId>querydsl-apt</artifactId>
+		  <version>${querydsl.version}</version>
+		  <scope>provided</scope>
 		</dependency>		
+		<dependency>
+		  <groupId>com.querydsl</groupId>
+		  <artifactId>querydsl-jpa</artifactId>
+		  <version>${querydsl.version}</version>
+		</dependency>		
+<!-- 		<dependency> -->
+<!-- 		  <groupId>org.slf4j</groupId> -->
+<!-- 		  <artifactId>slf4j-log4j12</artifactId> -->
+<!-- 		  <version>1.6.1</version> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+			<version>1.3.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-cypher-compiler-2.2</artifactId>
+			<version>2.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-core</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -228,6 +287,22 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
+			<!--<plugin>
+		      <groupId>com.mysema.maven</groupId>
+		      <artifactId>apt-maven-plugin</artifactId>
+		      <version>1.1.3</version>
+		      <executions>
+		        <execution>
+		          <goals>
+		            <goal>process</goal>
+		          </goals>
+		          <configuration>
+		            <outputDirectory>target/generated-sources/java</outputDirectory>
+		            <processor>com.querydsl.apt.hibernate.HibernateAnnotationProcessor</processor>
+		          </configuration>
+		        </execution>
+		      </executions>
+		    </plugin>  -->
 		</plugins>
 	</build>
 </project>

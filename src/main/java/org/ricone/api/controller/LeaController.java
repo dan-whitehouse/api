@@ -47,7 +47,7 @@ public class LeaController implements IController<Lea>
     @RequestMapping(value= "/leas/{refId}/*", method = RequestMethod.GET)
     public List<Lea> getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     { 
-    	System.out.println("wild card");
+    	//System.out.println("wild card");
     	List<Lea> leas = service.getLeas(); 
         return leas;
     }

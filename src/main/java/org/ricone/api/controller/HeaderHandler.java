@@ -13,11 +13,16 @@ public class HeaderHandler extends HandlerInterceptorAdapter
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{	
-		response.setStatus(response.getStatus());
-		response.setHeader("ServicePath", request.getRequestURI());
-		setPaging(request, response);
-			
+		response.setStatus(response.getStatus());		
+		setAdditionalHeaders(request, response);
+		setPaging(request, response);			
 		return super.preHandle(request, response, handler);
+	}
+	
+	private void setAdditionalHeaders(HttpServletRequest request, HttpServletResponse response)
+	{
+		response.setHeader("ServicePath", request.getRequestURI());
+		response.setHeader("Cache-Control", "no-cache, no-store");
 	}
 	
 	//Return proper paging headers based on request.
@@ -38,5 +43,5 @@ public class HeaderHandler extends HandlerInterceptorAdapter
 			response.setHeader("PageNumber", request.getParameter(pageNum));
 			response.setHeader("PageSize", request.getParameter(pageSize));
 		}
-	}
+	}	
 }
