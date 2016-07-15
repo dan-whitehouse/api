@@ -3,6 +3,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.cache.AppCache;
+import org.ricone.api.cache.ProfileCache;
+import org.ricone.api.component.config.model.App;
 import org.ricone.api.config.ConfigProperties;
 import org.ricone.api.exception.ConfigException;
 import org.ricone.api.exception.UnauthorizedException;
@@ -49,6 +52,9 @@ public class AuthHandler extends HandlerInterceptorAdapter
 				{
 					session = new Session();
 					session.setToken(decodedToken);
+					App app = AppCache.getInstance().getApp(decodedToken.getApplication_id());
+					session.setApp(app);
+					session.setProfile(ProfileCache.getInstance().getProfile(app.getProfile_id()));
 					SessionManager.getInstance().addSession(decodedToken.getApplication_id(), session);
 				}
 			}

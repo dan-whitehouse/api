@@ -87,7 +87,22 @@ public class ConfigService
 		}		
 	}
 	
-	public Profile getProfile(String appId)
+	public Profile[] getProfiles()
+	{  
+		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();		
+		try
+		{
+			headers.set("Authorization", getAccessToken());
+			HttpEntity<?> entity = new HttpEntity<Object>(headers);
+			ResponseEntity<Profile[]> response = rt.exchange((getUrl() +  "/profiles"), HttpMethod.GET, entity, Profile[].class);
+			return response.getBody();
+		}
+		catch(Exception e){}	
+		return null;
+	}
+	
+	public Profile getProfileByAppId(String appId)
 	{  
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();		
@@ -102,6 +117,22 @@ public class ConfigService
 		return null;
 	}
 
+	
+	public App[] getApps()
+	{		
+		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();		
+		try
+		{
+			headers.set("Authorization", getAccessToken());
+			HttpEntity<?> entity = new HttpEntity<Object>(headers);
+			ResponseEntity<App[]> response = rt.exchange((getUrl() +  "/app"), HttpMethod.GET, entity, App[].class);
+			return response.getBody();
+		}
+		catch(Exception e){}	
+		return null;
+	}
+	
 	public App getApp(String appId)
 	{		
 		RestTemplate rt = new RestTemplate();

@@ -1,8 +1,14 @@
 package org.ricone.api.config;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.ricone.api.cache.AppCache;
+import org.ricone.api.cache.FileManager;
+import org.ricone.api.cache.ProfileCache;
 import org.ricone.api.component.config.ConfigService;
+import org.ricone.api.component.config.model.App;
+import org.ricone.api.component.config.model.Profile;
 import org.ricone.api.exception.ConfigException;
 
 public class Configure 
@@ -13,8 +19,11 @@ public class Configure
 		{
 			setConfigProperties();
 			ConfigService.getInstance().initializeCredential();
+			initializeAppCache();
+			initializeProfileCache();
+			
 		} 
-		catch (ConfigException e) 
+		catch (ConfigException | IOException e) 
 		{
 			e.printStackTrace();
 		}
@@ -22,6 +31,7 @@ public class Configure
 	
 	private static void setConfigProperties() throws ConfigException
 	{
+		System.out.println("Loading Config Properties....");
 		//From Environment
 		ConfigProperties.getInstance().setProperty("component.config.provider", System.getenv("provider_id"));
 		ConfigProperties.getInstance().setProperty("component.config.username", System.getenv("api_config_username"));
@@ -50,6 +60,67 @@ public class Configure
 		catch(ConfigException e)
 		{
 			throw new ConfigException("Failed to retrieve ProviderKV");
+		}
+	}
+	
+	public static void initializeAppCache() throws ConfigException
+	{
+		System.out.println("Loading App Cache....");
+		App[] apps = null; 
+		try
+		{
+			apps = ConfigService.getInstance().getApps();
+		}
+		finally
+		{
+			if(apps != null)
+			{
+				for(App app : apps)
+				{
+					AppCache.getInstance().addApp(app.getId(), app);
+				}
+			}
+			else
+			{
+				throw new ConfigException("Failed to create App Cache");
+			}
+		}
+	}
+	
+	public static void initializeProfileCache() throws ConfigException, IOException
+	{
+		System.out.println("Loading Profile Cache....");
+		Profile[] profiles = null;
+		try
+		{
+			System.out.println("Loading Profile Cache....From Config");
+			profiles = ConfigService.getInstance().getProfiles();
+		}
+		finally
+		{
+			if(profiles != null)
+			{
+				for(Profile profile : profiles)
+				{
+					ProfileCache.getInstance().addProfile(profile.getId(), profile);
+					FileManager.writeProfileToFile(profile);
+				}
+			}
+			else
+			{
+				try 
+				{
+					System.out.println("Loading Profile Cache....From File");
+					for(Profile profile : FileManager.loadProfilesFromFile())
+					{
+						ProfileCache.getInstance().addProfile(profile.getId(), profile);
+					}
+				} 
+				catch (IOException e) 
+				{
+					throw new ConfigException("Failed to create Profile Cache");
+				}
+			}
 		}
 	}
 }

@@ -1,5 +1,17 @@
 NOTES: should try testing mapping, and better query writing which allows filtering.
 
+0.0.8
+	- Created AppCache to hold onto valid App data.
+	- Created ProfileCache to hold onto valid Profile data.
+	- Created FileManager to create and load cached Apps and Profiles.
+	- Add methods to Configure to gather App and Profile data at startup.
+		- initializeAppCache
+		- initializeProfileCache
+	- Updated Profile to include profile_Id field.
+	- Added new properties to config.properties file which locate the temporary cached files directory.
+		- cache.tmp.app.path
+		- cache.tmp.profile.path
+	- Updated AuthHandler to now set App and Profile when creating a new session using AppCache and ProfileCache.
 0.0.7
 	- Added setAdditionalHeaders method in HeaderHandler to now set any additional globally headers.
 	- Created LogHandler to globally return logs.
