@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.ricone.api.cache.AppCache;
-import org.ricone.api.cache.FileManager;
 import org.ricone.api.cache.ProfileCache;
 import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.component.config.model.App;
@@ -77,7 +76,7 @@ public class Configure
 			{
 				for(App app : apps)
 				{
-					AppCache.getInstance().addApp(app.getId(), app);
+					AppCache.getInstance().put(app.getId(), app);
 				}
 			}
 			else
@@ -93,7 +92,6 @@ public class Configure
 		Profile[] profiles = null;
 		try
 		{
-			System.out.println("Loading Profile Cache....From Config");
 			profiles = ConfigService.getInstance().getProfiles();
 		}
 		finally
@@ -102,24 +100,12 @@ public class Configure
 			{
 				for(Profile profile : profiles)
 				{
-					ProfileCache.getInstance().addProfile(profile.getId(), profile);
-					FileManager.writeProfileToFile(profile);
+					ProfileCache.getInstance().put(profile.getId(), profile);
 				}
 			}
 			else
 			{
-				try 
-				{
-					System.out.println("Loading Profile Cache....From File");
-					for(Profile profile : FileManager.loadProfilesFromFile())
-					{
-						ProfileCache.getInstance().addProfile(profile.getId(), profile);
-					}
-				} 
-				catch (IOException e) 
-				{
-					throw new ConfigException("Failed to create Profile Cache");
-				}
+				throw new ConfigException("Failed to create Profile Cache");				
 			}
 		}
 	}

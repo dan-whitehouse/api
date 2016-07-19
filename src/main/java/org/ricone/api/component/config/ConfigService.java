@@ -95,7 +95,7 @@ public class ConfigService
 		{
 			headers.set("Authorization", getAccessToken());
 			HttpEntity<?> entity = new HttpEntity<Object>(headers);
-			ResponseEntity<Profile[]> response = rt.exchange((getUrl() +  "/profiles"), HttpMethod.GET, entity, Profile[].class);
+			ResponseEntity<Profile[]> response = rt.exchange((getUrl() +  "/profile"), HttpMethod.GET, entity, Profile[].class);
 			return response.getBody();
 		}
 		catch(Exception e){}	

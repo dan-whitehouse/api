@@ -1,15 +1,22 @@
 package org.ricone.api.cache;
 
-import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
+import javax.inject.Singleton;
 import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.component.config.model.Profile;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
-public class ProfileCache implements ICache<Profile>
+@Singleton
+public class ProfileCache
 {
 	private static ProfileCache instance = null;
-	private HashMap<String, Profile> profiles = new HashMap<String, Profile>();
-	
+	private static final Integer EXPIRE = 2;
+
+	private final LoadingCache<String, Profile> cache;
+	 
 	public static ProfileCache getInstance()
 	{
 		if(instance == null)
@@ -19,38 +26,33 @@ public class ProfileCache implements ICache<Profile>
 		return instance;
 	}
 	
-	public HashMap<String, Profile> getProfiles() 
+	public ProfileCache() 
 	{
-		return profiles;
-	}
-
-	public Profile getProfile(String appId) 
-	{
-		Profile profile = profiles.get(appId);		
-		if(profile == null)
+		cache = CacheBuilder.newBuilder()
+		.expireAfterWrite(EXPIRE, TimeUnit.HOURS)
+		.build( new CacheLoader<String, Profile>() 
 		{
-			profile = ConfigService.getInstance().getProfileByAppId(appId);		
-		}
-		return profile;
+	             @Override
+	             public Profile load( String profileId ) throws Exception 
+	             {
+	            	 return loadCache(profileId);
+	             }	
+		});
 	}
-	
-	public void addProfile(String profileId, Profile profile) 
-	{
-		this.profiles.put(profileId, profile);
-	}
-	
-	public void removeProfile(String profileId) 
-	{
-		this.profiles.remove(profileId);
-	}
-	
-	public void saveProfile(String profileId, Profile profile) 
-	{
-		this.profiles.remove(profileId);
-	}
-	
-	public void loadProfile(String profileId) 
-	{
-		this.profiles.remove(profileId);
-	}
+	 
+	 public Profile get(String profileId) 
+	 {
+	      return cache.getUnchecked(profileId);
+	 }
+	 
+	 public void put(String profileId, Profile profile) 
+	 {
+	      cache.put(profileId, profile);
+	 }
+	 
+	 private Profile loadCache(String appId) 
+	 {
+		 Profile profile = ConfigService.getInstance().getProfileByAppId(appId);
+	     return profile;
+	 }
 }

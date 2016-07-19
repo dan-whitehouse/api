@@ -1,4 +1,11 @@
-NOTES: should try testing mapping, and better query writing which allows filtering.
+0.0.9
+	- Updated AppCache to use Google Guava caching.
+	- Created AppCache to use Google Guava caching.
+	- Removed FileManager.
+	- Updated methods to Configure to gather App and Profile data at startup.
+		- initializeAppCache
+		- initializeProfileCache
+	- Updated AuthHandler to use new methods created when switching to Guava.
 
 0.0.8
 	- Created AppCache to hold onto valid App data.
@@ -12,6 +19,7 @@ NOTES: should try testing mapping, and better query writing which allows filteri
 		- cache.tmp.app.path
 		- cache.tmp.profile.path
 	- Updated AuthHandler to now set App and Profile when creating a new session using AppCache and ProfileCache.
+	
 0.0.7
 	- Added setAdditionalHeaders method in HeaderHandler to now set any additional globally headers.
 	- Created LogHandler to globally return logs.
