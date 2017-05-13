@@ -24,7 +24,7 @@ public class AuthHandler extends HandlerInterceptorAdapter
 		if(header || param)
 		{		
 			String token = null;
-			boolean verified = false;
+			boolean verified;
 			
 			if(header)
 			{
@@ -42,8 +42,8 @@ public class AuthHandler extends HandlerInterceptorAdapter
 			{
 				throw new UnauthorizedException("Invalid Token" );
 			}
-			else if(verified)
-			{			
+			else
+			{
 				Session session = SessionManager.getInstance().getSessions().get(decodedToken.getApplication_id());
 				if(session != null)
 				{

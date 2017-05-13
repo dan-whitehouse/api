@@ -50,7 +50,6 @@ public class AppCache
 	 private App loadCache(String appId) 
 	 {
 		 System.out.println("Loaded from Config: " + appId);
-		 App app = ConfigService.getInstance().getApp(appId);
-	     return app;
+		 return ConfigService.getInstance().getApp(appId);
 	 }
 }

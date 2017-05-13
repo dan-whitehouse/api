@@ -23,9 +23,9 @@ public class LeaService {
 		return laeDao.getLeas();
 	}
 	
-	public Lea getByRefId(String refId) throws NotFoundException
+	public Lea getByRefId(String refId) throws Exception
 	{
-		return laeDao.findByRefId(refId);
+		return laeDao.findById(refId);
 	}
 
 	public Lea getByLocalId(String localId)

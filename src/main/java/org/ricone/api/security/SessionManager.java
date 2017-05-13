@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class SessionManager
 {
 	private static SessionManager instance = null;
-	private HashMap<String, Session> sessions = new HashMap<String, Session>();
+	private HashMap<String, Session> sessions = new HashMap<>();
 
 
 	public static SessionManager getInstance()
@@ -22,7 +22,7 @@ public class SessionManager
 		return sessions;
 	}
 
-	public void addSession(String appId, Session session) 
+	void addSession(String appId, Session session)
 	{
 		this.sessions.put(appId, session);
 	}

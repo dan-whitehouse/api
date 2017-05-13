@@ -12,9 +12,9 @@ public class JWTVerifier
 
 	public static boolean verify(DecodedToken token) throws ConfigException 
 	{
-//		String key = ConfigService.getInstance().getApp().getProviderSecret(); 
+		//String key = ConfigService.getInstance().getApp().getProviderSecret();
 		String key = AppCache.getInstance().get(token.getApplication_id()).getProviderSecret();
-//		String key =  "thequickbrownfoxjumpedoverthelazydog"; //CastleLearningOnline
+		//String key =  "thequickbrownfoxjumpedoverthelazydog"; //CastleLearningOnline
 		try 
 		{
 			Jwts.parser().setSigningKey(key.getBytes()).requireIssuer("http://auth.ricone.org/").parseClaimsJws(token.getTokenString());	

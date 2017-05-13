@@ -3,7 +3,7 @@ package org.ricone.api.security;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
+import java.util.Base64;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -23,8 +23,7 @@ public class TokenDecoder
 	private static String base64Decode(String input)
 	{
 		String result = null;
-		Base64 decoder = new Base64(true);
-		byte[] decodedBytes = decoder.decode(input);
+		byte[] decodedBytes = Base64.getDecoder().decode(input);
 		result = new String(decodedBytes);
 		return result;
 	}

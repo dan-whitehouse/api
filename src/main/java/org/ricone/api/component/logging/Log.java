@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 public class Log 
 {
 	private int status;
+	private long duration;
 	private Level level;
 	
 	public Log(HttpServletRequest request, HttpServletResponse response) 
@@ -22,6 +23,14 @@ public class Log
 	
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	public long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(long duration) {
+		this.duration = duration;
 	}
 
 	public Level getLevel() {
@@ -56,8 +65,10 @@ public class Log
 	@Override
 	public String toString() 
 	{
-		return "Log [status=" + status + "]";
+		return "Log [status=" + status + "] + [duration=" + duration + "]";
 	}
+
+	
 	
 	
 	
