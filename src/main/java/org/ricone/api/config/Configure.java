@@ -20,7 +20,6 @@ public class Configure
 			ConfigService.getInstance().initializeCredential();
 			initializeAppCache();
 			initializeProfileCache();
-			
 		} 
 		catch (ConfigException | IOException e) 
 		{

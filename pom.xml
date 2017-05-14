@@ -6,18 +6,18 @@
 	<artifactId>api</artifactId>
 	<name>ricone</name>
 	<packaging>war</packaging>
-	<version>0.0.9-BUILD-SNAPSHOT</version>
+	<version>2.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.8</java-version>
 		<servlet-version>3.0.1</servlet-version>
 		<jsp-version>2.2.1</jsp-version>
 		<jstl-version>1.2</jstl-version>
 		<!-- spring -->
-		<spring-version>4.2.5.RELEASE</spring-version>
+		<spring-version>4.3.8.RELEASE</spring-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<log4j-version>1.2.17</log4j-version>
 		<!-- hibernate -->
-		<hibernate.version>4.3.8.Final</hibernate.version>
+		<hibernate.version>5.2.10.Final</hibernate.version>
 		<!-- mysql -->
 		<mysql.connector.version>5.1.35</mysql.connector.version>
 		<commons.dbcp.version>1.4</commons.dbcp.version>
@@ -71,29 +71,38 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-actuator</artifactId>
-			<version>1.3.3.RELEASE</version>
+			<version>1.3.8.RELEASE</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<!-- Other -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servletapi.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.5.3</version>
-		</dependency>
+
 		
 		<!-- JDBC -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
@@ -105,16 +114,6 @@
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>${commons.dbcp.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -146,12 +145,7 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring-version}</version>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -175,16 +169,16 @@
 			<version>1.9.13</version>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.13</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.8.8.1</version>
 		</dependency>
 		
 		<!-- Apache -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
+			<version>3.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -203,12 +197,24 @@
 <!--             <artifactId>splunk-library-javalogging</artifactId>  -->
 <!--             <version>1.5.0</version>  -->
 <!--         </dependency>  -->
+
+		<!-- Swagger -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.6.1</version>
+		</dependency>
 		
 		<!-- JWT -->
 		<dependency>
     		<groupId>io.jsonwebtoken</groupId>
     		<artifactId>jjwt</artifactId>
-    		<version>0.6.0</version>
+    		<version>0.7.0</version>
 		</dependency>	
 		
 		<!-- Google -->
@@ -254,6 +260,16 @@
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j-cypher-compiler-2.1</artifactId>
 			<version>2.1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.0.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.0.3.RELEASE</version>
 		</dependency>
 	</dependencies>
 	<build>

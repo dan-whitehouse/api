@@ -7,17 +7,17 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 
-import org.ricone.api.model.Leatelephone;
+import org.ricone.api.model.LeaTelephone;
 
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QLeatelephone is a Querydsl query type for Leatelephone
+ * QLeatelephone is a Querydsl query type for LeaTelephone
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QLeatelephone extends EntityPathBase<Leatelephone> {
+public class QLeatelephone extends EntityPathBase<LeaTelephone> {
 
     private static final long serialVersionUID = 140431135L;
 
@@ -36,10 +36,10 @@ public class QLeatelephone extends EntityPathBase<Leatelephone> {
     public final StringPath telephoneNumberTypeCode = createString("telephoneNumberTypeCode");
 
     public QLeatelephone(String variable) {
-        this(Leatelephone.class, forVariable(variable), INITS);
+        this(LeaTelephone.class, forVariable(variable), INITS);
     }
 
-    public QLeatelephone(Path<? extends Leatelephone> path) {
+    public QLeatelephone(Path<? extends LeaTelephone> path) {
         this(path.getType(), path.getMetadata(), path.getMetadata().isRoot() ? INITS : PathInits.DEFAULT);
     }
 
@@ -48,10 +48,10 @@ public class QLeatelephone extends EntityPathBase<Leatelephone> {
     }
 
     public QLeatelephone(PathMetadata metadata, PathInits inits) {
-        this(Leatelephone.class, metadata, inits);
+        this(LeaTelephone.class, metadata, inits);
     }
 
-    public QLeatelephone(Class<? extends Leatelephone> type, PathMetadata metadata, PathInits inits) {
+    public QLeatelephone(Class<? extends LeaTelephone> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.lea = inits.isInitialized("lea") ? new QLea(forProperty("lea")) : null;
     }

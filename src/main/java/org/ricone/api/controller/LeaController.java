@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import org.ricone.api.model.Lea;
+import org.ricone.api.model.LeaTelephone;
+import org.ricone.api.model.School;
 import org.ricone.api.model.xpress.XLea;
 import org.ricone.api.service.LeaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,55 +17,71 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class LeaController //implements IController<Lea>
+public class LeaController implements IController<Lea>
 {
 	//Reference for Request Mapping: http://www.baeldung.com/spring-requestmapping
 	
 	@Autowired
 	LeaService service;
-	
-//	@Override
-    @RequestMapping(value= "/leas/{refId}", method = RequestMethod.GET)
+
+    @RequestMapping(value= "/requests/leas/{refId}", method = RequestMethod.GET)
     public Lea getSingle(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {
-        return service.getByRefId(refId);
+
+        Lea instance = service.getByRefId(refId);
+
+        //Prepare For Output
+        Lea lea = map(instance);
+        return lea;
     }
-	 
-	public Lea getSingle(Paging paging, @PathVariable(value="refId") String refId) throws Exception
-    {
-        return service.getByRefId(refId);
-    }
-	
-//	@Override
-    @RequestMapping(value = "/leas", method = RequestMethod.GET) 
-    public List<XLea> getMulti(HttpServletResponse response) throws Exception
+
+    @RequestMapping(value = "/requests/leas", method = RequestMethod.GET)
+    public List<Lea> getMulti(HttpServletResponse response) throws Exception
     { 
     	//Get data from DB.
-    	List<Lea> leas = service.getLeas();
-    	
-    	//Map list of Leas
-    	List<XLea> xLeas = new ArrayList<>();
-        leas.stream().filter(l -> l != null).forEach((lea) -> { xLeas.add(map(lea)); });
-    	response.setHeader("Controller", "Test");
-        return xLeas;
+    	List<Lea> instance = service.getLeas();
+
+    	//Prepare For Output
+        List<Lea> leas = new ArrayList<>();
+        instance.stream().filter(l -> l != null).forEach((lea) -> { leas.add(map(lea)); });
+
+    	return leas;
     }
-	
-	private XLea map(Lea lea) 
-	{
-		XLea xlea = new XLea();
-		xlea.setRefId(lea.getLearefId());
-		return xlea;
-	}
-	
-//@Override
-    @RequestMapping(value= "/leas/{refId}/*", method = RequestMethod.GET)
+
+    @RequestMapping(value= "/requests/leas/{refId}/*", method = RequestMethod.GET)
     public List<Lea> getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
-    { 
-    	//System.out.println("wild card");
+    {
     	List<Lea> leas = service.getLeas(); 
         return leas;
     }
-    
+
+    private Lea map(Lea instance)
+    {
+        Lea lea = new Lea();
+        lea.setLeaRefId(instance.getLeaRefId());
+        lea.setLeaName(instance.getLeaName());
+        lea.setLeaId(instance.getLeaId());
+        lea.setLeaSeaId(instance.getLeaSeaId());
+        lea.setLeaNcesId(instance.getLeaNcesId());
+        lea.setStreetNumberAndName(instance.getStreetNumberAndName());
+        lea.setLine2(instance.getLine2());
+        lea.setCity(instance.getCity());
+        lea.setStateCode(instance.getStateCode());
+        lea.setPostalCode(instance.getPostalCode());
+        lea.setAddressCountyName(instance.getAddressCountyName());
+        lea.setCountryCode(instance.getCountryCode());
+
+        for(LeaTelephone phone : instance.getLeaTelephones())
+        {
+            lea.getLeaTelephones().add(phone);
+        }
+        for(School school : instance.getSchools())
+        {
+            lea.getSchools().add(new School(school.getSchoolRefId(), school.getSchoolName()));
+        }
+        return lea;
+    }
+
     
    
 }

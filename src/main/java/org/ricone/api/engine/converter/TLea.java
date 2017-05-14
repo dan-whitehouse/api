@@ -6,7 +6,7 @@ import java.util.List;
 import org.ricone.api.engine.QLea;
 import org.ricone.api.engine.QLeatelephone;
 import org.ricone.api.model.Lea;
-import org.ricone.api.model.Leatelephone;
+import org.ricone.api.model.LeaTelephone;
 
 import com.querydsl.core.Tuple;
 
@@ -32,50 +32,50 @@ public class TLea
 			{		
 				System.out.println("if");
 				l = leas.get(leas.indexOf(row.get(ql.learefId)));
-				Leatelephone lt = new Leatelephone();
-				lt.setLeatelephoneRefId(row.get(qlt.leatelephoneRefId));
+				LeaTelephone lt = new LeaTelephone();
+				lt.setLeaTelephoneRefId(row.get(qlt.leatelephoneRefId));
 				lt.setPrimaryTelephoneNumberIndicator(row.get(qlt.primaryTelephoneNumberIndicator));
 				lt.setTelephoneNumber(row.get(qlt.telephoneNumber));
 				lt.setTelephoneNumberTypeCode(row.get(qlt.telephoneNumberTypeCode));
 				lt.setLea(l);
 				
-				if(lt.getLeatelephoneRefId() != null)
+				if(lt.getLeaTelephoneRefId() != null)
 			    {
-			    	l.getLeatelephones().add(lt);
+			    	l.getLeaTelephones().add(lt);
 			    } 
 			}
 			else
 			{
 				//System.out.println("else");
 				l = new Lea();		
-				l.setLearefId(row.get(ql.learefId));
+				l.setLeaRefId(row.get(ql.learefId));
 				l.setAddressType(row.get(ql.addressType));
 				l.setCity(row.get(ql.city));
 				l.setCountryCode(row.get(ql.countryCode));
-				l.setLeaid(row.get(ql.leaid));
+				l.setLeaId(row.get(ql.leaid));
 				l.setAddressCountyName(row.get(ql.addressCountyName));
-				l.setLeaname(row.get(ql.leaname));
-				l.setLeaseaid(row.get(ql.leaseaid));
-				l.setLeavendorId(row.get(ql.leavendorId));
+				l.setLeaName(row.get(ql.leaname));
+				l.setLeaSeaId(row.get(ql.leaseaid));
+				l.setLeaVendorId(row.get(ql.leavendorId));
 				l.setLine2(row.get(ql.line2));
 				l.setPostalCode(row.get(ql.postalCode));
 				l.setStateCode(row.get(ql.stateCode));
 				l.setStreetNumberAndName(row.get(ql.streetNumberAndName));
 				
-				Leatelephone lt = new Leatelephone();
-				lt.setLeatelephoneRefId(row.get(qlt.leatelephoneRefId));
+				LeaTelephone lt = new LeaTelephone();
+				lt.setLeaTelephoneRefId(row.get(qlt.leatelephoneRefId));
 				lt.setPrimaryTelephoneNumberIndicator(row.get(qlt.primaryTelephoneNumberIndicator));
 				lt.setTelephoneNumber(row.get(qlt.telephoneNumber));
 				lt.setTelephoneNumberTypeCode(row.get(qlt.telephoneNumberTypeCode));
 				lt.setLea(l);
-				l.getLeatelephones().add(lt);
+				l.getLeaTelephones().add(lt);
 				
-				if(lt.getLeatelephoneRefId() != null)
+				if(lt.getLeaTelephoneRefId() != null)
 			    {
-			    	l.getLeatelephones().add(lt);
+			    	l.getLeaTelephones().add(lt);
 			    } 
 			}
-			if(l.getLearefId() != null)
+			if(l.getLeaRefId() != null)
 		    {
 		    	leas.add(l);
 		    }			    
@@ -88,30 +88,30 @@ public class TLea
 		Lea l = new Lea();
 		for (Tuple row : tuples) 
 		{
-			l.setLearefId(row.get(ql.learefId));
+			l.setLeaRefId(row.get(ql.learefId));
 			l.setAddressType(row.get(ql.addressType));
 			l.setCity(row.get(ql.city));
 			l.setCountryCode(row.get(ql.countryCode));
-			l.setLeaid(row.get(ql.leaid));
+			l.setLeaId(row.get(ql.leaid));
 			l.setAddressCountyName(row.get(ql.addressCountyName));
-			l.setLeaname(row.get(ql.leaname));
-			l.setLeaseaid(row.get(ql.leaseaid));
-			l.setLeavendorId(row.get(ql.leavendorId));
+			l.setLeaName(row.get(ql.leaname));
+			l.setLeaSeaId(row.get(ql.leaseaid));
+			l.setLeaVendorId(row.get(ql.leavendorId));
 			l.setLine2(row.get(ql.line2));
 			l.setPostalCode(row.get(ql.postalCode));
 			l.setStateCode(row.get(ql.stateCode));
 			l.setStreetNumberAndName(row.get(ql.streetNumberAndName));
 			 
-			Leatelephone lt = new Leatelephone();		     
-			lt.setLeatelephoneRefId(row.get(qlt.leatelephoneRefId));
+			LeaTelephone lt = new LeaTelephone();
+			lt.setLeaTelephoneRefId(row.get(qlt.leatelephoneRefId));
 			lt.setPrimaryTelephoneNumberIndicator(row.get(qlt.primaryTelephoneNumberIndicator));
 			lt.setTelephoneNumber(row.get(qlt.telephoneNumber));
 			lt.setTelephoneNumberTypeCode(row.get(qlt.telephoneNumberTypeCode));
 			lt.setLea(l);
 			
-			if(lt.getLeatelephoneRefId() != null)
+			if(lt.getLeaTelephoneRefId() != null)
 		     {
-		    	 l.getLeatelephones().add(lt);
+		    	 l.getLeaTelephones().add(lt);
 		     } 
 		}
 		return l;

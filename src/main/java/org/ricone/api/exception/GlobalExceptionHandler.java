@@ -16,17 +16,17 @@ public class GlobalExceptionHandler
 {
 
 	/**** 40X ****/
-	 @ExceptionHandler(UnauthorizedException.class)
-	    @ResponseStatus(value = HttpStatus.UNAUTHORIZED) 
-	    private @ResponseBody Error unauthorized(HttpServletRequest request, HttpServletResponse response, Exception ex) 
-	    {
-	    	Error error = new Error();
-	    	error.setUrl(request.getRequestURL().toString());
-	    	error.setStatus(401);
-	    	error.setMessage("Unauthorized"); 
-	        error.setDescription("Validation with security service failed: " + ex.getMessage());
-	        return error;
-	    }
+	@ExceptionHandler(UnauthorizedException.class)
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	private @ResponseBody Error unauthorized(HttpServletRequest request, HttpServletResponse response, Exception ex)
+	{
+		Error error = new Error();
+		error.setUrl(request.getRequestURL().toString());
+		error.setStatus(401);
+		error.setMessage("Unauthorized");
+		error.setDescription("Validation with security service failed: " + ex.getMessage());
+		return error;
+	}
 	 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND) 

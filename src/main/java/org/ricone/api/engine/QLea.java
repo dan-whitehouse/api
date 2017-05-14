@@ -8,7 +8,7 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 
 import org.ricone.api.model.Lea;
-import org.ricone.api.model.Leatelephone;
+import org.ricone.api.model.LeaTelephone;
 
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
@@ -42,7 +42,7 @@ public class QLea extends EntityPathBase<Lea> {
 
     public final StringPath leaseaid = createString("leaseaid");
 
-    public final SetPath<Leatelephone, QLeatelephone> leatelephones = this.<Leatelephone, QLeatelephone>createSet("leatelephones", Leatelephone.class, QLeatelephone.class, PathInits.DIRECT2);
+    public final SetPath<LeaTelephone, QLeatelephone> leatelephones = this.<LeaTelephone, QLeatelephone>createSet("leatelephones", LeaTelephone.class, QLeatelephone.class, PathInits.DIRECT2);
 
     public final StringPath leavendorId = createString("leavendorId");
 

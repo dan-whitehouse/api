@@ -3,6 +3,7 @@ package org.ricone.api.config;
 import org.ricone.api.component.logging.LogHandler;
 import org.ricone.api.controller.HeaderHandler;
 import org.ricone.api.security.AuthHandler;
+import org.ricone.api.security.test.SecurityConfig;
 import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.EndpointWebMvcAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.HealthIndicatorAutoConfiguration;
@@ -23,13 +24,13 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
-
 @ComponentScan(basePackages = "org.ricone.api")
 @Import({
-		EndpointWebMvcAutoConfiguration.class, 
+		EndpointWebMvcAutoConfiguration.class,
 		ManagementServerPropertiesAutoConfiguration.class, 
 		EndpointAutoConfiguration.class, 
-		HealthIndicatorAutoConfiguration.class})
+		HealthIndicatorAutoConfiguration.class
+		})
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
 @EnableScheduling
@@ -50,11 +51,12 @@ public class Config extends WebMvcConfigurerAdapter
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) 
     {
-        registry.addResourceHandler("/resources/**")
-        		.addResourceLocations("/resources/");
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
-    
-    @Override
+
+	@Override
     public void addInterceptors(InterceptorRegistry registry) 
     {   	
     	HandlerInterceptor authHandler = new AuthHandler();

@@ -2,47 +2,26 @@ package org.ricone.api.security;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.cache.AppCache;
 import org.ricone.api.cache.ProfileCache;
 import org.ricone.api.component.config.model.App;
-import org.ricone.api.config.ConfigProperties;
-import org.ricone.api.exception.ConfigException;
 import org.ricone.api.exception.UnauthorizedException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import java.util.Date;
+
 public class AuthHandler extends HandlerInterceptorAdapter 
 {
-	private final String PROPERTY_ALLOW_TOKEN_PARAMETER = "security.auth.allowTokenParameter";
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{	
-		boolean allowParam = allowTokenParams();
-		boolean header = StringUtils.isNotBlank(request.getHeader("Authorization"));
-		boolean param = StringUtils.isNotBlank(request.getParameter("access_token"));		
-		if(header || param)
-		{		
-			String token = null;
-			boolean verified;
-			
-			if(header)
-			{
-				token = request.getHeader("Authorization");				
-			}
-			else if(param) //Parameter tokens are allowed, and parameter is set
-			{
-				if(!allowParam) throw new UnauthorizedException("Token Parameter Not Allowed" );
-				else token = request.getParameter("access_token");
-			}
-			DecodedToken decodedToken = TokenDecoder.decodeToken(token);
-			verified = JWTVerifier.verify(decodedToken);
-					
-			if(!verified)
-			{
-				throw new UnauthorizedException("Invalid Token" );
-			}
-			else
+		AuthRequest authRequest = new AuthRequest(request);
+
+		if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter()))
+		{
+			DecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken());
+			if(JWTVerifier.verify(decodedToken))
 			{
 				Session session = SessionManager.getInstance().getSessions().get(decodedToken.getApplication_id());
 				if(session != null)
@@ -58,20 +37,48 @@ public class AuthHandler extends HandlerInterceptorAdapter
 					session.setProfile(ProfileCache.getInstance().get(app.getProfile_id()));
 					SessionManager.getInstance().addSession(decodedToken.getApplication_id(), session);
 				}
+				return super.preHandle(request, response, handler);
 			}
+			else
+			{
+				Date now = new Date();
+				if(decodedToken.getExp().before(now))
+				{
+					throw new UnauthorizedException("Token Expired");
+				}
+				else
+				{
+					throw new UnauthorizedException("Invalid Token");
+				}
+			}
+		}
+		else if(isPathException(request.getServletPath()))
+		{
+			return super.preHandle(request, response, handler);
+		}
+		else if(authRequest.isParameter() && !authRequest.isAllowTokenParameter())
+		{
+			throw new UnauthorizedException("Token Parameter Not Allowed");
 		}
 		else
 		{
 			throw new UnauthorizedException("No Token Provided");
 		}
-		return super.preHandle(request, response, handler);
 	}
-	
-	private boolean allowTokenParams() throws ConfigException
+
+	//This method checks to see if the servletPath being requested is an exception to the rule of needing a token
+	private boolean isPathException(String servletPath)
 	{
-		return BooleanUtils.toBoolean(ConfigProperties.getInstance().getProperty(PROPERTY_ALLOW_TOKEN_PARAMETER));		
+		if("/swagger/api-docs".equalsIgnoreCase(servletPath))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	
+
 	private void checkAgainstExisting(DecodedToken decodedToken, Session session) throws UnauthorizedException 
 	{
 		if(!StringUtils.equalsIgnoreCase(decodedToken.getTokenString(), session.getToken().getTokenString()))
@@ -80,10 +87,6 @@ public class AuthHandler extends HandlerInterceptorAdapter
 			if(isNewer)
 			{
 				session.setToken(decodedToken);
-			}
-			else
-			{
-				throw new UnauthorizedException("Token Expired");
 			}
 		}
 	}

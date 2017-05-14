@@ -1,3 +1,20 @@
+2.0.0 Build 20170514
+    - Updated project pom dependencies to:
+        - hibernate-core: v5.2.10
+        - spring-* v4.3.8
+        - jackson-databind: v2.8.8.1
+        - commons-lang3: v3.5
+    - Created All Core Model files
+    - Updated LeaDao to make better requests
+    - Created SwaggerConfig which creates swagger api-docs json for Swagger to consume.
+            - http://localhost:8080/api/swagger/api-docs
+    - Created AuthRequest to hold and handle some of the basic request info used for authenticating
+    - Updated AuthHandler
+        - Starting using AuthRequest object
+        - Modified logic to better handle expired tokens
+        - Created method for to check if the requested path is an exception to the rule of needing a token
+            - Ie: /swagger/api-docs
+
 0.0.9
 	- Updated AppCache to use Google Guava caching.
 	- Created AppCache to use Google Guava caching.

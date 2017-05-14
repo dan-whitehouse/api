@@ -1,6 +1,10 @@
 package org.ricone.api.dao;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -10,6 +14,8 @@ import org.ricone.api.engine.QLeatelephone;
 import org.ricone.api.engine.converter.TLea;
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.Lea;
+import org.ricone.api.model.LeaTelephone;
+import org.ricone.api.model.School;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.google.common.cache.CacheLoader;
@@ -38,63 +44,40 @@ public class LeaDao {
 			}			
 		});
     }
-        
+
 	public Lea findByRefId(String refId) throws NotFoundException
-	{	
-		HibernateQuery<?> query = new HibernateQuery<Void>(getCurrentSession());
-		QLea qlea = QLea.lea;
-		QLeatelephone qleatelephone = QLeatelephone.leatelephone;
-		List<Tuple> result = query	.select(qlea.learefId, qlea.leaname, qlea.leaid, qleatelephone.leatelephoneRefId)
-									.from(qlea)
-									.leftJoin(qlea.leatelephones, qleatelephone)
-									.where(qlea.learefId.eq(refId))
-									.fetch();	
-		
-		Lea instance = TLea.convertToSingle(result, qlea, qleatelephone);
-		if(instance == null)
+	{
+		Lea instance = (Lea) getCurrentSession().createCriteria(Lea.class).add(Restrictions.gt("leaRefId", refId)).list().get(0);
+		if(instance!=null)
 		{
-			throw new NotFoundException("Could not find Lea with RefId: " + refId);
+			Hibernate.initialize(instance.getLeaTelephones());
+			Hibernate.initialize(instance.getSchools());
 		}
 		return instance;
 	}
-	
+
 	public Lea findByLocalId(String localId)
 	{	
 		Lea instance = (Lea) getCurrentSession().createCriteria(Lea.class).add(Restrictions.gt("leaid", localId)).list().get(0);
+		if(instance!=null)
+		{
+			Hibernate.initialize(instance.getLeaTelephones());
+			Hibernate.initialize(instance.getSchools());
+		}
+
 		return instance;
 	}
-	
-	
-	
+
 	public List<Lea> getLeas() throws NotFoundException
 	{
-		
-//		cache = CacheBuilder.newBuilder()
-//		           .expireAfterWrite(EXPIRE, TimeUnit.HOURS)
-//		           .build( new CacheLoader<String, App>() {
-//		                 @Override
-//		                 public App load( String productId ) throws Exception {
-//		                     return loadCache(productId);
-//		                 }
-//		           }
-//		     );
-		
-		//return getCurrentSession().createCriteria(Lea.class).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).list();
-		
-		HibernateQuery<?> query = new HibernateQuery<Void>(getCurrentSession());
-		QLea qlea = QLea.lea;
-		QLeatelephone qleatelephone = QLeatelephone.leatelephone;
-		List<Tuple> result = query	.select(qlea.learefId, qlea.leaname, qlea.leaid, qleatelephone.leatelephoneRefId)
-									.from(qlea)
-									.leftJoin(qlea.leatelephones, qleatelephone)
-									.groupBy(qlea.learefId)
-									//.transform(GroupBy(qlea.learefId))
-									.fetch();	
-		
-		List<Lea> instance = TLea.convertToMulti(result, qlea, qleatelephone);
-		if(instance == null)
+		List<Lea> instance = getCurrentSession().createCriteria(Lea.class).list();
+		if(instance!=null)
 		{
-			throw new NotFoundException("Could not find Leas");
+			for(Lea o : instance)
+			{
+				Hibernate.initialize(o.getLeaTelephones());
+				Hibernate.initialize(o.getSchools());
+			}
 		}
 		return instance;
 	}

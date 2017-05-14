@@ -12,5 +12,5 @@ public class GlobalController
     public void notFound() throws NotFoundException 
     { 
         throw new NotFoundException("Try again....");
-    }    
+    }
 }

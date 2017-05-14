@@ -7,7 +7,6 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
-import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.exception.ConfigException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
@@ -45,20 +44,12 @@ public class DBConfig {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		
 		dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-//		dataSource.setUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
-//		dataSource.setUsername(env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
-//		dataSource.setPassword(env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
-		
-		dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
+
 		try 
 		{
 			dataSource.setUrl(ConfigProperties.getInstance().getProperty("db.core.url"));
 			dataSource.setUsername(ConfigProperties.getInstance().getProperty("db.core.username"));
 			dataSource.setPassword(ConfigProperties.getInstance().getProperty("db.core.password"));
-			
-//			System.out.println(dataSource.getUrl());
-//			System.out.println(dataSource.getUsername());
-//			System.out.println(dataSource.getPassword());
 		} 
 		catch (ConfigException e) 
 		{
