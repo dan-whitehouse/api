@@ -7,7 +7,6 @@ public class SessionManager
 	private static SessionManager instance = null;
 	private HashMap<String, Session> sessions = new HashMap<>();
 
-
 	public static SessionManager getInstance()
 	{
 		if(instance == null)
@@ -16,7 +15,6 @@ public class SessionManager
 		}
 		return instance;
 	}
-
 
 	public HashMap<String, Session> getSessions() {
 		return sessions;

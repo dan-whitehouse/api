@@ -33,6 +33,4 @@ public class Session
 	{
 		this.profile = profile;
 	}
-	
-	
 }

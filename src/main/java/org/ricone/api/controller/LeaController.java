@@ -2,13 +2,11 @@ package org.ricone.api.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import org.ricone.api.model.Lea;
 import org.ricone.api.model.LeaTelephone;
 import org.ricone.api.model.School;
-import org.ricone.api.model.xpress.XLea;
 import org.ricone.api.service.LeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

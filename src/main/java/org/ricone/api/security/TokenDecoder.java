@@ -11,8 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TokenDecoder 
 {
-	public static DecodedToken decodeToken(String token) throws JsonParseException, JsonMappingException, IOException
-	{
+	public static DecodedToken decodeToken(String token) throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper map = new ObjectMapper();	
 		String[] base64EncodedSegments = StringUtils.split(token, "\\.");
 		DecodedToken dt = map.readValue(base64Decode(base64EncodedSegments[1]), DecodedToken.class);
@@ -20,12 +19,10 @@ public class TokenDecoder
 		return dt;		
 	}
 	
-	private static String base64Decode(String input)
-	{
+	private static String base64Decode(String input) {
 		String result = null;
 		byte[] decodedBytes = Base64.getDecoder().decode(input);
 		result = new String(decodedBytes);
 		return result;
 	}
-	
 }

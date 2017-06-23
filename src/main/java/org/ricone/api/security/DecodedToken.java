@@ -14,7 +14,6 @@ public class DecodedToken
 	{
 		super();
 	}
-	
 	public String getApplication_id()
 	{
 		return application_id;
@@ -47,13 +46,10 @@ public class DecodedToken
 	{
 		this.iss = iss;
 	}
-
 	public String getTokenString() {
 		return tokenString;
 	}
-
 	public void setTokenString(String tokenString) {
 		this.tokenString = tokenString;
-	}	
-	
+	}
 }

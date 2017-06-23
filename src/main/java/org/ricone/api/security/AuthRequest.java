@@ -7,7 +7,6 @@ import org.ricone.api.exception.ConfigException;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 class AuthRequest
 {
     private boolean allowTokenParameter;
@@ -31,8 +30,7 @@ class AuthRequest
         }
     }
 
-    private boolean allowTokenParams() throws ConfigException
-    {
+    private boolean allowTokenParams() throws ConfigException {
         return BooleanUtils.toBoolean(ConfigProperties.getInstance().getProperty("security.auth.allowTokenParameter"));
     }
 

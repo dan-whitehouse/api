@@ -1,3 +1,11 @@
+2.0.0 Build 20170623
+    - Added XPress Objects
+        - Updated Phone & Address to include isEmptyObject method which checks if all fields are null
+    - Created XLeaController
+        - Added mapping methods
+    - Created JacksonConfiguration
+        - Used to override spring defaults for fasterXML ObjectMapper
+
 2.0.0 Build 20170514
     - Updated project pom dependencies to:
         - hibernate-core: v5.2.10
