@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.ricone.api.engine.QLea;
 import org.ricone.api.engine.QLeatelephone;
-import org.ricone.api.model.Lea;
-import org.ricone.api.model.LeaTelephone;
+import org.ricone.api.model.core.Lea;
+import org.ricone.api.model.core.LeaTelephone;
 
 import com.querydsl.core.Tuple;
 

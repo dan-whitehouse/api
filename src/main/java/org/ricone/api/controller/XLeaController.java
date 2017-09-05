@@ -2,8 +2,8 @@ package org.ricone.api.controller;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.ricone.api.model.Lea;
-import org.ricone.api.model.LeaTelephone;
+import org.ricone.api.model.core.Lea;
+import org.ricone.api.model.core.LeaTelephone;
 
 import org.ricone.api.model.xpress.*;
 import org.ricone.api.service.LeaService;

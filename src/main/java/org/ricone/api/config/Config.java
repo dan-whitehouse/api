@@ -38,11 +38,11 @@ public class Config extends WebMvcConfigurerAdapter
 {
 	
 	@Bean(name="viewProject")
-	public ViewResolver viewResolver() 
+	public ViewResolver viewResolver()
 	{
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/WEB-INF/pages/");
+		viewResolver.setPrefix("/WEB-INF/xPress/");
 		viewResolver.setSuffix(".jsp");
 
 		return viewResolver;
@@ -51,7 +51,7 @@ public class Config extends WebMvcConfigurerAdapter
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) 
     {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }

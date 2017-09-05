@@ -1,13 +1,10 @@
 package org.ricone.api.service;
 
-
 import java.util.List;
-
 import javax.transaction.Transactional;
-
-import org.ricone.api.dao.LeaDao;
+import org.ricone.api.dao.LeaDAO;
 import org.ricone.api.exception.NotFoundException;
-import org.ricone.api.model.Lea;
+import org.ricone.api.model.core.Lea;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class LeaService {
 	
 	@Autowired
-	LeaDao leaDao;
+	LeaDAO leaDao;
 	
 	public List<Lea> getLeas() throws NotFoundException
 	{

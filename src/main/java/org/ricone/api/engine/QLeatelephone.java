@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 
-import org.ricone.api.model.LeaTelephone;
+import org.ricone.api.model.core.LeaTelephone;
 
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;

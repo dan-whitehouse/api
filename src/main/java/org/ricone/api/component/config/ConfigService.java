@@ -3,6 +3,8 @@ package org.ricone.api.component.config;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
+
+import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.component.config.model.App;
 import org.ricone.api.component.config.model.Credential;
 import org.ricone.api.component.config.model.DistrictKV;
@@ -12,6 +14,7 @@ import org.ricone.api.component.config.model.Provider;
 import org.ricone.api.component.config.model.ProviderKV;
 import org.ricone.api.config.ConfigProperties;
 import org.ricone.api.exception.ConfigException;
+import org.ricone.api.model.info.Config;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -85,6 +88,31 @@ public class ConfigService
 		{
 			return null;
 		}		
+	}
+
+	/*********** Config Status ***********/
+	public Config getConfigStatus()
+	{
+		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		try
+		{
+			headers.set("Authorization", this.getAccessToken());
+			HttpEntity<?> entity = new HttpEntity<Object>(headers);
+			String rootUrl = getUrl().replace("/api", "");
+
+			ResponseEntity<Config> response = rt.exchange((rootUrl), HttpMethod.GET, entity, Config.class);
+
+			if(StringUtils.isNotBlank(response.getBody().getStarted()))
+			{
+				response.getBody().setStatus("Up");
+			}
+			return response.getBody();
+		}
+		catch(Exception e)
+		{
+			return new Config("Down");
+		}
 	}
 	
 	public Profile[] getProfiles()

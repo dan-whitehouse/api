@@ -15,10 +15,14 @@ public class AuthHandler extends HandlerInterceptorAdapter
 {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
-	{	
+	{
 		AuthRequest authRequest = new AuthRequest(request);
 
-		if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter()))
+		if(isPathException(request.getServletPath()))
+		{
+			return super.preHandle(request, response, handler);
+		}
+		else if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter()))
 		{
 			DecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken());
 			if(JWTVerifier.verify(decodedToken))
@@ -52,10 +56,6 @@ public class AuthHandler extends HandlerInterceptorAdapter
 				}
 			}
 		}
-		else if(isPathException(request.getServletPath()))
-		{
-			return super.preHandle(request, response, handler);
-		}
 		else if(authRequest.isParameter() && !authRequest.isAllowTokenParameter())
 		{
 			throw new UnauthorizedException("Token Parameter Not Allowed");
@@ -69,7 +69,16 @@ public class AuthHandler extends HandlerInterceptorAdapter
 	//This method checks to see if the servletPath being requested is an exception to the rule of needing a token
 	private boolean isPathException(String servletPath)
 	{
+		System.out.println(servletPath);
 		if("/swagger/api-docs".equalsIgnoreCase(servletPath))
+		{
+			return true;
+		}
+		else if("/info".equalsIgnoreCase(servletPath))
+		{
+			return true;
+		}
+		else if("/".equals(servletPath))
 		{
 			return true;
 		}

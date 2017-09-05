@@ -1,3 +1,15 @@
+2.0.0 Build 20170904
+    - Added Swagger WebApp
+        - /api now returns swagger
+        - Issue: Can't return a request, doesn't seem to authenticate
+    - Added Info Controller
+        - Also added model objects which make up InfoResponse
+        - api/info
+    - Updated AuthHandler
+        - Checks if path is exception before checking headers/parameters.
+        - Added /info to exceptions list
+    - CacheContainer is now tracked by git
+
 2.0.0 Build 20170623
     - Added XPress Objects
         - Updated Phone & Address to include isEmptyObject method which checks if all fields are null

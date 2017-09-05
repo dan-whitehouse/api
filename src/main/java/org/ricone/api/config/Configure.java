@@ -1,6 +1,7 @@
 package org.ricone.api.config;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.ricone.api.cache.AppCache;
@@ -35,6 +36,9 @@ public class Configure
 		ConfigProperties.getInstance().setProperty("component.config.username", System.getenv("api_config_username"));
 		ConfigProperties.getInstance().setProperty("component.config.password", System.getenv("api_config_password"));
 		ConfigProperties.getInstance().setProperty("component.config.href", System.getenv("config_url"));
+
+		Date startTime = new Date();
+		ConfigProperties.getInstance().setProperty("init.startTime", startTime.getTime()+"");
 		
 		//From Configuration Service
 		try

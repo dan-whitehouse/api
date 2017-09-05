@@ -2,6 +2,8 @@ package org.ricone.api.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletRegistration;
+
 public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
@@ -21,5 +23,4 @@ public class Initializer extends AbstractAnnotationConfigDispatcherServletInitia
 	{
 		return new String[] { "/" };
 	}
-
 }
