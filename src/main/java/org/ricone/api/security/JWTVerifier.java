@@ -1,5 +1,6 @@
 package org.ricone.api.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.cache.AppCache;
 import org.ricone.api.exception.ConfigException;
 import io.jsonwebtoken.Jwts;

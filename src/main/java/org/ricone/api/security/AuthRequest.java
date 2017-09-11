@@ -7,14 +7,14 @@ import org.ricone.api.exception.ConfigException;
 
 import javax.servlet.http.HttpServletRequest;
 
-class AuthRequest
+public class AuthRequest
 {
     private boolean allowTokenParameter;
     private boolean isParameter;
     private boolean isHeader;
     private String token;
 
-    AuthRequest(HttpServletRequest request) throws ConfigException
+    public AuthRequest(HttpServletRequest request) throws ConfigException
     {
         allowTokenParameter = allowTokenParams();
         isHeader = StringUtils.isNotBlank(request.getHeader("Authorization"));
@@ -22,7 +22,8 @@ class AuthRequest
 
         if(isHeader)
         {
-            token = request.getHeader("Authorization");
+            //Strip away the key if Bearer, otherwise it will keep it's key and fail
+            token = StringUtils.replace(request.getHeader("Authorization"), "Bearer ",  "");
         }
         else if(isParameter) //Parameter tokens are allowed, and parameter is set
         {
@@ -30,7 +31,7 @@ class AuthRequest
         }
     }
 
-    private boolean allowTokenParams() throws ConfigException {
+    boolean allowTokenParams() throws ConfigException {
         return BooleanUtils.toBoolean(ConfigProperties.getInstance().getProperty("security.auth.allowTokenParameter"));
     }
 
@@ -48,5 +49,16 @@ class AuthRequest
 
     String getToken() {
         return token;
+    }
+
+
+    @Override
+    public String toString() {
+        return "AuthRequest{" +
+                "allowTokenParameter=" + allowTokenParameter +
+                ", isParameter=" + isParameter +
+                ", isHeader=" + isHeader +
+                ", token='" + token + '\'' +
+                '}';
     }
 }

@@ -17,7 +17,6 @@ public class AuthHandler extends HandlerInterceptorAdapter
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{
 		AuthRequest authRequest = new AuthRequest(request);
-
 		if(isPathException(request.getServletPath()))
 		{
 			return super.preHandle(request, response, handler);
@@ -69,7 +68,6 @@ public class AuthHandler extends HandlerInterceptorAdapter
 	//This method checks to see if the servletPath being requested is an exception to the rule of needing a token
 	private boolean isPathException(String servletPath)
 	{
-		System.out.println(servletPath);
 		if("/swagger/api-docs".equalsIgnoreCase(servletPath))
 		{
 			return true;

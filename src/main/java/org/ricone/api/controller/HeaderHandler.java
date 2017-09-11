@@ -7,15 +7,15 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class HeaderHandler extends HandlerInterceptorAdapter 
 {
-	private static final String pageNum = "pageNum";
-	private static final String pageSize = "pageSize";
+	private static final String pageNum = "PageNumber";
+	private static final String pageSize = "PageSize";
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{	
-		response.setStatus(response.getStatus());		
+		response.setStatus(response.getStatus());
+		setPaging(request, response);
 		setAdditionalHeaders(request, response);
-		setPaging(request, response);			
 		return super.preHandle(request, response, handler);
 	}
 	
@@ -35,13 +35,13 @@ public class HeaderHandler extends HandlerInterceptorAdapter
 		
 		if(pagingNumHeader && pagingSizeHeader)
 		{
-			response.setHeader("PageNumber", request.getHeader(pageNum));
-			response.setHeader("PageSize", request.getHeader(pageSize));
+			response.setHeader(pageNum, request.getHeader(pageNum));
+			response.setHeader(pageSize, request.getHeader(pageSize));
 		}
 		else if(pagingNumParam && pagingSizeParam)
 		{
-			response.setHeader("PageNumber", request.getParameter(pageNum));
-			response.setHeader("PageSize", request.getParameter(pageSize));
+			response.setHeader(pageNum, request.getParameter(pageNum));
+			response.setHeader(pageSize, request.getParameter(pageSize));
 		}
 	}	
 }

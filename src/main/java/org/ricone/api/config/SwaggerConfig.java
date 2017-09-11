@@ -50,19 +50,9 @@ public class SwaggerConfig
 
     @Bean
     public Docket api() {
-       /* return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("org.ricone.api.controller"))
-                .paths(PathSelectors.ant("/requests/*"))
-                .build()
-                .apiInfo(apiInfo());*/
-
-
-
-
         Docket d =  new Docket(DocumentationType.SWAGGER_2).select()
                 .apis(RequestHandlerSelectors.basePackage("org.ricone.api.controller"))
-                .paths(PathSelectors.ant("/requests/*"))
+                .paths(PathSelectors.ant("/requests/**"))
                 .build()
                 .apiInfo(apiInfo())
                 .pathMapping("/")
@@ -88,6 +78,19 @@ public class SwaggerConfig
                 .enableUrlTemplating(true)
         ;
         return d;
+    }
+
+    @Bean
+    UiConfiguration uiConfig() {
+        return new UiConfiguration(
+                "validatorUrl",// url
+                "none",       // docExpansion          => none | list
+                "alpha",      // apiSorter             => alpha
+                "schema",     // defaultModelRendering => schema
+                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
+                false,        // enableJsonEditor      => true | false
+                true,         // showRequestHeaders    => true | false
+                60000L);      // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
     }
 
     @Bean
@@ -119,19 +122,6 @@ public class SwaggerConfig
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         return newArrayList(new SecurityReference("Bearer", authorizationScopes));
-    }
-
-    @Bean
-    UiConfiguration uiConfig() {
-        return new UiConfiguration(
-                "validatorUrl",// url
-                "none",       // docExpansion          => none | list
-                "alpha",      // apiSorter             => alpha
-                "schema",     // defaultModelRendering => schema
-                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
-                false,        // enableJsonEditor      => true | false
-                true,         // showRequestHeaders    => true | false
-                60000L);      // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
     }
 
     private ApiInfo apiInfo()

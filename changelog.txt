@@ -1,3 +1,12 @@
+2.0.0 Build 20170910
+    -Fixed configuration issue with SwaggerConfig path setting
+    - Added Swagger Annotations to xLea Controller
+    - Updated AuthRequest
+        - Fixed issue where tokens sent with an authorization header would not validate against the JWTVerifier
+    - Created XLeaMapper
+        - Removed mapping code from XLeaController and placed it here.
+    - Created AbstractController, which all controllers should extend in order to get additional information (like paging)
+
 2.0.0 Build 20170904
     - Added Swagger WebApp
         - /api now returns swagger
