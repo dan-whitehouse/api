@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+
+import org.ricone.api.mapping.xPress.XLeaMapper;
 import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.core.LeaTelephone;
 import org.ricone.api.model.core.School;
-import org.ricone.api.service.LeaService;
+import org.ricone.api.service.ILeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +22,15 @@ public class LeaController implements IController<Lea>
 	//Reference for Request Mapping: http://www.baeldung.com/spring-requestmapping
 	
 	@Autowired
-	LeaService service;
+    ILeaService service;
+
+	@Autowired
+    XLeaMapper mapper;
 
     @RequestMapping(value= "/requests/leas/{refId}", method = RequestMethod.GET)
     public Lea getSingle(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {
-
-        Lea instance = service.getByRefId(refId);
-
-        //Prepare For Output
+        Lea instance = service.findByRefId(refId);
         Lea lea = map(instance);
         return lea;
     }
@@ -37,7 +39,7 @@ public class LeaController implements IController<Lea>
     public List<Lea> getMulti(HttpServletResponse response) throws Exception
     { 
     	//Get data from DB.
-    	List<Lea> instance = service.getLeas();
+    	List<Lea> instance = service.findAll();
 
     	//Prepare For Output
         List<Lea> leas = new ArrayList<>();
@@ -49,7 +51,7 @@ public class LeaController implements IController<Lea>
     @RequestMapping(value= "/requests/leas/{refId}/*", method = RequestMethod.GET)
     public List<Lea> getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {
-    	List<Lea> leas = service.getLeas(); 
+    	List<Lea> leas = service.findAll();
         return leas;
     }
 
@@ -80,6 +82,6 @@ public class LeaController implements IController<Lea>
         return lea;
     }
 
-    
-   
+
+
 }

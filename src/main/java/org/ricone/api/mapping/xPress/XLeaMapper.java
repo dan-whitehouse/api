@@ -4,10 +4,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.core.LeaTelephone;
-import org.ricone.api.model.xpress.Address;
-import org.ricone.api.model.xpress.OtherPhoneNumbers;
-import org.ricone.api.model.xpress.PhoneNumber;
-import org.ricone.api.model.xpress.XLea;
+import org.ricone.api.model.core.School;
+import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,6 +15,33 @@ import java.util.List;
 public class XLeaMapper {
 
     public XLeaMapper() {
+    }
+
+    public XLeasResponse convert(List<Lea> instance)
+    {
+        List<XLea> list = new ArrayList<>();
+        for(Lea lea : instance)
+        {
+            XLea xLea = map(lea);
+            if (xLea != null)
+            {
+                list.add(xLea);
+            }
+        }
+
+        XLeasResponse response = new XLeasResponse();
+        XLeas xLeas = new XLeas();
+        xLeas.setXLea(list);
+
+        response.setXLeas(xLeas);
+        return response;
+    }
+
+    public XLeaResponse convert(Lea instance)
+    {
+        XLeaResponse response = new XLeaResponse();
+        response.setXLea(map(instance));
+        return response;
     }
 
     public XLea map(Lea instance)

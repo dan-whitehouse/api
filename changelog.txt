@@ -1,5 +1,15 @@
+2.0.0 Build 20170912
+    - Added XSchools Controller, Service, DAO & Mapper
+    - Added Service Layer Interfaces
+        - Updated methods in all Services
+    - Added DAO Layer Interfaces
+        - Updated methods in all DAOs
+    - Added converter methods to Mappers to return a XObjectResponse
+    - Updated Controllers to take advantage of new converter methods
+        - Cleaned them up as well.
+
 2.0.0 Build 20170910
-    -Fixed configuration issue with SwaggerConfig path setting
+    - Fixed configuration issue with SwaggerConfig path setting
     - Added Swagger Annotations to xLea Controller
     - Updated AuthRequest
         - Fixed issue where tokens sent with an authorization header would not validate against the JWTVerifier

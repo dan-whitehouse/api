@@ -8,27 +8,45 @@ import org.ricone.api.model.core.Lea;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("leaService")
 @Transactional
-public class LeaService {
-	
+public class LeaService implements ILeaService
+{
 	@Autowired
-	LeaDAO leaDao;
-	
-	public List<Lea> getLeas() throws NotFoundException
-	{
-		return leaDao.getLeas();
-	}
-	
-	public Lea getByRefId(String refId) throws Exception
-	{
-		//Attempts to load from Cache, otherwise will query database;
-		//return leaDao.findById(refId);
-		return leaDao.findByRefId(refId);
+	LeaDAO dao;
+
+	@Override
+	public List<Lea> findAll() throws NotFoundException {
+		return dao.findAll();
 	}
 
-	public Lea getByLocalId(String localId)
-	{
-		return leaDao.findByLocalId(localId);
+	@Override
+	public Lea findByRefId(String refId) throws Exception {
+		return dao.findByRefId(refId);
+	}
+
+	@Override
+	public Lea findByLocalId(String localId) throws Exception {
+		return dao.findByLocalId(localId);
+	}
+
+	@Override
+	public void save(Lea instance) {
+		dao.save(instance);
+	}
+
+	@Override
+	public void update(Lea instance) {
+		dao.update(instance);
+	}
+
+	@Override
+	public void delete(Lea instance) {
+		dao.delete(instance);
+	}
+
+	@Override
+	public void deleteByRefId(String refId) {
+		dao.deleteByRefId(refId);
 	}
 }
