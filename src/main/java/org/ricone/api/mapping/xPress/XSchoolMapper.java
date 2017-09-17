@@ -176,6 +176,5 @@ public class XSchoolMapper {
             return null;
         }
         return gradeLevels;
-
     }
 }

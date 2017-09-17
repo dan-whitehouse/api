@@ -18,8 +18,8 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
 	@Override
 	public List<Lea> findAll() throws NotFoundException {
 
-		Criteria crit = createEntityCriteria();
-		List<Lea> instance = (List<Lea>) crit.list();
+		Criteria criteria = createEntityCriteria();
+		List<Lea> instance = (List<Lea>) criteria.list();
 		if (instance != null) {
 			for (Lea o : instance) {
 				Hibernate.initialize(o.getLeaTelephones());
@@ -31,9 +31,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
 
 	@Override
 	public Lea findByRefId(String refId) throws Exception {
-		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("leaRefId", refId));
-		Lea instance = (Lea) crit.uniqueResult();
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("leaRefId", refId));
+		Lea instance = (Lea) criteria.uniqueResult();
 		if (instance != null) {
 			Hibernate.initialize(instance.getLeaTelephones());
 			Hibernate.initialize(instance.getSchools());
@@ -43,9 +43,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
 
 	@Override
 	public Lea findByLocalId(String localId) throws Exception {
-		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("leaId", localId));
-		Lea instance = (Lea) crit.uniqueResult();
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("leaId", localId));
+		Lea instance = (Lea) criteria.uniqueResult();
 		if (instance != null) {
 			Hibernate.initialize(instance.getLeaTelephones());
 			Hibernate.initialize(instance.getSchools());
@@ -70,9 +70,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
 
 	@Override
 	public void deleteByRefId(String refId) {
-		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("leaRefId", refId));
-		Lea instance = (Lea) crit.uniqueResult();
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("leaRefId", refId));
+		Lea instance = (Lea) criteria.uniqueResult();
 		delete(instance);
 	}
 }

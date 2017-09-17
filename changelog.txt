@@ -1,3 +1,10 @@
+2.0.0 Build 20170916
+    - Added XCalendars Controller, Service, DAO & Mapper
+    - Added XCourses Controller, Service, DAO & Mapper
+    - Added XRosters Controller, Service, DAO & Mapper (Contains a bug and is slow)
+    - Updated changelog titles for earlier versions
+    - Other minor fixes and adjustments to existing classes
+
 2.0.0 Build 20170912
     - Added XSchools Controller, Service, DAO & Mapper
     - Added Service Layer Interfaces
@@ -54,7 +61,7 @@
         - Created method for to check if the requested path is an exception to the rule of needing a token
             - Ie: /swagger/api-docs
 
-0.0.9
+2.0.0 Build 20160718
 	- Updated AppCache to use Google Guava caching.
 	- Created AppCache to use Google Guava caching.
 	- Removed FileManager.
@@ -63,7 +70,7 @@
 		- initializeProfileCache
 	- Updated AuthHandler to use new methods created when switching to Guava.
 
-0.0.8
+2.0.0 Build 20160715
 	- Created AppCache to hold onto valid App data.
 	- Created ProfileCache to hold onto valid Profile data.
 	- Created FileManager to create and load cached Apps and Profiles.
@@ -76,12 +83,12 @@
 		- cache.tmp.profile.path
 	- Updated AuthHandler to now set App and Profile when creating a new session using AppCache and ProfileCache.
 	
-0.0.7
+2.0.0 Build 20160610
 	- Added setAdditionalHeaders method in HeaderHandler to now set any additional globally headers.
 	- Created LogHandler to globally return logs.
 	- Created Log to contain the log information.
 
-0.0.6
+2.0.0 Build 20160515
 	- Created ConfigProperties to easily store and access configurable information.
 	- Created Configure to load ConfigProperties at startup and add properties which come from the system environment variables.
 	- Added Provider, ProviderKV, and DistrictKV to component.config.model
@@ -92,25 +99,24 @@
 		- JWTVerifier now retrieves sharedSecret from ConfigService.
 		- Removed catalog annotation from Lea and LeaTelepohone.
 	
-0.0.5
+2.0.0 Build 20160511
 	- Created HeaderHandler to globally return response headers.
 	- Created IController so all other Controllers follow the rules.
 
-0.0.4
+2.0.0 Build 20160509
 	- Parameter Tokens being allowed is now configurable through config.properties.
 	- Created new Exception (ConfigException) which should be returned when something is configured improperly.
 	- Added changelog.txt to keep track of major changes, as well as writing up old improvements.
 	- Moved AuthHandler to security package.
 	
-0.0.3
+2.0.0 Build 20160504
 	- Created SessionManager to hold onto valid tokens associated with the application_id defined in the DecodedToken.
 	- Added logic to AuthHandler to invalidate tokens which are valid, but the expiry date is less then the token saved by the SessionManager.
 		- Tokens which value are equal are valid as long as the token continues to validate or is overwritten by a newer token.
 	- Created SessionTask which will remove expired sessions from the SessionManager.
 	
-0.0.2
-	- Created AuthHandler to check for tokens in the headers as well as query parameters globally.
-	- Added GlobalExceptionHandler to allow the API to return custom Exceptions which report proper HTTP status codes.
-	
-0.0.1
+
+2.0.0 Build 20160501
 	- Basic Setup of Controllers, Services, DAOs, and Models.
+	- Created AuthHandler to check for tokens in the headers as well as query parameters globally.
+    - Added GlobalExceptionHandler to allow the API to return custom Exceptions which report proper HTTP status codes.

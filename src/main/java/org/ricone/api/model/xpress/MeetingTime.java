@@ -7,10 +7,10 @@
 
 package org.ricone.api.model.xpress;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -150,5 +150,11 @@ public class MeetingTime {
                 ", sessionCode='" + sessionCode + '\'' +
                 ", schoolCalendarRefId='" + schoolCalendarRefId + '\'' +
                 '}';
+    }
+
+    @JsonIgnore
+    public boolean isEmptyObject()
+    {
+        return Stream.of(timeTableDay, classMeetingDays, timeTablePeriod, roomNumber, classBeginningTime, classEndingTime, sessionCode, schoolCalendarRefId).allMatch(Objects::isNull);
     }
 }

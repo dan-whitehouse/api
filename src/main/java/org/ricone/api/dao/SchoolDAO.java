@@ -19,8 +19,8 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	@Override
 	public List<School> findAll() throws NotFoundException {
 
-		Criteria crit = createEntityCriteria();
-		List<School> instance = (List<School>)crit.list();
+		Criteria criteria = createEntityCriteria();
+		List<School> instance = (List<School>)criteria.list();
 		if(instance!=null)
 		{
 			for(School o : instance)
@@ -38,9 +38,9 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	@Override
 	public School findByRefId(String refId) throws Exception
 	{
-		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("schoolRefId", refId));
-		School instance = (School)crit.uniqueResult();
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("schoolRefId", refId));
+		School instance = (School)criteria.uniqueResult();
 		if(instance!=null)
 		{
 			Hibernate.initialize(instance.getLea());
@@ -56,9 +56,9 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	public School findByLocalId(String localId) throws Exception
 	{
 		//TODO: This isn't implemented correctly
-		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("leaId", localId));
-		School instance = (School)crit.uniqueResult();
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("leaId", localId));
+		School instance = (School)criteria.uniqueResult();
 		if(instance!=null)
 		{
 			Hibernate.initialize(instance.getLea());
@@ -88,11 +88,9 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	@Override
 	public void deleteByRefId(String refId)
 	{
-		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("leaRefId", refId));
-		School instance = (School)crit.uniqueResult();
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("leaRefId", refId));
+		School instance = (School)criteria.uniqueResult();
 		delete(instance);
 	}
 }
-
-

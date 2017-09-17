@@ -17,11 +17,11 @@ public interface ISchoolService
 
     School findByLocalId(String localId) throws Exception;
 
-    void save(School lea);
+    void save(School instance);
 
-    void update(School lea);
+    void update(School instance);
 
-    void delete(School lea);
+    void delete(School instance);
 
     void deleteByRefId(String refId);
 }
