@@ -50,4 +50,8 @@ public class Languages {
                 "language=" + language +
                 '}';
     }
+
+    public boolean isEmptyObject() {
+        return language.isEmpty();
+    }
 }

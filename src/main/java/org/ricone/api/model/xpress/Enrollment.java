@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -240,5 +243,9 @@ public class Enrollment {
                 ", projectedGraduationYear='" + projectedGraduationYear + '\'' +
                 ", counselor=" + counselor +
                 '}';
+    }
+
+    public boolean isEmptyObject() {
+        return Stream.of(leaRefId, schoolRefId, studentSchoolAssociationRefId, responsibleSchoolType, membershipType, entryDate, entryType, exitDate, exitType, homeRoomNumber, homeRoomTeacher, gradeLevel, projectedGraduationYear, counselor).allMatch(Objects::isNull);
     }
 }

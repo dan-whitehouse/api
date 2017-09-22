@@ -30,10 +30,17 @@ public class CourseSection implements java.io.Serializable
         this.courseSectionRefId = courseSectionRefId;
     }
 
-    public CourseSection(String courseSectionRefId, Boolean isDeleted)
+
+    public CourseSection(CourseSection courseSection, SchoolCalendarSession schoolcalendarsession, Course course, CourseSectionSchedule coursesectionschedules, StaffCourseSection staffcoursesections, StudentCourseSection studentcoursesections)
     {
-        this.courseSectionRefId = courseSectionRefId;
-        this.isDeleted = isDeleted;
+        this.courseSectionRefId = courseSection.getCourseSectionRefId();
+        this.schoolSectionId = courseSection.getSchoolSectionId();
+        this.vendorSectionId = courseSection.getVendorSectionId();
+        this.schoolCalendarSession = schoolcalendarsession;
+        this.course = course;
+        this.courseSectionSchedules.add(coursesectionschedules);
+        this.staffCourseSections.add(staffcoursesections);
+        this.studentCourseSections.add(studentcoursesections);
     }
 
     public CourseSection(String courseSectionRefId, SchoolCalendarSession schoolcalendarsession, Course course)

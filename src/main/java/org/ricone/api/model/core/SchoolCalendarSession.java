@@ -33,7 +33,7 @@ public class SchoolCalendarSession implements java.io.Serializable
     private Date sessionStartTime;
     private Date sessionEndTime;
     private String linkedSessionCode;
-    private Set<CourseSection> courseSections = new HashSet<CourseSection>(0);
+    private Set<CourseSection> courseSections = new HashSet<>(0);
 
     public SchoolCalendarSession()
     {
