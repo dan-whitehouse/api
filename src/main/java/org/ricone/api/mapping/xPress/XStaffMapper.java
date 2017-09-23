@@ -12,8 +12,8 @@ import java.util.Set;
 @Component("XStaffMapper")
 public class XStaffMapper {
 
-    private final String localId = "LEA";
-    private final String stateId = "SEA";
+    private final String LOCAL_ID = "LEA";
+    private final String STATE_ID = "SEA";
 
     public XStaffMapper() {
     }
@@ -24,8 +24,7 @@ public class XStaffMapper {
         for(Staff staff : instance)
         {
             XStaff xStaff = map(staff);
-            if (xStaff != null)
-            {
+            if (xStaff != null) {
                 list.add(xStaff);
             }
         }
@@ -41,7 +40,10 @@ public class XStaffMapper {
     public XStaffResponse convert(Staff instance)
     {
         XStaffResponse response = new XStaffResponse();
-        response.setXStaff(map(instance));
+        XStaff xStaff = map(instance);
+        if (xStaff != null) {
+            response.setXStaff(map(instance));;
+        }
         return response;
     }
 
@@ -54,18 +56,21 @@ public class XStaffMapper {
 
         //Name
         Name name = mapName(instance);
-        xStaff.setName(name);
+        if(name != null) {
+            xStaff.setName(name);
+        }
 
         //Email
         for(StaffEmail staffEmail : instance.getStaffEmails())
         {
             if(staffEmail.getPrimaryEmailAddressIndicator())
             {
-                Email email = new Email();
-                email.setEmailAddress(staffEmail.getEmailAddress());
-                email.setEmailType(staffEmail.getEmailTypeCode());
-                xStaff.setEmail(email);
-                break;
+                Email email = mapEmail(staffEmail);
+                if(staffEmail != null)
+                {
+                    xStaff.setEmail(email);
+                    break;
+                }
             }
         }
 
@@ -73,18 +78,18 @@ public class XStaffMapper {
         List<OtherId> otherIdList = new ArrayList<>();
         for(StaffIdentifier id : instance.getStaffIdentifiers())
         {
-            OtherId otherId = mapOtherId(id);
-            if(localId.equals(otherId.getType()))
-            {
-                xStaff.setLocalId(otherId.getId());
+            if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
+                xStaff.setLocalId(id.getStaffId());
             }
-            else if(stateId.equals(otherId.getType()))
-            {
-                xStaff.setStateProvinceId(otherId.getId());
+            else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
+                xStaff.setStateProvinceId(id.getStaffId());
             }
             else
             {
-                otherIdList.add(otherId);
+                OtherId otherId = mapOtherId(id);
+                if(otherId != null) {
+                    otherIdList.add(otherId);
+                }
             }
         }
 
@@ -103,12 +108,16 @@ public class XStaffMapper {
             if(assignment.getPrimaryAssignment())
             {
                 PrimaryAssignment primaryAssignment = mapPrimaryAssignment(assignment);
-                xStaff.setPrimaryAssignment(primaryAssignment);
+                if(primaryAssignment != null){
+                    xStaff.setPrimaryAssignment(primaryAssignment);
+                }
             }
             else
             {
                 StaffPersonAssignment staffPersonAssignment = mapOtherAssignment(assignment);
-                assignmentList.add(staffPersonAssignment);
+                if(staffPersonAssignment != null){
+                    assignmentList.add(staffPersonAssignment);
+                }
             }
         }
 
@@ -123,8 +132,7 @@ public class XStaffMapper {
         return xStaff;
     }
 
-    private OtherId mapOtherId(StaffIdentifier id)
-    {
+    private OtherId mapOtherId(StaffIdentifier id) {
         OtherId otherId = new OtherId();
         otherId.setId(id.getStaffId());
         otherId.setType(id.getIdentificationSystemCode());
@@ -136,8 +144,7 @@ public class XStaffMapper {
         return otherId;
     }
 
-    private Name mapName(Staff instance)
-    {
+    private Name mapName(Staff instance) {
         Name name = new Name();
         name.setFamilyName(instance.getLastName());
         name.setGivenName(instance.getFirstName());
@@ -153,8 +160,7 @@ public class XStaffMapper {
         return name;
     }
 
-    private PrimaryAssignment mapPrimaryAssignment(StaffAssignment assignment)
-    {
+    private PrimaryAssignment mapPrimaryAssignment(StaffAssignment assignment) {
         PrimaryAssignment primaryAssignment = new PrimaryAssignment();
         primaryAssignment.setJobFunction(assignment.getPositionTitle());
 
@@ -173,8 +179,7 @@ public class XStaffMapper {
         return primaryAssignment;
     }
 
-    private StaffPersonAssignment mapOtherAssignment(StaffAssignment assignment)
-    {
+    private StaffPersonAssignment mapOtherAssignment(StaffAssignment assignment) {
         StaffPersonAssignment staffPersonAssignment = new StaffPersonAssignment();
         staffPersonAssignment.setJobFunction(assignment.getPositionTitle());
 
@@ -191,5 +196,17 @@ public class XStaffMapper {
             return null;
         }
         return staffPersonAssignment;
+    }
+
+    private Email mapEmail(StaffEmail staffEmail) {
+        Email email = new Email();
+        email.setEmailAddress(staffEmail.getEmailAddress());
+        email.setEmailType(staffEmail.getEmailTypeCode());
+
+        if(email.isEmptyObject())
+        {
+            return null;
+        }
+        return email;
     }
 }

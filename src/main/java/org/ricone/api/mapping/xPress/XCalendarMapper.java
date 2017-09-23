@@ -22,8 +22,7 @@ public class XCalendarMapper {
         for(SchoolCalendar calendar : instance)
         {
             XCalendar xCalendar = map(calendar);
-            if (xCalendar != null)
-            {
+            if (xCalendar != null) {
                 list.add(xCalendar);
             }
         }
@@ -39,7 +38,10 @@ public class XCalendarMapper {
     public XCalendarResponse convert(SchoolCalendar instance)
     {
         XCalendarResponse response = new XCalendarResponse();
-        response.setXCalendar(map(instance));
+        XCalendar xCalendar = map(instance);
+        if (xCalendar != null) {
+            response.setXCalendar(xCalendar);
+        }
         return response;
     }
 
@@ -54,7 +56,9 @@ public class XCalendarMapper {
         for(SchoolCalendarSession calendarSession : instance.getSchoolCalendarSessions())
         {
             SessionList sessionList = mapSessionList(calendarSession);
-            sessionsList.add(sessionList);
+            if(sessionList != null){
+                sessionsList.add(sessionList);
+            }
         }
 
         if(CollectionUtils.isNotEmpty(sessionsList))

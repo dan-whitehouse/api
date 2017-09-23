@@ -22,8 +22,7 @@ public class XCourseMapper {
         for(Course course : instance)
         {
             XCourse xCourse = map(course);
-            if (xCourse != null)
-            {
+            if (xCourse != null) {
                 list.add(xCourse);
             }
         }
@@ -39,7 +38,10 @@ public class XCourseMapper {
     public XCourseResponse convert(Course instance)
     {
         XCourseResponse response = new XCourseResponse();
-        response.setXCourse(map(instance));
+        XCourse xCourse = map(instance);
+        if (xCourse != null) {
+            response.setXCourse(xCourse);
+        }
         return response;
     }
 
@@ -57,8 +59,7 @@ public class XCourseMapper {
         {
             xCourse.setSchoolRefId(instance.getSchool().getSchoolRefId());
 
-            if(instance.getSchool().getLea() != null)
-            {
+            if(instance.getSchool().getLea() != null) {
                 xCourse.setLeaCourseId(instance.getSchool().getLea().getLeaRefId());
             }
         }
@@ -73,7 +74,9 @@ public class XCourseMapper {
         for(CourseIdentifier id : instance.getCourseIdentifiers())
         {
             OtherId otherId = mapOtherId(id);
-            otherIdList.add(otherId);
+            if(otherId != null) {
+                otherIdList.add(otherId);
+            }
         }
 
         //Other Identifiers
@@ -86,7 +89,9 @@ public class XCourseMapper {
 
         //Applicable Education Levels
         ApplicableEducationLevels applicableEducationLevels = mapApplicableEducationLevels(instance.getCourseGrades());
-        xCourse.setApplicableEducationLevels(applicableEducationLevels);
+        if(applicableEducationLevels != null) {
+            xCourse.setApplicableEducationLevels(applicableEducationLevels);
+        }
 
         return xCourse;
     }
@@ -99,8 +104,7 @@ public class XCourseMapper {
             applicableEducationLevels.getApplicableEducationLevel().add(grade.getGradeLevelCode());
         }
 
-        if(applicableEducationLevels.isEmptyObject())
-        {
+        if(applicableEducationLevels.isEmptyObject()) {
             return null;
         }
         return applicableEducationLevels;
@@ -112,8 +116,7 @@ public class XCourseMapper {
         otherId.setId(id.getCourseId());
         otherId.setType(id.getIdentificationSystemCode());
 
-        if(otherId.isEmptyObject())
-        {
+        if(otherId.isEmptyObject()) {
             return null;
         }
         return otherId;

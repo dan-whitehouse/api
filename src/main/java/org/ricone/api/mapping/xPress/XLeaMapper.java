@@ -23,8 +23,7 @@ public class XLeaMapper {
         for(Lea lea : instance)
         {
             XLea xLea = map(lea);
-            if (xLea != null)
-            {
+            if (xLea != null) {
                 list.add(xLea);
             }
         }
@@ -55,20 +54,23 @@ public class XLeaMapper {
 
         //Address
         Address address = mapAddress(instance);
-        xLea.setAddress(address);
+        if (address != null) {
+            xLea.setAddress(address);
+        }
 
         //PhoneNumber - Primary
         List<PhoneNumber> phoneNumbers = new ArrayList<>();
         for(LeaTelephone telephone : instance.getLeaTelephones())
         {
             PhoneNumber phone = mapPhone(telephone);
-            if(telephone.getPrimaryTelephoneNumberIndicator())
+            if(phone != null)
             {
-                xLea.setPhoneNumber(phone);
-            }
-            else
-            {
-                phoneNumbers.add(phone);
+                if(telephone.getPrimaryTelephoneNumberIndicator()) {
+                    xLea.setPhoneNumber(phone);
+                }
+                else {
+                    phoneNumbers.add(phone);
+                }
             }
         }
 
@@ -114,5 +116,4 @@ public class XLeaMapper {
         }
         return phone;
     }
-
 }

@@ -1,6 +1,8 @@
 2.0.0 Build 20170922
     - Created XStaffMapper
     - Created XStudentMapper
+    - Updated all Mappers to include additional null checks.
+    - Added EntryExitCode Model to Core
 
 2.0.0 Build 20170916
     - Added XCalendars Controller, Service, DAO & Mapper

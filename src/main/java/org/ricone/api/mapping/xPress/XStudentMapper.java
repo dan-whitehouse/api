@@ -13,8 +13,13 @@ import java.util.*;
 @Component("XStudentMapper")
 public class XStudentMapper {
 
-    private final String localId = "LEA";
-    private final String stateId = "SEA";
+    private final String LOCAL_ID = "LEA";
+    private final String STATE_ID = "SEA";
+    private final String PRIMARY_ADDRESS_TYPE = "Mailing";
+    private final String MEMBERSHIP_TYPE_CODE = "Home";
+    private final String SYSTEM_TYPE_CODE = "CEDS";
+    private final String ENTRY_TYPE = "Entry";
+    private final String EXIT_TYPE = "Exit";
 
     public XStudentMapper() {
     }
@@ -25,8 +30,7 @@ public class XStudentMapper {
         for(Student student : instance)
         {
             XStudent xStudent = map(student);
-            if (xStudent != null)
-            {
+            if (xStudent != null) {
                 list.add(xStudent);
             }
         }
@@ -42,10 +46,12 @@ public class XStudentMapper {
     public XStudentResponse convert(Student instance)
     {
         XStudentResponse response = new XStudentResponse();
-        response.setXStudent(map(instance));
+        XStudent xStudent = map(instance);
+        if (xStudent != null) {
+            response.setXStudent(xStudent);
+        }
         return response;
     }
-
 
     public XStudent map(Student instance)
     {
@@ -99,10 +105,10 @@ public class XStudentMapper {
         List<OtherId> otherIdList = new ArrayList<>();
         for(StudentIdentifier id : instance.getStudentIdentifiers())
         {
-            if(localId.equals(id.getIdentificationSystemCode())) {
+            if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
                 xStudent.setLocalId(id.getStudentId());
             }
-            else if(stateId.equals(id.getIdentificationSystemCode())) {
+            else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
                 xStudent.setStateProvinceId(id.getStudentId());
             }
             else {
@@ -123,7 +129,7 @@ public class XStudentMapper {
         //Address
         for(StudentAddress studentAddress : instance.getStudentAddresses())
         {
-            if("Organizational".equalsIgnoreCase(studentAddress.getAddressTypeCode()))
+            if(PRIMARY_ADDRESS_TYPE.equalsIgnoreCase(studentAddress.getAddressTypeCode()))
             {
                 Address address = mapAddress(studentAddress);
                 if(address != null) {
@@ -139,7 +145,6 @@ public class XStudentMapper {
             xStudent.setDemographics(demographics);
         }
 
-
         //Phone
         for(StudentTelephone studentTelephone : instance.getStudentTelephones())
         {
@@ -153,8 +158,6 @@ public class XStudentMapper {
             }
         }
 
-
-
         //Enrollments
         List<Enrollment> enrollmentList = new ArrayList<>();
         for(StudentEnrollment studentEnrollment : instance.getStudentEnrollments())
@@ -162,7 +165,7 @@ public class XStudentMapper {
             Enrollment enrollment = mapEnrollment(studentEnrollment);
             if(enrollment != null)
             {
-                if("Home".equalsIgnoreCase(studentEnrollment.getMembershipTypeCode())) {
+                if(MEMBERSHIP_TYPE_CODE.equalsIgnoreCase(studentEnrollment.getMembershipTypeCode())) {
                     xStudent.setEnrollment(enrollment);
                 }
                 else {
@@ -177,7 +180,6 @@ public class XStudentMapper {
             otherEnrollments.setEnrollment(enrollmentList);
             xStudent.setOtherEnrollments(otherEnrollments);
         }
-
 
         //Academic Summary
         AcademicSummary academicSummary = mapAcademicSummary(instance.getStudentAcademicRecords());
@@ -200,53 +202,21 @@ public class XStudentMapper {
         return xStudent;
     }
 
-    private Enrollment mapEnrollment(StudentEnrollment studentEnrollment) {
-        Enrollment enrollment = new Enrollment();
-        enrollment.setStudentSchoolAssociationRefId(null);
-        enrollment.setHomeRoomNumber(studentEnrollment.getHomeroomIdentifier());
-        enrollment.setGradeLevel(studentEnrollment.getCurrentGradeLevel());
-        enrollment.setMembershipType(studentEnrollment.getMembershipTypeCode());
-        enrollment.setProjectedGraduationYear(null);
-        enrollment.setResponsibleSchoolType(studentEnrollment.getResponsibleSchoolTypeCode());
-        enrollment.setEntryDate(DateFormatUtils.format(studentEnrollment.getEnrollmentEntryDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
-        enrollment.setExitDate(DateFormatUtils.format(studentEnrollment.getEnrollmentExitDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
+    private OtherCode mapOtherCode(EntryExitCode entryExitCode) {
+        OtherCode otherCode = new OtherCode();
+        otherCode.setCodesetName(entryExitCode.getSystemTypeCode());
+        otherCode.setOtherCodeValue(entryExitCode.getCode());
 
-        if(studentEnrollment.getSchool() != null)
-        {
-            enrollment.setSchoolRefId(studentEnrollment.getSchool().getSchoolRefId());
-            enrollment.setLeaRefId(studentEnrollment.getSchool().getLea().getLeaRefId());
-        }
-
-        EntryType entryType = new EntryType(); //TODO - Need Mapper
-        if(entryType != null) {
-            enrollment.setEntryType(entryType);
-        }
-        ExitType exitType = new ExitType(); //TODO - Need Mapper
-        if(exitType != null) {
-            enrollment.setExitType(exitType);
-        }
-
-
-        HomeRoomTeacher homeRoomTeacher = new HomeRoomTeacher(); //TODO - Need Mapper
-        if(homeRoomTeacher != null){
-            enrollment.setHomeRoomTeacher(homeRoomTeacher);
-        }
-
-        Counselor counselor = new Counselor();
-        if(counselor != null){
-            enrollment.setCounselor(counselor); //TODO - Need Mapper
-        }
-
-        if(enrollment.isEmptyObject())
+        if(otherCode.isEmptyObject())
         {
             return null;
         }
-        return enrollment;
+        return otherCode;
     }
 
     private AcademicSummary mapAcademicSummary(Set<StudentAcademicRecord> studentAcademicRecords) {
         List<StudentAcademicRecord> academicRecordList = new ArrayList<>(studentAcademicRecords); //Need list for sorting
-        Collections.sort(academicRecordList, (Comparator<StudentAcademicRecord>) (o1, o2) -> o1.getAsOfDate().compareTo(o2.getAsOfDate())); //Sort by Latest Date
+        academicRecordList.sort(Comparator.comparing(StudentAcademicRecord::getAsOfDate)); //Sort by Latest Date
         StudentAcademicRecord academicRecord = academicRecordList.get(0); //Get Latest Date
 
         AcademicSummary academicSummary = new AcademicSummary();
@@ -402,8 +372,7 @@ public class XStudentMapper {
         for(StudentLanguage studentLanguage : studentLanguages)
         {
             Language language = mapLanguage(studentLanguage);
-            if(language != null)
-            {
+            if(language != null) {
                 languages.getLanguage().add(language);
             }
         }
@@ -425,6 +394,159 @@ public class XStudentMapper {
             return null;
         }
         return language;
+    }
+
+    private Enrollment mapEnrollment(StudentEnrollment studentEnrollment) {
+        Enrollment enrollment = new Enrollment();
+        enrollment.setStudentSchoolAssociationRefId(null);
+        enrollment.setHomeRoomNumber(studentEnrollment.getHomeroomIdentifier());
+        enrollment.setGradeLevel(studentEnrollment.getCurrentGradeLevel());
+        enrollment.setMembershipType(studentEnrollment.getMembershipTypeCode());
+        enrollment.setProjectedGraduationYear(null);
+        enrollment.setResponsibleSchoolType(studentEnrollment.getResponsibleSchoolTypeCode());
+        enrollment.setEntryDate(DateFormatUtils.format(studentEnrollment.getEnrollmentEntryDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
+        enrollment.setExitDate(DateFormatUtils.format(studentEnrollment.getEnrollmentExitDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
+
+        if(studentEnrollment.getSchool() != null)
+        {
+            enrollment.setSchoolRefId(studentEnrollment.getSchool().getSchoolRefId());
+            enrollment.setLeaRefId(studentEnrollment.getSchool().getLea().getLeaRefId());
+        }
+
+        //Entry Type
+        EntryType entryType = mapEntryType(studentEnrollment.getEntryExitCodes());
+        if(entryType != null) {
+            enrollment.setEntryType(entryType);
+        }
+
+        //Exit Type
+        ExitType exitType = mapExitType(studentEnrollment.getEntryExitCodes());
+        if(exitType != null) {
+            enrollment.setExitType(exitType);
+        }
+
+        //Home Room Teacher
+        HomeRoomTeacher homeRoomTeacher = mapHomeRoomTeacher(studentEnrollment.getTeacher());
+        if(homeRoomTeacher != null){
+            enrollment.setHomeRoomTeacher(homeRoomTeacher);
+        }
+
+        //Counselor
+        Counselor counselor = mapCounselor(studentEnrollment.getCounselor());
+        if(counselor != null){
+            enrollment.setCounselor(counselor);
+        }
+
+        if(enrollment.isEmptyObject())
+        {
+            return null;
+        }
+        return enrollment;
+    }
+
+    private Counselor mapCounselor(Staff staff) {
+        Counselor counselor = new Counselor();
+        counselor.setRefId(staff.getStaffRefId());
+        counselor.setFamilyName(staff.getLastName());
+        counselor.setGivenName(staff.getFirstName());
+
+        for(StaffIdentifier id : staff.getStaffIdentifiers())
+        {
+            if(LOCAL_ID.equalsIgnoreCase(id.getIdentificationSystemCode())){
+                counselor.setLocalId(id.getStaffId());
+                break;
+            }
+        }
+
+        if(counselor.isEmptyObject())
+        {
+            return null;
+        }
+        return counselor;
+    }
+
+    private HomeRoomTeacher mapHomeRoomTeacher(Staff staff) {
+        HomeRoomTeacher homeRoomTeacher = new HomeRoomTeacher();
+        homeRoomTeacher.setRefId(staff.getStaffRefId());
+        homeRoomTeacher.setFamilyName(staff.getLastName());
+        homeRoomTeacher.setGivenName(staff.getFirstName());
+
+        for(StaffIdentifier id : staff.getStaffIdentifiers())
+        {
+            if(LOCAL_ID.equalsIgnoreCase(id.getIdentificationSystemCode())){
+                homeRoomTeacher.setLocalId(id.getStaffId());
+                break;
+            }
+        }
+
+        if(homeRoomTeacher.isEmptyObject())
+        {
+            return null;
+        }
+        return homeRoomTeacher;
+    }
+
+    private EntryType mapEntryType(Set<EntryExitCode> entryExitCodes) {
+
+        EntryType entryType = new EntryType();
+
+        List<OtherCode> otherCodes = new ArrayList<>();
+        for(EntryExitCode entryExitCode : entryExitCodes)
+        {
+            if(SYSTEM_TYPE_CODE.equalsIgnoreCase(entryExitCode.getSystemTypeCode()) && ENTRY_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
+            {
+                entryType.setCode(entryExitCode.getCode());
+            }
+            else if(ENTRY_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
+            {
+                OtherCode otherCode = mapOtherCode(entryExitCode);
+                if(otherCode != null){
+                    otherCodes.add(otherCode);
+                }
+            }
+        }
+
+        if(CollectionUtils.isNotEmpty(otherCodes))
+        {
+            entryType.setOtherCode(otherCodes);
+        }
+
+        if(entryType.isEmptyObject())
+        {
+            return null;
+        }
+        return entryType;
+    }
+
+    private ExitType mapExitType(Set<EntryExitCode> entryExitCodes) {
+        ExitType exitType = new ExitType();
+
+        List<OtherCode> otherCodes = new ArrayList<>();
+        for(EntryExitCode entryExitCode : entryExitCodes)
+        {
+            if(SYSTEM_TYPE_CODE.equalsIgnoreCase(entryExitCode.getSystemTypeCode()) && EXIT_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
+            {
+                exitType.setCode(entryExitCode.getCode());
+            }
+            else if(EXIT_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
+            {
+                OtherCode otherCode = mapOtherCode(entryExitCode);
+                if(otherCode != null){
+                    otherCodes.add(otherCode);
+                }
+            }
+        }
+
+        if(CollectionUtils.isNotEmpty(otherCodes))
+        {
+            exitType.setOtherCode(otherCodes);
+        }
+
+        if(exitType.isEmptyObject())
+        {
+            return null;
+        }
+        return exitType;
     }
 
 }

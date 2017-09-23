@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.ricone.api.model.core.*;
 import org.ricone.api.model.xpress.*;
+import org.ricone.api.util.Util;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -28,12 +29,10 @@ public class XRosterMapper {
         for(CourseSection courseSection : instance)
         {
             XRoster xRoster = map(courseSection);
-            if (xRoster != null)
-            {
+            if (xRoster != null) {
                 list.add(xRoster);
             }
         }
-        //List<XSchool> list = instance.stream().map(school -> map(school)).collect(Collectors.toList());
 
         XRostersResponse response = new XRostersResponse();
         XRosters xRosters = new XRosters();
@@ -46,7 +45,10 @@ public class XRosterMapper {
     public XRosterResponse convert(CourseSection instance)
     {
         XRosterResponse response = new XRosterResponse();
-        response.setXRoster(map(instance));
+        XRoster xRoster = map(instance);
+        if (xRoster != null) {
+            response.setXRoster(xRoster);
+        }
         return response;
     }
 
@@ -58,7 +60,8 @@ public class XRosterMapper {
             xRoster.setRefId(instance.getCourseSectionRefId());
 
             /* Course & School Data */
-           /* if (instance.getCourse() != null) {
+           if (instance.getCourse() != null)
+           {
                 xRoster.setCourseRefId(instance.getCourse().getCourseRefId());
                 xRoster.setCourseTitle(instance.getCourse().getTitle());
                 xRoster.setSubject(instance.getCourse().getSubjectCode());
@@ -66,25 +69,31 @@ public class XRosterMapper {
                 if (instance.getCourse().getSchool() != null) {
                     xRoster.setSchoolRefId(instance.getCourse().getSchool().getSchoolRefId());
                 }
-            }*/
+            }
 
             /* Calendar */
-           /* if (instance.getSchoolCalendarSession() != null) {
+           if (instance.getSchoolCalendarSession() != null)
+           {
                 xRoster.setSessionCode(instance.getSchoolCalendarSession().getSessionTypeCode());
 
-                if (instance.getSchoolCalendarSession().getSchoolCalendar() != null) {
+                if (instance.getSchoolCalendarSession().getSchoolCalendar() != null)
+                {
                     xRoster.setSchoolYear(instance.getSchoolCalendarSession().getSchoolCalendar().getCalendarYear());
                     xRoster.setSchoolCalendarRefId(instance.getSchoolCalendarSession().getSchoolCalendar().getSchoolCalendarRefId());
-                    //xRoster.setSchoolSectionId(null);
+                    xRoster.setSchoolSectionId(null);
                 }
-            }*/
+            }
 
             /* Meeting Times */
-           /* if(CollectionUtils.isNotEmpty(instance.getCourseSectionSchedules())) {
+           if(CollectionUtils.isNotEmpty(instance.getCourseSectionSchedules()))
+           {
                 List<MeetingTime> meetingTimeList = new ArrayList<>();
-                for (CourseSectionSchedule courseSectionSchedule : instance.getCourseSectionSchedules()) {
+                for (CourseSectionSchedule courseSectionSchedule : instance.getCourseSectionSchedules())
+                {
                     MeetingTime meetingTime = mapMeetingTime(courseSectionSchedule, instance);
-                    meetingTimeList.add(meetingTime);
+                    if(meetingTime != null){
+                        meetingTimeList.add(meetingTime);
+                    }
                 }
 
                 if (CollectionUtils.isNotEmpty(meetingTimeList)) {
@@ -92,53 +101,62 @@ public class XRosterMapper {
                     meetingTimes.setMeetingTime(meetingTimeList);
                     xRoster.setMeetingTimes(meetingTimes);
                 }
-            }*/
+           }
 
 
             /* Students */
-            /*if(CollectionUtils.isNotEmpty(instance.getStudentCourseSections())) {
+            if(CollectionUtils.isNotEmpty(instance.getStudentCourseSections()))
+            {
                 List<StudentReference> studentList = new ArrayList<>();
-                for (StudentCourseSection studentCourseSection : instance.getStudentCourseSections()) {
-                    StudentReference staffPersonReference = mapStudent(studentCourseSection.getStudent());
-                    studentList.add(staffPersonReference);
+                for (StudentCourseSection studentCourseSection : instance.getStudentCourseSections())
+                {
+                    StudentReference studentReference = mapStudent(studentCourseSection.getStudent());
+                    if(studentReference != null){
+                        studentList.add(studentReference);
+                    }
                 }
 
-                if (CollectionUtils.isNotEmpty(studentList)) {
+                if (CollectionUtils.isNotEmpty(studentList))
+                {
                     Students students = new Students();
                     students.setStudentReference(studentList);
                     xRoster.setStudents(students);
                 }
-            }*/
+            }
 
             /* Staff */ //TODO: There is an error in here. Line 121
-            /*if(CollectionUtils.isNotEmpty(instance.getStaffCourseSections()))
+            if(CollectionUtils.isNotEmpty(instance.getStaffCourseSections()))
             {
                 List<OtherStaff> otherStaffList = new ArrayList<>();
                 for (StaffCourseSection staffCourseSection : instance.getStaffCourseSections())
                 {
                     StaffPersonReference staffPersonReference = mapStaff(staffCourseSection.getStaff());
-                    if (staffPersonReference != null) {
-                        if (staffCourseSection.getTeacherOfRecord()) {
+                    if (staffPersonReference != null)
+                    {
+                        if (staffCourseSection.getTeacherOfRecord())
+                        {
                             PrimaryStaff staff = new PrimaryStaff();
                             staff.setStaffPersonReference(staffPersonReference);
                             staff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            staff.setPercentResponsible(bigDecimalConverter(staffCourseSection.getContributionPercentage()));
+                            staff.setPercentResponsible(Util.bigDecimalConverter(staffCourseSection.getContributionPercentage()));
 
-                            if (!staff.isEmptyObject()) {
+                            if (!staff.isEmptyObject())
+                            {
                                 xRoster.setPrimaryStaff(staff);
                             }
-                        } else {
+                        }
+                        else
+                        {
                             OtherStaff otherStaff = new OtherStaff();
                             otherStaff.setStaffPersonReference(staffPersonReference);
                             otherStaff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            otherStaff.setPercentResponsible(bigDecimalConverter(staffCourseSection.getContributionPercentage()));
+                            otherStaff.setPercentResponsible(Util.bigDecimalConverter(staffCourseSection.getContributionPercentage()));
 
                             if (!otherStaff.isEmptyObject()) {
                                 otherStaffList.add(otherStaff);
                             }
                         }
                     }
-
                 }
 
                 //Other Staff
@@ -147,7 +165,7 @@ public class XRosterMapper {
                     otherStaffs.setOtherStaff(otherStaffList);
                     xRoster.setOtherStaffs(otherStaffs);
                 }
-            }*/
+            }
         }
         catch(Exception e)
         {
@@ -157,8 +175,7 @@ public class XRosterMapper {
         return xRoster;
     }
 
-    private MeetingTime mapMeetingTime(CourseSectionSchedule courseSectionSchedule, CourseSection instance)
-    {
+    private MeetingTime mapMeetingTime(CourseSectionSchedule courseSectionSchedule, CourseSection instance) {
         MeetingTime meetingTime = new MeetingTime();
         meetingTime.setRoomNumber(courseSectionSchedule.getClassroomIdentifier());
         meetingTime.setSessionCode(instance.getSchoolCalendarSession().getSessionTypeCode());
@@ -177,7 +194,9 @@ public class XRosterMapper {
 
         //Class Meeting Days
         ClassMeetingDays classMeetingDays = mapClassMeetingDays(courseSectionSchedule.getClassMeetingDays());
-        meetingTime.setClassMeetingDays(classMeetingDays);
+        if(classMeetingDays != null) {
+            meetingTime.setClassMeetingDays(classMeetingDays);
+        }
 
         //Calendar
         if(instance.getSchoolCalendarSession() != null)
@@ -195,8 +214,7 @@ public class XRosterMapper {
         return meetingTime;
     }
 
-    private ClassMeetingDays mapClassMeetingDays(String meetingDays)
-    {
+    private ClassMeetingDays mapClassMeetingDays(String meetingDays) {
         ClassMeetingDays classMeetingDays = new ClassMeetingDays();
         classMeetingDays.setBellScheduleDay(meetingDays);
 
@@ -207,9 +225,7 @@ public class XRosterMapper {
         return classMeetingDays;
     }
 
-
-    private StaffPersonReference mapStaff(Staff staff)
-    {
+    private StaffPersonReference mapStaff(Staff staff) {
         StaffPersonReference staffPersonReference = new StaffPersonReference();
         staffPersonReference.setRefId(staff.getStaffRefId());
         staffPersonReference.setGivenName(staff.getFirstName());
@@ -231,9 +247,7 @@ public class XRosterMapper {
         return staffPersonReference;
     }
 
-
-    private StudentReference mapStudent(Student student)
-    {
+    private StudentReference mapStudent(Student student) {
         StudentReference studentReference = new StudentReference();
         studentReference.setRefId(student.getStudentRefId());
         studentReference.setFamilyName(student.getLastName());
@@ -254,5 +268,4 @@ public class XRosterMapper {
         }
         return studentReference;
     }
-
 }

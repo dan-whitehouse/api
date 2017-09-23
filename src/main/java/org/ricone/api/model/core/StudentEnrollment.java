@@ -3,6 +3,8 @@ package org.ricone.api.model.core;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "studentenrollment")
@@ -12,7 +14,7 @@ public class StudentEnrollment implements java.io.Serializable
     private static final long serialVersionUID = -7894349036867529032L;
     private String studentEnrollmentRefId;
     private Student student;
-    private Staff staff;
+    private Staff counselor;
     private Staff teacher;
     private School school;
     private String entryGradeLevelCode;
@@ -33,6 +35,7 @@ public class StudentEnrollment implements java.io.Serializable
     private Date enrollmentExitDate;
     private String currentGradeLevel;
     private String studentSchoolAssociationRefId;
+    private Set<EntryExitCode> entryExitCodes = new HashSet<>(0);
 
     public StudentEnrollment()
     {
@@ -45,11 +48,11 @@ public class StudentEnrollment implements java.io.Serializable
         this.school = school;
     }
 
-    public StudentEnrollment(String studentEnrollmentRefId, Student student, Staff staff, Staff teacher, School school, String entryGradeLevelCode, String enrollmentStatusCode, String entryTypeCode, String exitGradeLevelCode, String exitOrWithdrawalStatusCode, String exitOrWithdrawalTypeCode, Boolean displacedStudentStatus, String endOfTermStatusCode, String promotionReasonCode, String foodServiceEligibilityCode, Date firstEntryDateIntoUsschool, String homeroomIdentifier, String responsibleSchoolTypeCode, String membershipTypeCode, Date enrollmentEntryDate, Date enrollmentExitDate, String currentGradeLevel, String studentSchoolAssociationRefId)
+    public StudentEnrollment(String studentEnrollmentRefId, Student student, Staff counselor, Staff teacher, School school, String entryGradeLevelCode, String enrollmentStatusCode, String entryTypeCode, String exitGradeLevelCode, String exitOrWithdrawalStatusCode, String exitOrWithdrawalTypeCode, Boolean displacedStudentStatus, String endOfTermStatusCode, String promotionReasonCode, String foodServiceEligibilityCode, Date firstEntryDateIntoUsschool, String homeroomIdentifier, String responsibleSchoolTypeCode, String membershipTypeCode, Date enrollmentEntryDate, Date enrollmentExitDate, String currentGradeLevel, String studentSchoolAssociationRefId, Set<EntryExitCode> entryExitCodes)
     {
         this.studentEnrollmentRefId = studentEnrollmentRefId;
         this.student = student;
-        this.staff = staff;
+        this.counselor = counselor;
         this.teacher = teacher;
         this.school = school;
         this.entryGradeLevelCode = entryGradeLevelCode;
@@ -70,6 +73,7 @@ public class StudentEnrollment implements java.io.Serializable
         this.enrollmentExitDate = enrollmentExitDate;
         this.currentGradeLevel = currentGradeLevel;
         this.studentSchoolAssociationRefId = studentSchoolAssociationRefId;
+        this.entryExitCodes = entryExitCodes;
     }
 
     @Id
@@ -98,14 +102,14 @@ public class StudentEnrollment implements java.io.Serializable
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CounselorRefId")
-    public Staff getStaff()
+    public Staff getCounselor()
     {
-        return this.staff;
+        return this.counselor;
     }
 
-    public void setStaff(Staff staff)
+    public void setCounselor(Staff staff)
     {
-        this.staff = staff;
+        this.counselor = staff;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -331,5 +335,16 @@ public class StudentEnrollment implements java.io.Serializable
     public void setStudentSchoolAssociationRefId(String studentSchoolAssociationRefId)
     {
         this.studentSchoolAssociationRefId = studentSchoolAssociationRefId;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentEnrollment")
+    public Set<EntryExitCode> getEntryExitCodes()
+    {
+        return entryExitCodes;
+    }
+
+    public void setEntryExitCodes(Set<EntryExitCode> entryExitCodes)
+    {
+        this.entryExitCodes = entryExitCodes;
     }
 }
