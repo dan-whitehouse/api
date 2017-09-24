@@ -2,23 +2,19 @@ package org.ricone.api.mapping.xPress;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.ricone.api.model.core.*;
 import org.ricone.api.model.xpress.*;
-import org.ricone.api.util.Util;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 @Component("XRosterMapper")
 public class XRosterMapper {
 
-    private final String localId = "LEA";
-    private final String stateId = "SEA";
+    private final String LOCAL_ID = "LEA";
 
     public XRosterMapper() {
     }
@@ -138,7 +134,7 @@ public class XRosterMapper {
                             PrimaryStaff staff = new PrimaryStaff();
                             staff.setStaffPersonReference(staffPersonReference);
                             staff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            staff.setPercentResponsible(Util.bigDecimalConverter(staffCourseSection.getContributionPercentage()));
+                            staff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage()));
 
                             if (!staff.isEmptyObject())
                             {
@@ -150,7 +146,7 @@ public class XRosterMapper {
                             OtherStaff otherStaff = new OtherStaff();
                             otherStaff.setStaffPersonReference(staffPersonReference);
                             otherStaff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            otherStaff.setPercentResponsible(Util.bigDecimalConverter(staffCourseSection.getContributionPercentage()));
+                            otherStaff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage()));
 
                             if (!otherStaff.isEmptyObject()) {
                                 otherStaffList.add(otherStaff);
@@ -233,7 +229,7 @@ public class XRosterMapper {
 
         for(StaffIdentifier id : staff.getStaffIdentifiers())
         {
-            if(localId.equals(id.getIdentificationSystemCode()))
+            if(LOCAL_ID.equals(id.getIdentificationSystemCode()))
             {
                 staffPersonReference.setLocalId(id.getStaffId());
                 break;
@@ -255,7 +251,7 @@ public class XRosterMapper {
 
         for(StudentIdentifier id : student.getStudentIdentifiers())
         {
-            if(localId.equals(id.getIdentificationSystemCode()))
+            if(LOCAL_ID.equals(id.getIdentificationSystemCode()))
             {
                 studentReference.setLocalId(id.getStudentId());
                 break;

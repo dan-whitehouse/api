@@ -16,11 +16,11 @@ public interface IRosterDAO
 
     CourseSection findByRefId(String refId) throws Exception;
 
-    void save(CourseSection lea);
+    void save(CourseSection instance);
 
-    void update(CourseSection lea);
+    void update(CourseSection instance);
 
-    void delete(CourseSection lea);
+    void delete(CourseSection instance);
 
     void deleteByRefId(String refId);
 }

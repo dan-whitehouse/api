@@ -16,11 +16,11 @@ public interface ICalendarDAO
 
     SchoolCalendar findByRefId(String refId) throws Exception;
 
-    void save(SchoolCalendar lea);
+    void save(SchoolCalendar instance);
 
-    void update(SchoolCalendar lea);
+    void update(SchoolCalendar instance);
 
-    void delete(SchoolCalendar lea);
+    void delete(SchoolCalendar instance);
 
     void deleteByRefId(String refId);
 }

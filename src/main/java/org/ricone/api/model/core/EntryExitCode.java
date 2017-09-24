@@ -7,13 +7,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "entryexitcode")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
 public class EntryExitCode implements java.io.Serializable
 {
 	private static final long serialVersionUID = -6732821891680730343L;

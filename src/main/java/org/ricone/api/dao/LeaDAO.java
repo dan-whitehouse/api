@@ -12,12 +12,15 @@ import org.ricone.api.model.core.School;
 import org.springframework.stereotype.Repository;
 
 @Repository("leaDAO")
-public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
+public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
+{
+	private final String PRIMARY_KEY = "leaRefId";
+	private final String LOCAL_ID_KEY = "leaId";
+
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
 	public List<Lea> findAll() throws NotFoundException {
-
 		Criteria criteria = createEntityCriteria();
 		List<Lea> instance = (List<Lea>) criteria.list();
 		if (instance != null) {
@@ -32,7 +35,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
 	@Override
 	public Lea findByRefId(String refId) throws Exception {
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("leaRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		Lea instance = (Lea) criteria.uniqueResult();
 		if (instance != null) {
 			Hibernate.initialize(instance.getLeaTelephones());
@@ -44,7 +47,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
 	@Override
 	public Lea findByLocalId(String localId) throws Exception {
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("leaId", localId));
+		criteria.add(Restrictions.eq(LOCAL_ID_KEY, localId));
 		Lea instance = (Lea) criteria.uniqueResult();
 		if (instance != null) {
 			Hibernate.initialize(instance.getLeaTelephones());
@@ -71,7 +74,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO {
 	@Override
 	public void deleteByRefId(String refId) {
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("leaRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		Lea instance = (Lea) criteria.uniqueResult();
 		delete(instance);
 	}

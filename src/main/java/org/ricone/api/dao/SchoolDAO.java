@@ -14,6 +14,7 @@ import java.util.List;
 @Repository("schoolDAO")
 public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDAO
 {
+	private final String PRIMARY_KEY = "schoolRefId";
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
@@ -21,7 +22,7 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 
 		Criteria criteria = createEntityCriteria();
 		List<School> instance = (List<School>)criteria.list();
-		if(instance!=null)
+		if(instance != null)
 		{
 			for(School o : instance)
 			{
@@ -39,9 +40,9 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	public School findByRefId(String refId) throws Exception
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("schoolRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		School instance = (School)criteria.uniqueResult();
-		if(instance!=null)
+		if(instance != null)
 		{
 			Hibernate.initialize(instance.getLea());
 			Hibernate.initialize(instance.getSchoolIdentifiers());
@@ -56,18 +57,7 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	public School findByLocalId(String localId) throws Exception
 	{
 		//TODO: This isn't implemented correctly
-		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("leaId", localId));
-		School instance = (School)criteria.uniqueResult();
-		if(instance!=null)
-		{
-			Hibernate.initialize(instance.getLea());
-			Hibernate.initialize(instance.getSchoolIdentifiers());
-			Hibernate.initialize(instance.getSchoolCalendars());
-			Hibernate.initialize(instance.getSchoolGrades());
-			Hibernate.initialize(instance.getSchoolTelephones());
-		}
-		return instance;
+		return null;
 	}
 
 	@Override
@@ -89,7 +79,7 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	public void deleteByRefId(String refId)
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("leaRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		School instance = (School)criteria.uniqueResult();
 		delete(instance);
 	}

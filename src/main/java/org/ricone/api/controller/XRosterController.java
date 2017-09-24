@@ -46,7 +46,7 @@ public class XRosterController extends AbstractController
 
 
     @ResponseBody
-    @ApiOperation(value="Return all xRosters by xLeas refId", tags = { "xCourses" })
+    @ApiOperation(value="Return all xRosters by xLea refId", tags = { "xRosters" })
     @RequestMapping(value= "/requests/xLeas/{refId}/xRosters", method = RequestMethod.GET)
     public List<XRoster> getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {

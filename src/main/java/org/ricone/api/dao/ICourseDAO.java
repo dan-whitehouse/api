@@ -16,11 +16,11 @@ public interface ICourseDAO
 
     Course findByRefId(String refId) throws Exception;
 
-    void save(Course lea);
+    void save(Course instance);
 
-    void update(Course lea);
+    void update(Course instance);
 
-    void delete(Course lea);
+    void delete(Course instance);
 
     void deleteByRefId(String refId);
 }

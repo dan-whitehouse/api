@@ -14,6 +14,7 @@ import java.util.List;
 @Repository("courseDAO")
 public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDAO
 {
+	private final String PRIMARY_KEY = "courseRefId";
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
@@ -21,7 +22,7 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 
 		Criteria criteria = createEntityCriteria();
 		List<Course> instance = (List<Course>)criteria.list();
-		if(instance!=null)
+		if(instance != null)
 		{
 			for(Course o : instance)
 			{
@@ -29,7 +30,6 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 				Hibernate.initialize(o.getSchool().getLea());
 				Hibernate.initialize(o.getCourseIdentifiers());
 				Hibernate.initialize(o.getCourseGrades());
-				//Hibernate.initialize(o.getCourseSections());
 			}
 		}
 		return instance;
@@ -39,15 +39,14 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 	public Course findByRefId(String refId) throws Exception
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("courseRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		Course instance = (Course)criteria.uniqueResult();
-		if(instance!=null)
+		if(instance != null)
 		{
 			Hibernate.initialize(instance.getSchool());
 			Hibernate.initialize(instance.getSchool().getLea());
 			Hibernate.initialize(instance.getCourseIdentifiers());
 			Hibernate.initialize(instance.getCourseGrades());
-			//Hibernate.initialize(instance.getCourseSections());
 		}
 		return instance;
 	}
@@ -72,7 +71,7 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 	public void deleteByRefId(String refId)
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("courseRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		Course instance = (Course)criteria.uniqueResult();
 		delete(instance);
 	}

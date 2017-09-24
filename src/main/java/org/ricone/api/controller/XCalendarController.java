@@ -46,7 +46,7 @@ public class XCalendarController extends AbstractController
 
 
     @ResponseBody
-    @ApiOperation(value="Return all xCalendars by xLeas refId", tags = { "xCalendars" })
+    @ApiOperation(value="Return all xCalendars by xLea refId", tags = { "xCalendars" })
     @RequestMapping(value= "/requests/xLeas/{refId}/xCalendars", method = RequestMethod.GET)
     public List<XCalendar> getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {

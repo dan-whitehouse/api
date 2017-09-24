@@ -41,7 +41,7 @@ public class GlobalExceptionHandler
     }
     
     /**** 50X ****/
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class, MappingException.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) 
     private @ResponseBody Error badRequest(HttpServletRequest request, HttpServletResponse response, Exception ex) 
     {

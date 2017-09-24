@@ -44,7 +44,7 @@ public class XSchoolController extends AbstractController
 
 
     @ResponseBody
-    @ApiOperation(value="Return all xLeas by xSchools refId", tags = { "xSchools" })
+    @ApiOperation(value="Return all xSchools by xLea refId", tags = { "xSchools" })
     @RequestMapping(value= "/requests/xLeas/{refId}/xSchools", method = RequestMethod.GET)
     public List<XSchool> getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {

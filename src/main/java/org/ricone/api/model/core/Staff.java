@@ -216,7 +216,7 @@ public class Staff implements java.io.Serializable
         this.staffIdentifiers = staffidentifiers;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "teacher")
     public Set<StudentEnrollment> getStudentEnrollments()
     {
         return this.studentEnrollments;

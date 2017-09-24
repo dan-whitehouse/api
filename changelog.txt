@@ -1,3 +1,9 @@
+2.0.0 Build 20170923
+    - Added XStaffs Controller, Service, & DAO
+    - Added XStudents Controller, Service, & DAO
+    - Added XContacts Controller, Service, DAO & Mapper
+    - Other minor fixes and adjustments to existing classes
+
 2.0.0 Build 20170922
     - Created XStaffMapper
     - Created XStudentMapper

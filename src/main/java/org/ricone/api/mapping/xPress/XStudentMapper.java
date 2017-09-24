@@ -5,7 +5,6 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.ricone.api.model.core.*;
 import org.ricone.api.model.xpress.*;
-import org.ricone.api.util.Util;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -187,13 +186,13 @@ public class XStudentMapper {
             xStudent.setAcademicSummary(academicSummary);
         }
 
-        //Student Languages
+        //Languages
         Languages languages = mapLanguages(instance.getStudentLanguages());
         if(languages != null) {
             xStudent.setLanguages(languages);
         }
 
-        //Student Contacts
+        //Contacts
         StudentContacts studentContacts = mapStudentContacts(instance.getStudentContactRelationships());
         if(studentContacts != null) {
             xStudent.setStudentContacts(studentContacts);
@@ -220,9 +219,9 @@ public class XStudentMapper {
         StudentAcademicRecord academicRecord = academicRecordList.get(0); //Get Latest Date
 
         AcademicSummary academicSummary = new AcademicSummary();
-        academicSummary.setClassRank(academicRecord.getHighSchoolStudentClassRank().toString());
-        academicSummary.setCumulativeWeightedGpa(Util.bigDecimalConverter(academicRecord.getGradePointAverageCumulative()));
-        academicSummary.setTermWeightedGpa(Util.bigDecimalConverter(academicRecord.getGradePointAverageGivenSession()));
+        academicSummary.setClassRank(Objects.toString(academicRecord.getHighSchoolStudentClassRank()));
+        academicSummary.setCumulativeWeightedGpa(Objects.toString(academicRecord.getGradePointAverageCumulative()));
+        academicSummary.setTermWeightedGpa(Objects.toString(academicRecord.getGradePointAverageGivenSession()));
 
         if(academicSummary.isEmptyObject())
         {
@@ -357,7 +356,7 @@ public class XStudentMapper {
         StudentContacts studentContacts = new StudentContacts();
         for(StudentContactRelationship relationship : relationships)
         {
-            studentContacts.getContactPersonRefId().add(relationship.getStudent().getStudentRefId());
+            studentContacts.getContactPersonRefId().add(relationship.getStudentContact().getStudentContactRefId());
         }
 
         if(studentContacts.isEmptyObject())
@@ -410,7 +409,9 @@ public class XStudentMapper {
         if(studentEnrollment.getSchool() != null)
         {
             enrollment.setSchoolRefId(studentEnrollment.getSchool().getSchoolRefId());
-            enrollment.setLeaRefId(studentEnrollment.getSchool().getLea().getLeaRefId());
+            if(studentEnrollment.getSchool().getLea() != null){
+                enrollment.setLeaRefId(studentEnrollment.getSchool().getLea().getLeaRefId());
+            }
         }
 
         //Entry Type

@@ -14,6 +14,7 @@ import java.util.List;
 @Repository("calendarDAO")
 public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements ICalendarDAO
 {
+	private final String PRIMARY_KEY = "schoolCalendarRefId";
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
@@ -21,7 +22,7 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 
 		Criteria criteria = createEntityCriteria();
 		List<SchoolCalendar> instance = (List<SchoolCalendar>)criteria.list();
-		if(instance!=null)
+		if(instance != null)
 		{
 			for(SchoolCalendar o : instance)
 			{
@@ -36,9 +37,9 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 	public SchoolCalendar findByRefId(String refId) throws Exception
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("schoolCalendarRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		SchoolCalendar instance = (SchoolCalendar)criteria.uniqueResult();
-		if(instance!=null)
+		if(instance != null)
 		{
 			Hibernate.initialize(instance.getSchool());
 			Hibernate.initialize(instance.getSchoolCalendarSessions());
@@ -65,7 +66,7 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 	public void deleteByRefId(String refId)
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("schoolCalendarRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		SchoolCalendar instance = (SchoolCalendar)criteria.uniqueResult();
 		delete(instance);
 	}

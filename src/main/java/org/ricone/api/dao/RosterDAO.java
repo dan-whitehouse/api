@@ -16,6 +16,7 @@ import java.util.List;
 @Repository("rosterDAO")
 public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IRosterDAO
 {
+	private final String PRIMARY_KEY = "courseSectionRefId";
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
@@ -120,7 +121,7 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		// #1
 		Criteria criteria = createEntityCriteria();
 		List<CourseSection> instance = (List<CourseSection>)criteria.list();
-		if(instance!=null)
+		if(instance != null)
 		{
 			for(CourseSection o : instance)
 			{
@@ -158,9 +159,9 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 	public CourseSection findByRefId(String refId) throws Exception
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("courseSectionRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		CourseSection instance = (CourseSection)criteria.uniqueResult();
-		if(instance!=null)
+		if(instance != null)
 		{
 			Hibernate.initialize(instance.getCourse());
 			Hibernate.initialize(instance.getCourse().getSchool());
@@ -210,7 +211,7 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 	public void deleteByRefId(String refId)
 	{
 		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("courseSectionRefId", refId));
+		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		CourseSection instance = (CourseSection)criteria.uniqueResult();
 		delete(instance);
 	}

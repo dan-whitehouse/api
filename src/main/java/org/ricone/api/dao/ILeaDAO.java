@@ -17,11 +17,11 @@ public interface ILeaDAO
 
     Lea findByLocalId(String localId) throws Exception;
 
-    void save(Lea lea);
+    void save(Lea instance);
 
-    void update(Lea lea);
+    void update(Lea instance);
 
-    void delete(Lea lea);
+    void delete(Lea instance);
 
     void deleteByRefId(String refId);
 }
