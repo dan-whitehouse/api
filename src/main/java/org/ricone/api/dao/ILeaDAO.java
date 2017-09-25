@@ -13,9 +13,9 @@ public interface ILeaDAO
 {
     List<Lea> findAll() throws NotFoundException;
 
-    Lea findByRefId(String refId) throws Exception;
+    Lea findByRefId(String refId) throws NotFoundException;
 
-    Lea findByLocalId(String localId) throws Exception;
+    Lea findByLocalId(String localId) throws NotFoundException;
 
     void save(Lea instance);
 

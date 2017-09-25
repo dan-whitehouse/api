@@ -23,6 +23,7 @@ import java.util.List;
 public class Relationships {
 
     @JsonProperty("relationship")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Relationship> relationship;
 
     public Relationships() {

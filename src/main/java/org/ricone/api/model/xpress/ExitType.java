@@ -8,6 +8,7 @@
 package org.ricone.api.model.xpress;
 
 import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,9 @@ public class ExitType {
 
     @JsonProperty("code")
     private String code;
+
     @JsonProperty("otherCode")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<OtherCode> otherCode;
 
     /**
@@ -71,6 +74,6 @@ public class ExitType {
     @JsonIgnore
     public boolean isEmptyObject()
     {
-        return Stream.of(code, otherCode).allMatch(Objects::isNull);
+        return Stream.of(code, otherCode).allMatch(Objects::isNull) || (StringUtils.isBlank(code) && otherCode.isEmpty());
     }
 }

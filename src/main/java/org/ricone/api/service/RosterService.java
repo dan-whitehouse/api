@@ -19,7 +19,7 @@ public class RosterService implements IRosterService
 	RosterDAO dao;
 
 	@Override
-	public List<CourseSection> findAll() throws NotFoundException {
+	public List<CourseSection> findAll() throws Exception {
 		return dao.findAll();
 	}
 

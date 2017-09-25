@@ -23,6 +23,7 @@ import java.util.List;
 public class XLeas {
 
     @JsonProperty("xLea")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<XLea> xLea;
 
     public XLeas() {

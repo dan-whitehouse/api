@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ICourseService
 {
-    List<Course> findAll() throws NotFoundException;
+    List<Course> findAll() throws Exception;
 
     Course findByRefId(String refId) throws Exception;
 

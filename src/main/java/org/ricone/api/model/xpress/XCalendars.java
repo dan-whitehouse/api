@@ -23,6 +23,7 @@ import java.util.List;
 public class XCalendars {
 
     @JsonProperty("xCalendar")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<XCalendar> xCalendar;
 
     public XCalendars() {

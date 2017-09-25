@@ -20,6 +20,7 @@ import java.util.List;
 public class ApplicableEducationLevels {
 
     @JsonProperty("applicableEducationLevel")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<String> applicableEducationLevel;
 
 

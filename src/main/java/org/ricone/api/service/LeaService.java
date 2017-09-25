@@ -16,7 +16,7 @@ public class LeaService implements ILeaService
 	LeaDAO dao;
 
 	@Override
-	public List<Lea> findAll() throws NotFoundException {
+	public List<Lea> findAll() throws Exception {
 		return dao.findAll();
 	}
 

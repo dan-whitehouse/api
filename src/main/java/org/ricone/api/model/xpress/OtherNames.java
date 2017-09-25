@@ -23,6 +23,7 @@ import java.util.List;
 public class OtherNames {
 
     @JsonProperty("name")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Name> name;
 
     public OtherNames() {

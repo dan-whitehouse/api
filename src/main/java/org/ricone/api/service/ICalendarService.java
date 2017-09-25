@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ICalendarService
 {
-    List<SchoolCalendar> findAll() throws NotFoundException;
+    List<SchoolCalendar> findAll() throws Exception;
 
     SchoolCalendar findByRefId(String refId) throws Exception;
 

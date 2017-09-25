@@ -27,6 +27,10 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 			for(Staff o : instance)
 			{
 				Hibernate.initialize(o.getStaffAssignments());
+				o.getStaffAssignments().forEach(sa -> {
+					Hibernate.initialize(sa.getSchool());
+				});
+
 				Hibernate.initialize(o.getStaffCourseSections());
 				Hibernate.initialize(o.getStaffEmails());
 				Hibernate.initialize(o.getStaffIdentifiers());
@@ -44,11 +48,17 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		if(instance!=null)
 		{
 			Hibernate.initialize(instance.getStaffAssignments());
+			instance.getStaffAssignments().forEach(sa -> {
+				Hibernate.initialize(sa.getSchool());
+			});
+
 			Hibernate.initialize(instance.getStaffCourseSections());
 			Hibernate.initialize(instance.getStaffEmails());
 			Hibernate.initialize(instance.getStaffIdentifiers());
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
+
 	}
 
 	@Override

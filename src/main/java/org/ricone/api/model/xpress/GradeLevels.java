@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 public class GradeLevels {
 
     @JsonProperty("gradeLevel")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<String> gradeLevel;
 
     public GradeLevels() {

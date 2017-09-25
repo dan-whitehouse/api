@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IStudentService
 {
-    List<Student> findAll() throws NotFoundException;
+    List<Student> findAll() throws Exception;
 
-    Student findByRefId(String refId) throws NotFoundException;
+    Student findByRefId(String refId) throws Exception;
 
-    Student findByLocalId(String localId) throws NotFoundException;
+    Student findByLocalId(String localId) throws Exception;
 
     void save(Student instance);
 

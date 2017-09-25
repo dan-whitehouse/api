@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface IContactService
 {
-    List<StudentContact> findAll() throws NotFoundException;
+    List<StudentContact> findAll() throws Exception;
 
-    StudentContact findByRefId(String refId) throws NotFoundException;
+    StudentContact findByRefId(String refId) throws Exception;
 
     void save(StudentContact instance);
 

@@ -19,7 +19,7 @@ public class CalendarService implements ICalendarService
 	CalendarDAO dao;
 
 	@Override
-	public List<SchoolCalendar> findAll() throws NotFoundException {
+	public List<SchoolCalendar> findAll() throws Exception {
 		return dao.findAll();
 	}
 

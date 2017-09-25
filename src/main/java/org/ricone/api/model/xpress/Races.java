@@ -20,6 +20,7 @@ import java.util.List;
 public class Races {
 
     @JsonProperty("race")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Race> race;
 
     public Races() {

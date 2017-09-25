@@ -20,6 +20,7 @@ import java.util.List;
 public class StudentContacts {
 
     @JsonProperty("contactPersonRefId")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<String> contactPersonRefId;
 
     public StudentContacts() {

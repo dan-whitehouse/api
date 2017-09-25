@@ -26,7 +26,7 @@ public class InfoService {
 		return infoDao.getAPI();
 	}
 
-	public Config getConfig() throws NotFoundException
+	public Config getConfig() throws Exception
 	{
 		return infoDao.getConfig();
 	}

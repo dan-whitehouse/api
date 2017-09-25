@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ILeaService
 {
-    List<Lea> findAll() throws NotFoundException;
+    List<Lea> findAll() throws Exception;
 
     Lea findByRefId(String refId) throws Exception;
 

@@ -23,6 +23,7 @@ import java.util.List;
 public class XContacts {
 
     @JsonProperty("xContact")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<XContact> xContact;
 
     public XContacts() {

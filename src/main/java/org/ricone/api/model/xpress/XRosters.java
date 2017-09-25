@@ -23,6 +23,7 @@ import java.util.List;
 public class XRosters {
 
     @JsonProperty("xRoster")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<XRoster> xRoster;
 
     public XRosters() {

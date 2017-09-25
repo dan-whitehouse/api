@@ -1,6 +1,7 @@
 package org.ricone.api.mapping.xPress;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.MappingException;
 import org.ricone.api.model.core.*;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,8 @@ import java.util.Set;
 @Component("XStaffMapper")
 public class XStaffMapper {
 
-    private final String LOCAL_ID = "LEA";
-    private final String STATE_ID = "SEA";
+    private final String LOCAL_ID = "District";
+    private final String STATE_ID = "State";
 
     public XStaffMapper() {
     }
@@ -50,86 +51,90 @@ public class XStaffMapper {
 
     public XStaff map(Staff instance)
     {
-        XStaff xStaff = new XStaff();
-        xStaff.setRefId(instance.getStaffRefId());
-        xStaff.setSex(instance.getSexCode());
+        try {
+            XStaff xStaff = new XStaff();
+            xStaff.setRefId(instance.getStaffRefId());
+            xStaff.setSex(instance.getSexCode());
 
-        //Name
-        Name name = mapName(instance);
-        if(name != null) {
-            xStaff.setName(name);
-        }
+            //Name
+            Name name = mapName(instance);
+            if (name != null) {
+                xStaff.setName(name);
+            }
 
-        //Email
-        for(StaffEmail staffEmail : instance.getStaffEmails())
-        {
-            if(staffEmail.getPrimaryEmailAddressIndicator())
+            //Email
+            for (StaffEmail staffEmail : instance.getStaffEmails())
             {
-                Email email = mapEmail(staffEmail);
-                if(staffEmail != null)
+                if (staffEmail.getPrimaryEmailAddressIndicator() != null && staffEmail.getPrimaryEmailAddressIndicator())
                 {
-                    xStaff.setEmail(email);
-                    break;
+                    Email email = mapEmail(staffEmail);
+                    if (staffEmail != null)
+                    {
+                        xStaff.setEmail(email);
+                        break;
+                    }
                 }
+                else continue;
             }
-        }
 
-        //Identifiers
-        List<OtherId> otherIdList = new ArrayList<>();
-        for(StaffIdentifier id : instance.getStaffIdentifiers())
-        {
-            if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
-                xStaff.setLocalId(id.getStaffId());
-            }
-            else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
-                xStaff.setStateProvinceId(id.getStaffId());
-            }
-            else
+            //Identifiers
+            List<OtherId> otherIdList = new ArrayList<>();
+            for (StaffIdentifier id : instance.getStaffIdentifiers())
             {
-                OtherId otherId = mapOtherId(id);
-                if(otherId != null) {
-                    otherIdList.add(otherId);
+                if (LOCAL_ID.equals(id.getIdentificationSystemCode()))
+                {
+                    xStaff.setLocalId(id.getStaffId());
+                }
+                else if (STATE_ID.equals(id.getIdentificationSystemCode()))
+                {
+                    xStaff.setStateProvinceId(id.getStaffId());
+                }
+                else
+                {
+                    OtherId otherId = mapOtherId(id);
+                    if (otherId != null) {
+                        otherIdList.add(otherId);
+                    }
                 }
             }
-        }
 
-        //Other Identifiers
-        if(CollectionUtils.isNotEmpty(otherIdList))
-        {
-            OtherIds otherIds = new OtherIds();
-            otherIds.setOtherId(otherIdList);
-            xStaff.setOtherIds(otherIds);
-        }
+            //Other Identifiers
+            if (CollectionUtils.isNotEmpty(otherIdList)) {
+                OtherIds otherIds = new OtherIds();
+                otherIds.setOtherId(otherIdList);
+                xStaff.setOtherIds(otherIds);
+            }
 
-        //Assignments
-        List<StaffPersonAssignment> assignmentList = new ArrayList<>();
-        for(StaffAssignment assignment : instance.getStaffAssignments())
-        {
-            if(assignment.getPrimaryAssignment())
-            {
-                PrimaryAssignment primaryAssignment = mapPrimaryAssignment(assignment);
-                if(primaryAssignment != null){
-                    xStaff.setPrimaryAssignment(primaryAssignment);
+            //Assignments
+            List<StaffPersonAssignment> assignmentList = new ArrayList<>();
+            for (StaffAssignment assignment : instance.getStaffAssignments()) {
+                if (assignment.getPrimaryAssignment()) {
+                    PrimaryAssignment primaryAssignment = mapPrimaryAssignment(assignment);
+                    if (primaryAssignment != null) {
+                        xStaff.setPrimaryAssignment(primaryAssignment);
+                    }
+                } else {
+                    StaffPersonAssignment staffPersonAssignment = mapOtherAssignment(assignment);
+                    if (staffPersonAssignment != null) {
+                        assignmentList.add(staffPersonAssignment);
+                    }
                 }
             }
-            else
-            {
-                StaffPersonAssignment staffPersonAssignment = mapOtherAssignment(assignment);
-                if(staffPersonAssignment != null){
-                    assignmentList.add(staffPersonAssignment);
-                }
+
+            //Other Assignments
+            if (CollectionUtils.isNotEmpty(assignmentList)) {
+                OtherAssignments otherAssignments = new OtherAssignments();
+                otherAssignments.setStaffPersonAssignment(assignmentList);
+                xStaff.setOtherAssignments(otherAssignments);
             }
-        }
 
-        //Other Assignments
-        if(CollectionUtils.isNotEmpty(assignmentList))
+            return xStaff;
+        }
+        catch(Exception ex)
         {
-            OtherAssignments otherAssignments = new OtherAssignments();
-            otherAssignments.setStaffPersonAssignment(assignmentList);
-            xStaff.setOtherAssignments(otherAssignments);
+            ex.printStackTrace();
+            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
         }
-
-        return xStaff;
     }
 
     private OtherId mapOtherId(StaffIdentifier id) {

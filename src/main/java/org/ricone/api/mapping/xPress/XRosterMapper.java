@@ -14,7 +14,7 @@ import java.util.Objects;
 @Component("XRosterMapper")
 public class XRosterMapper {
 
-    private final String LOCAL_ID = "LEA";
+    private final String LOCAL_ID = "District";
 
     public XRosterMapper() {
     }
@@ -134,7 +134,7 @@ public class XRosterMapper {
                             PrimaryStaff staff = new PrimaryStaff();
                             staff.setStaffPersonReference(staffPersonReference);
                             staff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            staff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage()));
+                            staff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage())); //TODO: Objects.toString() displays 'null' on output
 
                             if (!staff.isEmptyObject())
                             {
@@ -146,7 +146,7 @@ public class XRosterMapper {
                             OtherStaff otherStaff = new OtherStaff();
                             otherStaff.setStaffPersonReference(staffPersonReference);
                             otherStaff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            otherStaff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage()));
+                            otherStaff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage(), null)); //TODO: Objects.toString() displays 'null' on output
 
                             if (!otherStaff.isEmptyObject()) {
                                 otherStaffList.add(otherStaff);

@@ -19,7 +19,7 @@ public class CourseService implements ICourseService
 	CourseDAO dao;
 
 	@Override
-	public List<Course> findAll() throws NotFoundException {
+	public List<Course> findAll() throws Exception {
 		return dao.findAll();
 	}
 

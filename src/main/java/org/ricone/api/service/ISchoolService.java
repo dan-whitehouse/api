@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ISchoolService
 {
-    List<School> findAll() throws NotFoundException;
+    List<School> findAll() throws Exception;
 
     School findByRefId(String refId) throws Exception;
 

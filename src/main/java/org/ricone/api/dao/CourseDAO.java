@@ -27,7 +27,6 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 			for(Course o : instance)
 			{
 				Hibernate.initialize(o.getSchool());
-				Hibernate.initialize(o.getSchool().getLea());
 				Hibernate.initialize(o.getCourseIdentifiers());
 				Hibernate.initialize(o.getCourseGrades());
 			}
@@ -36,7 +35,7 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 	}
 
 	@Override
-	public Course findByRefId(String refId) throws Exception
+	public Course findByRefId(String refId) throws NotFoundException
 	{
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
@@ -44,11 +43,11 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 		if(instance != null)
 		{
 			Hibernate.initialize(instance.getSchool());
-			Hibernate.initialize(instance.getSchool().getLea());
 			Hibernate.initialize(instance.getCourseIdentifiers());
 			Hibernate.initialize(instance.getCourseGrades());
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
 	}
 
 

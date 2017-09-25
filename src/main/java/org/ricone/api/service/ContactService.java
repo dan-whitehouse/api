@@ -17,12 +17,12 @@ public class ContactService implements IContactService
 	ContactDAO dao;
 
 	@Override
-	public List<StudentContact> findAll() throws NotFoundException {
+	public List<StudentContact> findAll() throws Exception {
 		return dao.findAll();
 	}
 
 	@Override
-	public StudentContact findByRefId(String refId) throws NotFoundException {
+	public StudentContact findByRefId(String refId) throws Exception {
 		return dao.findByRefId(refId);
 	}
 

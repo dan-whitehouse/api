@@ -23,6 +23,7 @@ import java.util.List;
 public class OtherEmails {
 
     @JsonProperty("email")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Email> email;
 
     public OtherEmails() {

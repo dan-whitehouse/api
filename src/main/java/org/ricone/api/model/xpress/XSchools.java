@@ -23,6 +23,7 @@ import java.util.List;
 public class XSchools {
 
     @JsonProperty("xSchool")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<XSchool> xSchool;
 
     public XSchools() {

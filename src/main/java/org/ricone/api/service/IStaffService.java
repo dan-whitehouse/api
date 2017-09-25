@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface IStaffService
 {
-    List<Staff> findAll() throws NotFoundException;
+    List<Staff> findAll() throws Exception;
 
-    Staff findByRefId(String refId) throws NotFoundException;
+    Staff findByRefId(String refId) throws Exception;
 
-    Staff findByLocalId(String localId) throws NotFoundException;
+    Staff findByLocalId(String localId) throws Exception;
 
     void save(Staff instance);
 

@@ -13,6 +13,9 @@ import java.util.Set;
 @Component("XCourseMapper")
 public class XCourseMapper {
 
+    private final String LEA_COURSE_ID = "LEA";
+    private final String SCHOOL_COURSE_ID = "School";
+
     public XCourseMapper() {
     }
 
@@ -53,15 +56,10 @@ public class XCourseMapper {
         xCourse.setCourseTitle(instance.getTitle());
         xCourse.setSubject(instance.getSubjectCode());
         xCourse.setDescription(instance.getDescription());
-        xCourse.setSchoolCourseId(instance.getCourseRefId());
 
         if(instance.getSchool() != null)
         {
             xCourse.setSchoolRefId(instance.getSchool().getSchoolRefId());
-
-            if(instance.getSchool().getLea() != null) {
-                xCourse.setLeaCourseId(instance.getSchool().getLea().getLeaRefId());
-            }
         }
 
         xCourse.setScedCourseCode(instance.getScedCourseCode());
@@ -73,9 +71,20 @@ public class XCourseMapper {
         List<OtherId> otherIdList = new ArrayList<>();
         for(CourseIdentifier id : instance.getCourseIdentifiers())
         {
-            OtherId otherId = mapOtherId(id);
-            if(otherId != null) {
-                otherIdList.add(otherId);
+            if(LEA_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode()))
+            {
+                xCourse.setLeaCourseId(id.getCourseId());
+            }
+            else if(SCHOOL_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode()))
+            {
+                xCourse.setSchoolCourseId(id.getCourseId());
+            }
+            else
+            {
+                OtherId otherId = mapOtherId(id);
+                if(otherId != null) {
+                    otherIdList.add(otherId);
+                }
             }
         }
 

@@ -23,6 +23,7 @@ import java.util.List;
 public class Students {
 
     @JsonProperty("studentReference")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<StudentReference> studentReference;
 
     public Students() {

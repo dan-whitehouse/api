@@ -1,3 +1,16 @@
+2.0.0 Build 20170924
+    - Updated project pom dependencies to:
+        - jackson-core: v2.9.1
+        - jackson-annotations: v2.9.1
+        - jackson-databind: v2.9.1
+    - Updated JacksonConfiguration so it works with v2.9.1
+    - Fixed bugs in XStudents DAO & Mapper which had caused the service path to fail to return data
+    - Added Jacked JsonInclude.Include.NON_EMPTY annotation to all XPress Models which contained only a list.
+        - Needed to remove empty lists like: {"id":"", "grades" : []}
+    - Updated models EntryType & ExitType isEmptyObject() method to better tell if object is empty.
+    - Updated all Controller, Service, DAO methods with better exception handling.
+        - All DAOs findByRefId and findByLocalId methods now throw NotFoundException
+
 2.0.0 Build 20170923
     - Added XStaffs Controller, Service, & DAO
     - Added XStudents Controller, Service, & DAO

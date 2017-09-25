@@ -23,6 +23,7 @@ import java.util.List;
 public class Sessions {
 
     @JsonProperty("sessionList")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<SessionList> sessionList;
 
     public Sessions() {

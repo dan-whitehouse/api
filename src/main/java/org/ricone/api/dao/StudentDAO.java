@@ -40,15 +40,22 @@ public class StudentDAO extends AbstractDAO<Integer, Student> implements IStuden
 				});
 
 				Hibernate.initialize(o.getStudentEnrollments());
-				o.getStudentEnrollments().forEach(se -> {
-					Hibernate.initialize(se.getCounselor());
-					Hibernate.initialize(se.getTeacher());
+				o.getStudentEnrollments().forEach(se ->
+				{
+					if(se.getCounselor() != null) {
+						Hibernate.initialize(se.getCounselor());
+						se.getCounselor().getStaffIdentifiers().forEach(Hibernate::initialize);
+					}
+
+					if(se.getTeacher() != null) {
+						Hibernate.initialize(se.getTeacher());
+						se.getTeacher().getStaffIdentifiers().forEach(Hibernate::initialize);
+					}
+
 					Hibernate.initialize(se.getEntryExitCodes());
 					Hibernate.initialize(se.getSchool());
-					Hibernate.initialize(se.getSchool().getLea());
+					//Hibernate.initialize(se.getSchool().getLea());
 				});
-
-
 			}
 		}
 		return instance;
@@ -77,15 +84,25 @@ public class StudentDAO extends AbstractDAO<Integer, Student> implements IStuden
 			});
 
 			Hibernate.initialize(instance.getStudentEnrollments());
-			instance.getStudentEnrollments().forEach(se -> {
-				Hibernate.initialize(se.getCounselor());
-				Hibernate.initialize(se.getTeacher());
+			instance.getStudentEnrollments().forEach(se ->
+			{
+				if(se.getCounselor() != null) {
+					Hibernate.initialize(se.getCounselor());
+					se.getCounselor().getStaffIdentifiers().forEach(Hibernate::initialize);
+				}
+
+				if(se.getTeacher() != null) {
+					Hibernate.initialize(se.getTeacher());
+					se.getTeacher().getStaffIdentifiers().forEach(Hibernate::initialize);
+				}
+
 				Hibernate.initialize(se.getEntryExitCodes());
 				Hibernate.initialize(se.getSchool());
-				Hibernate.initialize(se.getSchool().getLea());
+				//Hibernate.initialize(se.getSchool().getLea());
 			});
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
 	}
 
 	@Override

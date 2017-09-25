@@ -23,8 +23,8 @@ import java.util.List;
 public class XCourses {
 
     @JsonProperty("xCourse")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<XCourse> xCourse;
-
 
     public XCourses() {
         xCourse = new ArrayList<>();

@@ -17,17 +17,17 @@ public class StudentService implements IStudentService
 	StudentDAO dao;
 
 	@Override
-	public List<Student> findAll() throws NotFoundException {
+	public List<Student> findAll() throws Exception {
 		return dao.findAll();
 	}
 
 	@Override
-	public Student findByRefId(String refId) throws NotFoundException {
+	public Student findByRefId(String refId) throws Exception {
 		return dao.findByRefId(refId);
 	}
 
 	@Override
-	public Student findByLocalId(String localId) throws NotFoundException {
+	public Student findByLocalId(String localId) throws Exception {
 		return dao.findByLocalId(localId);
 	}
 

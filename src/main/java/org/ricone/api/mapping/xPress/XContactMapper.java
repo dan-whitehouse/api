@@ -12,7 +12,7 @@ import java.util.*;
 @Component("XContactMapper")
 public class XContactMapper {
 
-    private final String LOCAL_ID = "LEA";
+    private final String LOCAL_ID = "District";
     private final String PRIMARY_ADDRESS_TYPE = "Mailing";
 
     public XContactMapper() {

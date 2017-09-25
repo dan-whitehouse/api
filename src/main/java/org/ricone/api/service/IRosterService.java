@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface IRosterService
 {
-    List<CourseSection> findAll() throws NotFoundException;
+    List<CourseSection> findAll() throws Exception;
 
     CourseSection findByRefId(String refId) throws Exception;
 

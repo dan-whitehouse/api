@@ -19,7 +19,7 @@ public class SchoolService implements ISchoolService
 	SchoolDAO dao;
 
 	@Override
-	public List<School> findAll() throws NotFoundException {
+	public List<School> findAll() throws Exception {
 		return dao.findAll();
 	}
 

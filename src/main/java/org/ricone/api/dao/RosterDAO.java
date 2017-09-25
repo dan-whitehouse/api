@@ -156,7 +156,7 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 	}
 
 	@Override
-	public CourseSection findByRefId(String refId) throws Exception
+	public CourseSection findByRefId(String refId) throws NotFoundException
 	{
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
@@ -180,16 +180,14 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 			}
 
 			Hibernate.initialize(instance.getStudentCourseSections());
-			for(StudentCourseSection studentCourseSection : instance.getStudentCourseSections())
+			instance.getStudentCourseSections().forEach(scs ->
 			{
-				Hibernate.initialize(studentCourseSection.getStudent());
-				for(StudentIdentifier id : studentCourseSection.getStudent().getStudentIdentifiers())
-				{
-					Hibernate.initialize(id);
-				}
-			}
+				Hibernate.initialize(scs.getStudent());
+				scs.getStudent().getStudentIdentifiers().forEach(Hibernate::initialize);
+			});
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
 	}
 
 	@Override

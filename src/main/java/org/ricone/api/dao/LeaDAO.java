@@ -33,27 +33,30 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public Lea findByRefId(String refId) throws Exception {
+	public Lea findByRefId(String refId) throws NotFoundException {
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		Lea instance = (Lea) criteria.uniqueResult();
+
 		if (instance != null) {
 			Hibernate.initialize(instance.getLeaTelephones());
 			Hibernate.initialize(instance.getSchools());
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
 	}
 
 	@Override
-	public Lea findByLocalId(String localId) throws Exception {
+	public Lea findByLocalId(String localId) throws NotFoundException {
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(LOCAL_ID_KEY, localId));
 		Lea instance = (Lea) criteria.uniqueResult();
 		if (instance != null) {
 			Hibernate.initialize(instance.getLeaTelephones());
 			Hibernate.initialize(instance.getSchools());
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + localId);
 	}
 
 	@Override

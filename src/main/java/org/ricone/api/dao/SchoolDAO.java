@@ -37,7 +37,7 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	}
 
 	@Override
-	public School findByRefId(String refId) throws Exception
+	public School findByRefId(String refId) throws NotFoundException
 	{
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
@@ -49,12 +49,13 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 			Hibernate.initialize(instance.getSchoolCalendars());
 			Hibernate.initialize(instance.getSchoolGrades());
 			Hibernate.initialize(instance.getSchoolTelephones());
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
 	}
 
 	@Override
-	public School findByLocalId(String localId) throws Exception
+	public School findByLocalId(String localId) throws NotFoundException
 	{
 		//TODO: This isn't implemented correctly
 		return null;

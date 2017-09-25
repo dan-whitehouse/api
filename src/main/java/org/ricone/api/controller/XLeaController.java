@@ -2,6 +2,8 @@ package org.ricone.api.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ricone.api.exception.MappingException;
+import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.mapping.xPress.XLeaMapper;
 import org.ricone.api.model.core.Lea;
 

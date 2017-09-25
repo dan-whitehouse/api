@@ -23,6 +23,7 @@ import java.util.List;
 public class MeetingTimes {
 
     @JsonProperty("meetingTime")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<MeetingTime> meetingTime;
 
 

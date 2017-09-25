@@ -23,6 +23,7 @@ import java.util.List;
 public class XStaffs {
 
     @JsonProperty("xStaff")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<XStaff> xStaff;
 
     public XStaffs() {

@@ -34,7 +34,7 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 	}
 
 	@Override
-	public SchoolCalendar findByRefId(String refId) throws Exception
+	public SchoolCalendar findByRefId(String refId) throws NotFoundException
 	{
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
@@ -43,8 +43,9 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 		{
 			Hibernate.initialize(instance.getSchool());
 			Hibernate.initialize(instance.getSchoolCalendarSessions());
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
 	}
 
 	@Override

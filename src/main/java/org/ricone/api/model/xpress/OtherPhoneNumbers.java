@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 public class OtherPhoneNumbers {
 
     @JsonProperty("phoneNumber")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<PhoneNumber> phoneNumber;
 
     public OtherPhoneNumbers() {

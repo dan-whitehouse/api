@@ -54,8 +54,9 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 
 			Hibernate.initialize(instance.getStudentContactRelationships());
 			instance.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+			return instance;
 		}
-		return instance;
+		throw new NotFoundException("No record found with refId: " + refId);
 	}
 
 

@@ -17,17 +17,17 @@ public class StaffService implements IStaffService
 	StaffDAO dao;
 
 	@Override
-	public List<Staff> findAll() throws NotFoundException {
+	public List<Staff> findAll() throws Exception {
 		return dao.findAll();
 	}
 
 	@Override
-	public Staff findByRefId(String refId) throws NotFoundException {
+	public Staff findByRefId(String refId) throws Exception {
 		return dao.findByRefId(refId);
 	}
 
 	@Override
-	public Staff findByLocalId(String localId) throws NotFoundException {
+	public Staff findByLocalId(String localId) throws Exception {
 		return dao.findByLocalId(localId);
 	}
 

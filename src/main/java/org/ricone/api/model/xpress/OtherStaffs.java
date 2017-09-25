@@ -23,6 +23,7 @@ import java.util.List;
 public class OtherStaffs {
 
     @JsonProperty("otherStaff")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<OtherStaff> otherStaff;
 
     public OtherStaffs() {
