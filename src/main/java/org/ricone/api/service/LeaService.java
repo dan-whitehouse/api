@@ -6,6 +6,8 @@ import org.ricone.api.dao.LeaDAO;
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Lea;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service("leaService")
@@ -16,8 +18,8 @@ public class LeaService implements ILeaService
 	LeaDAO dao;
 
 	@Override
-	public List<Lea> findAll() throws Exception {
-		return dao.findAll();
+	public List<Lea> findAll(Pageable pageRequest) throws Exception {
+		return dao.findAll(pageRequest);
 	}
 
 	@Override

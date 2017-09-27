@@ -10,6 +10,8 @@ import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.xpress.*;
 import org.ricone.api.service.ILeaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,9 +40,9 @@ public class XLeaController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xLeas", tags = { "xLeas" })
     @RequestMapping(value = "/requests/xLeas", method = RequestMethod.GET)
-    public XLeasResponse getMulti(HttpServletResponse response) throws Exception
+    public XLeasResponse getMultiPage(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<Lea> instance = service.findAll();
+        List<Lea> instance = service.findAll(pageRequest);
         return mapper.convert(instance);
     }
 

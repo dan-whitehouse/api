@@ -1,3 +1,8 @@
+2.0.0 Build 20170926
+    - Updated Lea's Controller, Service, & DAO to use Pageable object.
+    - Updated LeaDAO query's with sorting and paging.
+    - Added count method to LeaDAO to return the max number of records.
+
 2.0.0 Build 20170925
     - Updated LeaDAO query's with new CriteriaBuilder. Should allow for better sql.
 

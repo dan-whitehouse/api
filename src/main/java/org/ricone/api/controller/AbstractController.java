@@ -24,10 +24,10 @@ public abstract class AbstractController
     public AbstractController(){
     }
 
-    public Paging getPaging()
+    /*public Paging getPaging()
     {
         return new Paging(request);
-    }
+    }*/
 
     public AuthRequest getAuthRequest() throws ConfigException {
         return new AuthRequest(request);

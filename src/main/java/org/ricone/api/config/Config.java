@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
@@ -34,9 +35,9 @@ import org.springframework.web.servlet.view.JstlView;
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
 @EnableScheduling
+@EnableSpringDataWebSupport
 public class Config extends WebMvcConfigurerAdapter 
 {
-	
 	@Bean(name="viewProject")
 	public ViewResolver viewResolver()
 	{
@@ -67,4 +68,6 @@ public class Config extends WebMvcConfigurerAdapter
 		registry.addInterceptor(headerHandler);
 		registry.addInterceptor(logHandler);
 	}
+
+
 }

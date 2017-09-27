@@ -2,6 +2,8 @@ package org.ricone.api.dao;
 
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Lea;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ import java.util.List;
  */
 public interface ILeaDAO
 {
-    List<Lea> findAll() throws NotFoundException;
+    List<Lea> findAll(Pageable pageRequest) throws NotFoundException;
 
     Lea findByRefId(String refId) throws NotFoundException;
 
@@ -24,4 +26,6 @@ public interface ILeaDAO
     void delete(Lea instance);
 
     void deleteByRefId(String refId);
+
+    Long count();
 }
