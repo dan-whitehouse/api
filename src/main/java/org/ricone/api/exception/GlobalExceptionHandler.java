@@ -1,5 +1,6 @@
 package org.ricone.api.exception;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class GlobalExceptionHandler 
 {
 
+	/**** 20X ****/
+	@ExceptionHandler(NoContentException.class)
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	private @ResponseBody void noContent(HttpServletRequest request, HttpServletResponse response, Exception ex)
+	{
+
+	}
+
 	/**** 40X ****/
 	@ExceptionHandler(UnauthorizedException.class)
 	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
@@ -28,7 +37,7 @@ public class GlobalExceptionHandler
 		return error;
 	}
 	 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler({NoResultException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND) 
     private @ResponseBody Error notFound(HttpServletRequest request, HttpServletResponse response, Exception ex) 
     {

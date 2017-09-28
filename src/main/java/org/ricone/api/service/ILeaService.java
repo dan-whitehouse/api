@@ -15,9 +15,19 @@ public interface ILeaService
 {
     List<Lea> findAll(Pageable pageRequest) throws Exception;
 
-    Lea findByRefId(String refId) throws Exception;
+    List<Lea> findAllBySchool(Pageable pageRequest, String refId) throws Exception;
 
-    Lea findByLocalId(String localId) throws Exception;
+    List<Lea> findAllByCalendar(Pageable pageRequest, String refId) throws Exception;
+
+    List<Lea> findAllByRoster(Pageable pageRequest, String refId) throws Exception;
+
+    List<Lea> findAllByStaff(Pageable pageRequest, String refId) throws Exception;
+
+    List<Lea> findAllByStudent(Pageable pageRequest, String refId) throws Exception;
+
+    List<Lea> findAllByContact(Pageable pageRequest, String refId) throws Exception;
+
+    Lea findById(String refId) throws Exception;
 
     void save(Lea instance);
 

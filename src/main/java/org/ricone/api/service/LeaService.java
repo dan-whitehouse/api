@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import org.ricone.api.dao.LeaDAO;
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Lea;
+import org.ricone.api.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +24,44 @@ public class LeaService implements ILeaService
 	}
 
 	@Override
-	public Lea findByRefId(String refId) throws Exception {
-		return dao.findByRefId(refId);
+	public List<Lea> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(pageRequest, refId);
 	}
 
 	@Override
-	public Lea findByLocalId(String localId) throws Exception {
-		return dao.findByLocalId(localId);
+	public List<Lea> findAllByCalendar(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByCalendarRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<Lea> findAllByRoster(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByRosterRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<Lea> findAllByStaff(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByStaffRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<Lea> findAllByStudent(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByStudentRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<Lea> findAllByContact(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByContactRefId(pageRequest, refId);
+	}
+
+	@Override
+	public Lea findById(String id) throws Exception
+	{
+		if (Util.isRefId(id)) {
+			return dao.findByRefId(id);
+		}
+		else {
+			return dao.findByLocalId(id);
+		}
 	}
 
 	@Override
@@ -51,4 +83,6 @@ public class LeaService implements ILeaService
 	public void deleteByRefId(String refId) {
 		dao.deleteByRefId(refId);
 	}
+
+
 }
