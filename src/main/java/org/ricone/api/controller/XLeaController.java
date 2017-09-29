@@ -29,7 +29,7 @@ public class XLeaController extends AbstractController
 	XLeaMapper mapper;
 
     @ResponseBody
-    @ApiOperation(value="Return xLea by refId", tags = { "xLeas" })
+    @ApiOperation(value="Return xLea by refId or localId", tags = { "xLeas" })
     @RequestMapping(value= "/requests/xLeas/{refId}", method = RequestMethod.GET)
     public XLeaResponse getXLea(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {
@@ -40,8 +40,7 @@ public class XLeaController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xLeas", tags = { "xLeas" })
     @RequestMapping(value = "/requests/xLeas", method = RequestMethod.GET)
-    public XLeasResponse getXLeas(HttpServletResponse response, Pageable pageRequest) throws Exception
-    {
+    public XLeasResponse getXLeas(HttpServletResponse response, Pageable pageRequest, @RequestHeader(value = "page", required = false) Integer page, @RequestHeader(value = "size", required = false) Integer size) throws Exception {
         List<Lea> instance = service.findAll(pageRequest);
         return mapper.convert(instance);
     }
@@ -61,6 +60,15 @@ public class XLeaController extends AbstractController
     public XLeasResponse getXLeasByCalendar(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
         List<Lea> instance = service.findAllByCalendar(pageRequest, refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xLeas by xCourse refId", tags = { "xLeas" })
+    @RequestMapping(value= "/requests/xCourses/{refId}/xLeas", method = RequestMethod.GET)
+    public XLeasResponse getXLeasByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<Lea> instance = service.findAllByCourse(pageRequest, refId);
         return mapper.convert(instance);
     }
 

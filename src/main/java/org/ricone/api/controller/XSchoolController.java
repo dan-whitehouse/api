@@ -7,8 +7,10 @@ import org.ricone.api.model.core.School;
 import org.ricone.api.model.xpress.*;
 import org.ricone.api.service.ISchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,20 +27,20 @@ public class XSchoolController extends AbstractController
 
 
     @ResponseBody
-    @ApiOperation(value="Return xSchool by refId", tags = { "xSchools" })
+    @ApiOperation(value="Return xSchool by refId, localId, or BEDS", tags = { "xSchools" })
     @RequestMapping(value= "/requests/xSchools/{refId}", method = RequestMethod.GET)
-    public XSchoolResponse getSingle(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XSchoolResponse getXSchool(HttpServletResponse response, HttpServletRequest request, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        School instance = service.findByRefId(refId);
+        School instance = service.findById(request, refId);
         return mapper.convert(instance);
     }
 
     @ResponseBody
     @ApiOperation(value="Return all xSchools", tags = { "xSchools" })
     @RequestMapping(value = "/requests/xSchools", method = RequestMethod.GET)
-    public XSchoolsResponse getMulti(HttpServletResponse response) throws Exception
+    public XSchoolsResponse getXSchools(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<School> instance = service.findAll();
+        List<School> instance = service.findAll(pageRequest);
         return mapper.convert(instance);
     }
 
@@ -46,8 +48,63 @@ public class XSchoolController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xSchools by xLea refId", tags = { "xSchools" })
     @RequestMapping(value= "/requests/xLeas/{refId}/xSchools", method = RequestMethod.GET)
-    public List<XSchool> getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XSchoolsResponse getXSchoolsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        return null;
+        List<School> instance = service.findAllByLea(pageRequest, refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xSchools by xCalendar refId", tags = { "xSchools" })
+    @RequestMapping(value= "/requests/xCalendars/{refId}/xSchools", method = RequestMethod.GET)
+    public XSchoolsResponse getXSchoolsByCalendar(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<School> instance = service.findAllByCalendar(pageRequest, refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xSchools by xCourse refId", tags = { "xSchools" })
+    @RequestMapping(value= "/requests/xCourses/{refId}/xSchools", method = RequestMethod.GET)
+    public XSchoolsResponse getXSchoolsByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<School> instance = service.findAllByCourse(pageRequest, refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xSchools by xRoster refId", tags = { "xSchools" })
+    @RequestMapping(value= "/requests/xRosters/{refId}/xSchools", method = RequestMethod.GET)
+    public XSchoolsResponse getXSchoolsByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<School> instance = service.findAllByRoster(pageRequest, refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xSchools by xStaff refId", tags = { "xSchools" })
+    @RequestMapping(value= "/requests/xStaffs/{refId}/xSchools", method = RequestMethod.GET)
+    public XSchoolsResponse getXSchoolsByStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<School> instance = service.findAllByStaff(pageRequest, refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xSchools by xStudent refId", tags = { "xSchools" })
+    @RequestMapping(value= "/requests/xStudents/{refId}/xSchools", method = RequestMethod.GET)
+    public XSchoolsResponse getXSchoolsByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<School> instance = service.findAllByStudent(pageRequest, refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xSchools by xContact refId", tags = { "xSchools" })
+    @RequestMapping(value= "/requests/xContacts/{refId}/xSchools", method = RequestMethod.GET)
+    public XSchoolsResponse getXSchoolsByContact(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<School> instance = service.findAllByContact(pageRequest, refId);
+        return mapper.convert(instance);
     }
 }

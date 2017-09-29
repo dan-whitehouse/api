@@ -19,6 +19,8 @@ public interface ILeaService
 
     List<Lea> findAllByCalendar(Pageable pageRequest, String refId) throws Exception;
 
+    List<Lea> findAllByCourse(Pageable pageRequest, String refId) throws Exception;
+
     List<Lea> findAllByRoster(Pageable pageRequest, String refId) throws Exception;
 
     List<Lea> findAllByStaff(Pageable pageRequest, String refId) throws Exception;

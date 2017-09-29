@@ -34,6 +34,11 @@ public class LeaService implements ILeaService
 	}
 
 	@Override
+	public List<Lea> findAllByCourse(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByCourseRefId(pageRequest, refId);
+	}
+
+	@Override
 	public List<Lea> findAllByRoster(Pageable pageRequest, String refId) throws Exception {
 		return dao.findAllByRosterRefId(pageRequest, refId);
 	}

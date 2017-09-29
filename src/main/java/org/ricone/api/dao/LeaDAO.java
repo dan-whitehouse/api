@@ -47,6 +47,8 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.select(from);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
+		System.out.println(pageRequest.getPageNumber() + " | " + pageRequest.getPageSize());
+
 		Query<Lea> q = getSession().createQuery(select);
 		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
 		q.setMaxResults(pageRequest.getPageSize());
@@ -90,6 +92,29 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.distinct(true);
 		select.select(from);
 		select.where(cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId));
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<Lea> q = getSession().createQuery(select);
+		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+		q.setMaxResults(pageRequest.getPageSize());
+		List<Lea> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<Lea> findAllByCourseRefId(Pageable pageRequest, String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final Root<Lea> from = select.from(Lea.class);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.INNER);
+		final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>fetch("courses", JoinType.INNER);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.equal(courses.get("courseRefId"), refId));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -231,17 +256,17 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 	@Override
 	public void save(Lea instance) {
-		persist(instance);
+		super.persist(instance);
 	}
 
 	@Override
 	public void update(Lea instance) {
-		saveOrUpdate(instance);
+		super.saveOrUpdate(instance);
 	}
 
 	@Override
 	public void delete(Lea instance) {
-		delete(instance);
+		super.delete(instance);
 	}
 
 	@Override

@@ -1,6 +1,13 @@
+2.0.0 Build 20170928
+    - Updated School's Controller, Service, & DAO
+        - Added all service paths to controller
+        - Added matching methods to the service
+        - Added new methods and working sql code with paging
+            - Still need to limit by districts associated to the accessing app.
+
 2.0.0 Build 20170927
     - Updated Lea's Controller, Service, & DAO
-        - Added all Service paths to controller
+        - Added all service paths to controller
         - Added matching methods to the service
         - Added new methods and working sql code with paging
             - Still need to limit by districts associated to the accessing app.

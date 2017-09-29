@@ -20,6 +20,8 @@ public interface ILeaDAO
 
     List<Lea> findAllByCalendarRefId(Pageable pageRequest, String refId) throws Exception;
 
+    List<Lea> findAllByCourseRefId(Pageable pageRequest, String refId) throws Exception;
+
     List<Lea> findAllByRosterRefId(Pageable pageRequest, String refId) throws Exception;
 
     List<Lea> findAllByStaffRefId(Pageable pageRequest, String refId) throws Exception;

@@ -5,6 +5,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.ricone.api.exception.ConfigException;
 import org.ricone.api.security.AuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,12 +23,25 @@ public abstract class AbstractController
     @Autowired
     private HttpServletResponse response;
 
+   /* @Autowired
+    private Pageable pageRequest;*/
+
     public AbstractController(){
     }
 
-    /*public Paging getPaging()
+    /*public Pageable getPaging()
     {
-        return new Paging(request);
+        boolean hasPage = StringUtils.isNotBlank(request.getHeader("page"));
+        boolean hasSize = StringUtils.isNotBlank(request.getHeader("size"));
+
+        if(hasPage && hasSize)
+        {
+            int page = NumberUtils.toInt(request.getHeader("page"));
+            int size = NumberUtils.toInt(request.getHeader("size"));
+
+            return new PageRequest(page, size);
+        }
+        return null;
     }*/
 
     public AuthRequest getAuthRequest() throws ConfigException {
