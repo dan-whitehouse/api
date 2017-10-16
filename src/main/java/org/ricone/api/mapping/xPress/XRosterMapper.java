@@ -71,7 +71,6 @@ public class XRosterMapper {
            if (instance.getSchoolCalendarSession() != null)
            {
                 xRoster.setSessionCode(instance.getSchoolCalendarSession().getSessionTypeCode());
-
                 if (instance.getSchoolCalendarSession().getSchoolCalendar() != null)
                 {
                     xRoster.setSchoolYear(instance.getSchoolCalendarSession().getSchoolCalendar().getCalendarYear());
@@ -129,7 +128,7 @@ public class XRosterMapper {
                     StaffPersonReference staffPersonReference = mapStaff(staffCourseSection.getStaff());
                     if (staffPersonReference != null)
                     {
-                        if (staffCourseSection.getTeacherOfRecord())
+                        if (BooleanUtils.isTrue(staffCourseSection.getTeacherOfRecord()))
                         {
                             PrimaryStaff staff = new PrimaryStaff();
                             staff.setStaffPersonReference(staffPersonReference);

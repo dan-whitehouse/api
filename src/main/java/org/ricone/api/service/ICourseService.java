@@ -3,7 +3,9 @@ package org.ricone.api.service;
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Course;
 import org.ricone.api.model.core.School;
+import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -12,7 +14,7 @@ import java.util.List;
  */
 public interface ICourseService
 {
-    List<Course> findAll() throws Exception;
+    List<Course> findAll(Pageable pageRequest) throws Exception;
 
     Course findByRefId(String refId) throws Exception;
 

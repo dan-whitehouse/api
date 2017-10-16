@@ -6,6 +6,7 @@ import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.CourseSection;
 import org.ricone.api.model.core.School;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,8 +20,8 @@ public class RosterService implements IRosterService
 	RosterDAO dao;
 
 	@Override
-	public List<CourseSection> findAll() throws Exception {
-		return dao.findAll();
+	public List<CourseSection> findAll(Pageable pageRequest) throws Exception {
+		return dao.findAll(pageRequest);
 	}
 
 	@Override

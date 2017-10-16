@@ -274,7 +274,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		Lea instance = (Lea) criteria.uniqueResult();
-		delete(instance);
+		super.delete(instance);
 	}
 
 	@Override

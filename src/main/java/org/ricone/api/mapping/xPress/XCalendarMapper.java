@@ -3,6 +3,7 @@ package org.ricone.api.mapping.xPress;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.hibernate.MappingException;
 import org.ricone.api.model.core.*;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
@@ -48,33 +49,36 @@ public class XCalendarMapper {
     public XCalendar map(SchoolCalendar instance)
     {
         XCalendar xCalendar = new XCalendar();
-        xCalendar.setRefId(instance.getSchoolCalendarRefId());
-        xCalendar.setSchoolRefId(instance.getSchool().getSchoolRefId());
-        xCalendar.setSchoolYear(instance.getCalendarYear());
+        try {
+            xCalendar.setRefId(instance.getSchoolCalendarRefId());
+            xCalendar.setSchoolRefId(instance.getSchool().getSchoolRefId());
+            xCalendar.setSchoolYear(instance.getCalendarYear());
 
-        List<SessionList> sessionsList = new ArrayList<>();
-        for(SchoolCalendarSession calendarSession : instance.getSchoolCalendarSessions())
-        {
-            SessionList sessionList = mapSessionList(calendarSession);
-            if(sessionList != null){
-                sessionsList.add(sessionList);
+            List<SessionList> sessionsList = new ArrayList<>();
+            for (SchoolCalendarSession calendarSession : instance.getSchoolCalendarSessions()) {
+                SessionList sessionList = mapSessionList(calendarSession);
+                if (sessionList != null) {
+                    sessionsList.add(sessionList);
+                }
+            }
+
+            if (CollectionUtils.isNotEmpty(sessionsList)) {
+                Sessions sessions = new Sessions();
+                sessions.setSessionList(sessionsList);
+                xCalendar.setSessions(sessions);
             }
         }
-
-        if(CollectionUtils.isNotEmpty(sessionsList))
-        {
-            Sessions sessions = new Sessions();
-            sessions.setSessionList(sessionsList);
-            xCalendar.setSessions(sessions);
+        catch(Exception e){
+            xCalendar = null;
+            e.printStackTrace();
+            throw new MappingException("Mapping Exception: " + e.getLocalizedMessage());
         }
-
         return xCalendar;
     }
 
     private SessionList mapSessionList(SchoolCalendarSession calendarSession)
     {
         SessionList sessionList = new SessionList();
-
         sessionList.setDescription(calendarSession.getDescription());
         sessionList.setSessionCode(calendarSession.getCode());
         sessionList.setSessionType(calendarSession.getSessionTypeCode());
@@ -83,8 +87,12 @@ public class XCalendarMapper {
         sessionList.setMarkingTerm(BooleanUtils.toStringTrueFalse(calendarSession.getMarkingTermIndicator()));
         sessionList.setSchedulingTerm(BooleanUtils.toStringTrueFalse(calendarSession.getSchedulingTermIndicator()));
 
-        sessionList.setStartDate(DateFormatUtils.format(calendarSession.getBeginDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
-        sessionList.setEndDate(DateFormatUtils.format(calendarSession.getEndDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
+        if(calendarSession.getBeginDate() != null){
+            sessionList.setStartDate(DateFormatUtils.format(calendarSession.getBeginDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
+        }
+        if(calendarSession.getEndDate() != null) {
+            sessionList.setEndDate(DateFormatUtils.format(calendarSession.getEndDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
+        }
 
         if(sessionList.isEmptyObject())
         {

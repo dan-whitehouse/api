@@ -1,12 +1,12 @@
 package org.ricone.api.model.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 
 @Entity
 @Table(name = "schoolcalendarsession")
@@ -50,6 +50,28 @@ public class SchoolCalendarSession implements java.io.Serializable
         this.schoolCalendar = schoolCalendar;
     }
 
+    public SchoolCalendarSession(String schoolCalendarSessionRefId, SchoolCalendar schoolCalendar, String designator, Date beginDate, Date endDate, String sessionTypeCode, Long instructionalMinutes, String code, String description, Boolean markingTermIndicator, Boolean schedulingTermIndicator, Boolean attendanceTermIndicator, Integer daysInSession, Date firstInstructionDate, Date lastInstructionDate, Integer minutesPerDay, Date sessionStartTime, Date sessionEndTime, String linkedSessionCode) {
+        this.schoolCalendarSessionRefId = schoolCalendarSessionRefId;
+        this.schoolCalendar = schoolCalendar;
+        this.designator = designator;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.sessionTypeCode = sessionTypeCode;
+        this.instructionalMinutes = instructionalMinutes;
+        this.code = code;
+        this.description = description;
+        this.markingTermIndicator = markingTermIndicator;
+        this.schedulingTermIndicator = schedulingTermIndicator;
+        this.attendanceTermIndicator = attendanceTermIndicator;
+        this.daysInSession = daysInSession;
+        this.firstInstructionDate = firstInstructionDate;
+        this.lastInstructionDate = lastInstructionDate;
+        this.minutesPerDay = minutesPerDay;
+        this.sessionStartTime = sessionStartTime;
+        this.sessionEndTime = sessionEndTime;
+        this.linkedSessionCode = linkedSessionCode;
+    }
+
     public SchoolCalendarSession(String schoolCalendarSessionRefId, SchoolCalendar schoolCalendar, String designator, Date beginDate, Date endDate, String sessionTypeCode, Long instructionalMinutes, String code, String description, Boolean markingTermIndicator, Boolean schedulingTermIndicator, Boolean attendanceTermIndicator, Integer daysInSession, Date firstInstructionDate, Date lastInstructionDate, Integer minutesPerDay, Date sessionStartTime, Date sessionEndTime, String linkedSessionCode, Set<CourseSection> courseSections)
     {
         this.schoolCalendarSessionRefId = schoolCalendarSessionRefId;
@@ -80,19 +102,15 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.schoolCalendarSessionRefId;
     }
+    public void setSchoolCalendarSessionRefId(String schoolCalendarSessionRefId) { this.schoolCalendarSessionRefId = schoolCalendarSessionRefId; }
 
-    public void setSchoolCalendarSessionRefId(String schoolCalendarSessionRefId)
-    {
-        this.schoolCalendarSessionRefId = schoolCalendarSessionRefId;
-    }
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SchoolCalendarRefId", nullable = false)
     public SchoolCalendar getSchoolCalendar()
     {
         return this.schoolCalendar;
     }
-
     public void setSchoolCalendar(SchoolCalendar schoolCalendar)
     {
         this.schoolCalendar = schoolCalendar;
@@ -103,7 +121,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.designator;
     }
-
     public void setDesignator(String designator)
     {
         this.designator = designator;
@@ -115,7 +132,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.beginDate;
     }
-
     public void setBeginDate(Date beginDate)
     {
         this.beginDate = beginDate;
@@ -127,7 +143,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.endDate;
     }
-
     public void setEndDate(Date endDate)
     {
         this.endDate = endDate;
@@ -138,7 +153,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.sessionTypeCode;
     }
-
     public void setSessionTypeCode(String sessionTypeCode)
     {
         this.sessionTypeCode = sessionTypeCode;
@@ -149,7 +163,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.instructionalMinutes;
     }
-
     public void setInstructionalMinutes(Long instructionalMinutes)
     {
         this.instructionalMinutes = instructionalMinutes;
@@ -160,7 +173,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.code;
     }
-
     public void setCode(String code)
     {
         this.code = code;
@@ -171,7 +183,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.description;
     }
-
     public void setDescription(String description)
     {
         this.description = description;
@@ -182,22 +193,14 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.markingTermIndicator;
     }
-
-    public void setMarkingTermIndicator(Boolean markingTermIndicator)
-    {
-        this.markingTermIndicator = markingTermIndicator;
-    }
+    public void setMarkingTermIndicator(Boolean markingTermIndicator) { this.markingTermIndicator = markingTermIndicator; }
 
     @Column(name = "SchedulingTermIndicator")
     public Boolean getSchedulingTermIndicator()
     {
         return this.schedulingTermIndicator;
     }
-
-    public void setSchedulingTermIndicator(Boolean schedulingTermIndicator)
-    {
-        this.schedulingTermIndicator = schedulingTermIndicator;
-    }
+    public void setSchedulingTermIndicator(Boolean schedulingTermIndicator) { this.schedulingTermIndicator = schedulingTermIndicator; }
 
     @Column(name = "AttendanceTermIndicator")
     public Boolean getAttendanceTermIndicator()
@@ -205,17 +208,13 @@ public class SchoolCalendarSession implements java.io.Serializable
         return this.attendanceTermIndicator;
     }
 
-    public void setAttendanceTermIndicator(Boolean attendanceTermIndicator)
-    {
-        this.attendanceTermIndicator = attendanceTermIndicator;
-    }
+    public void setAttendanceTermIndicator(Boolean attendanceTermIndicator) { this.attendanceTermIndicator = attendanceTermIndicator; }
 
     @Column(name = "DaysInSession")
     public Integer getDaysInSession()
     {
         return this.daysInSession;
     }
-
     public void setDaysInSession(Integer daysInSession)
     {
         this.daysInSession = daysInSession;
@@ -227,7 +226,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.firstInstructionDate;
     }
-
     public void setFirstInstructionDate(Date firstInstructionDate)
     {
         this.firstInstructionDate = firstInstructionDate;
@@ -239,7 +237,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.lastInstructionDate;
     }
-
     public void setLastInstructionDate(Date lastInstructionDate)
     {
         this.lastInstructionDate = lastInstructionDate;
@@ -250,7 +247,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.minutesPerDay;
     }
-
     public void setMinutesPerDay(Integer minutesPerDay)
     {
         this.minutesPerDay = minutesPerDay;
@@ -262,7 +258,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.sessionStartTime;
     }
-
     public void setSessionStartTime(Date sessionStartTime)
     {
         this.sessionStartTime = sessionStartTime;
@@ -274,7 +269,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.sessionEndTime;
     }
-
     public void setSessionEndTime(Date sessionEndTime)
     {
         this.sessionEndTime = sessionEndTime;
@@ -285,7 +279,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.linkedSessionCode;
     }
-
     public void setLinkedSessionCode(String linkedSessionCode)
     {
         this.linkedSessionCode = linkedSessionCode;
@@ -296,7 +289,6 @@ public class SchoolCalendarSession implements java.io.Serializable
     {
         return this.courseSections;
     }
-
     public void setCourseSections(Set<CourseSection> coursesections)
     {
         this.courseSections = coursesections;

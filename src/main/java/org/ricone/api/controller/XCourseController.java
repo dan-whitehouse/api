@@ -10,6 +10,7 @@ import org.ricone.api.model.xpress.*;
 import org.ricone.api.service.ICalendarService;
 import org.ricone.api.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,9 +39,9 @@ public class XCourseController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xCourses", tags = { "xCourses" })
     @RequestMapping(value = "/requests/xCourses", method = RequestMethod.GET)
-    public XCoursesResponse getMulti(HttpServletResponse response) throws Exception
+    public XCoursesResponse getMulti(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<Course> instance = service.findAll();
+        List<Course> instance = service.findAll(pageRequest);
         return mapper.convert(instance);
     }
 

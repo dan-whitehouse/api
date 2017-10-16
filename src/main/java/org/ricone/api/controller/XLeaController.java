@@ -12,6 +12,8 @@ import org.ricone.api.service.ILeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,9 +41,9 @@ public class XLeaController extends AbstractController
 
     @ResponseBody
     @ApiOperation(value="Return all xLeas", tags = { "xLeas" })
-    @RequestMapping(value = "/requests/xLeas", method = RequestMethod.GET)
+    @RequestMapping(value = "/requests/xLeas", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
     public XLeasResponse getXLeas(HttpServletResponse response, Pageable pageRequest, @RequestHeader(value = "page", required = false) Integer page, @RequestHeader(value = "size", required = false) Integer size) throws Exception {
-        List<Lea> instance = service.findAll(pageRequest);
+        List<Lea> instance = service.findAll(getPaging(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -50,7 +52,7 @@ public class XLeaController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeasBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Lea> instance = service.findAllBySchool(pageRequest, refId);
+        List<Lea> instance = service.findAllBySchool(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -59,7 +61,7 @@ public class XLeaController extends AbstractController
     @RequestMapping(value= "/requests/xCalendars/{refId}/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeasByCalendar(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Lea> instance = service.findAllByCalendar(pageRequest, refId);
+        List<Lea> instance = service.findAllByCalendar(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -68,7 +70,7 @@ public class XLeaController extends AbstractController
     @RequestMapping(value= "/requests/xCourses/{refId}/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeasByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Lea> instance = service.findAllByCourse(pageRequest, refId);
+        List<Lea> instance = service.findAllByCourse(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -77,7 +79,7 @@ public class XLeaController extends AbstractController
     @RequestMapping(value= "/requests/xRosters/{refId}/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeasByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Lea> instance = service.findAllByRoster(pageRequest, refId);
+        List<Lea> instance = service.findAllByRoster(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -86,7 +88,7 @@ public class XLeaController extends AbstractController
     @RequestMapping(value= "/requests/xStaffs/{refId}/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeasByStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Lea> instance = service.findAllByStaff(pageRequest, refId);
+        List<Lea> instance = service.findAllByStaff(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -95,7 +97,7 @@ public class XLeaController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeasByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Lea> instance = service.findAllByStudent(pageRequest, refId);
+        List<Lea> instance = service.findAllByStudent(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -104,7 +106,7 @@ public class XLeaController extends AbstractController
     @RequestMapping(value= "/requests/xContacts/{refId}/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeasByContact(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Lea> instance = service.findAllByContact(pageRequest, refId);
+        List<Lea> instance = service.findAllByContact(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

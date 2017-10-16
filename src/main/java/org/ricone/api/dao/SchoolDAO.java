@@ -304,6 +304,6 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		School instance = (School)criteria.uniqueResult();
-		delete(instance);
+		super.delete(instance);
 	}
 }

@@ -40,7 +40,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value = "/requests/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchools(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<School> instance = service.findAll(pageRequest);
+        List<School> instance = service.findAll(getPaging(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -50,7 +50,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchoolsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<School> instance = service.findAllByLea(pageRequest, refId);
+        List<School> instance = service.findAllByLea(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -59,7 +59,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value= "/requests/xCalendars/{refId}/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchoolsByCalendar(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<School> instance = service.findAllByCalendar(pageRequest, refId);
+        List<School> instance = service.findAllByCalendar(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -68,7 +68,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value= "/requests/xCourses/{refId}/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchoolsByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<School> instance = service.findAllByCourse(pageRequest, refId);
+        List<School> instance = service.findAllByCourse(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -77,7 +77,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value= "/requests/xRosters/{refId}/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchoolsByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<School> instance = service.findAllByRoster(pageRequest, refId);
+        List<School> instance = service.findAllByRoster(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -86,7 +86,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value= "/requests/xStaffs/{refId}/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchoolsByStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<School> instance = service.findAllByStaff(pageRequest, refId);
+        List<School> instance = service.findAllByStaff(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -95,7 +95,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchoolsByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<School> instance = service.findAllByStudent(pageRequest, refId);
+        List<School> instance = service.findAllByStudent(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -104,7 +104,7 @@ public class XSchoolController extends AbstractController
     @RequestMapping(value= "/requests/xContacts/{refId}/xSchools", method = RequestMethod.GET)
     public XSchoolsResponse getXSchoolsByContact(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<School> instance = service.findAllByContact(pageRequest, refId);
+        List<School> instance = service.findAllByContact(getPaging(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

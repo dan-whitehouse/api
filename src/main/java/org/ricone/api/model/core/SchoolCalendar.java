@@ -16,8 +16,7 @@ public class SchoolCalendar implements java.io.Serializable
     private String calendarCode;
     private String calendarDescription;
     private String calendarYear;
-    private Set<SchoolCalendarSession> schoolCalendarSessions = new HashSet<SchoolCalendarSession>(0);
-    private Boolean isDeleted = null;
+    private Set<SchoolCalendarSession> schoolCalendarSessions = new HashSet<>(0);
 
     public SchoolCalendar()
     {
@@ -26,19 +25,6 @@ public class SchoolCalendar implements java.io.Serializable
     public SchoolCalendar(String schoolCalendarRefId)
     {
         this.schoolCalendarRefId = schoolCalendarRefId;
-    }
-
-    public SchoolCalendar(String schoolCalendarRefId, Boolean isDeleted)
-    {
-        this.schoolCalendarRefId = schoolCalendarRefId;
-        this.isDeleted = isDeleted;
-    }
-
-    public SchoolCalendar(String schoolCalendarRefId, School school, String calendarDescription)
-    {
-        this.schoolCalendarRefId = schoolCalendarRefId;
-        this.school = school;
-        this.calendarDescription = calendarDescription;
     }
 
     public SchoolCalendar(String schoolCalendarRefId, School school, String calendarCode, String calendarDescription, String calendarYear, Set<SchoolCalendarSession> schoolcalendarsessions)
@@ -57,7 +43,6 @@ public class SchoolCalendar implements java.io.Serializable
     {
         return this.schoolCalendarRefId;
     }
-
     public void setSchoolCalendarRefId(String schoolCalendarRefId)
     {
         this.schoolCalendarRefId = schoolCalendarRefId;
@@ -69,7 +54,6 @@ public class SchoolCalendar implements java.io.Serializable
     {
         return this.school;
     }
-
     public void setSchool(School school)
     {
         this.school = school;
@@ -80,7 +64,6 @@ public class SchoolCalendar implements java.io.Serializable
     {
         return this.calendarCode;
     }
-
     public void setCalendarCode(String calendarCode)
     {
         this.calendarCode = calendarCode;
@@ -91,7 +74,6 @@ public class SchoolCalendar implements java.io.Serializable
     {
         return this.calendarDescription;
     }
-
     public void setCalendarDescription(String calendarDescription)
     {
         this.calendarDescription = calendarDescription;
@@ -102,7 +84,6 @@ public class SchoolCalendar implements java.io.Serializable
     {
         return this.calendarYear;
     }
-
     public void setCalendarYear(String calendarYear)
     {
         this.calendarYear = calendarYear;
@@ -113,21 +94,5 @@ public class SchoolCalendar implements java.io.Serializable
     {
         return this.schoolCalendarSessions;
     }
-
-    public void setSchoolCalendarSessions(Set<SchoolCalendarSession> schoolcalendarsessions)
-    {
-        this.schoolCalendarSessions = schoolcalendarsessions;
-    }
-
-    @Transient
-    public Boolean getIsDeleted()
-    {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean isDeleted)
-    {
-        this.isDeleted = isDeleted;
-    }
-
+    public void setSchoolCalendarSessions(Set<SchoolCalendarSession> schoolcalendarsessions) { this.schoolCalendarSessions = schoolcalendarsessions; }
 }

@@ -21,7 +21,7 @@ public class GlobalExceptionHandler
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	private @ResponseBody void noContent(HttpServletRequest request, HttpServletResponse response, Exception ex)
 	{
-
+		//Do nothing
 	}
 
 	/**** 40X ****/
@@ -29,24 +29,14 @@ public class GlobalExceptionHandler
 	@ResponseStatus(value = HttpStatus.FORBIDDEN)
 	private @ResponseBody Error unauthorized(HttpServletRequest request, HttpServletResponse response, Exception ex)
 	{
-		Error error = new Error();
-		error.setUrl(request.getRequestURL().toString());
-		error.setStatus(403);
-		error.setMessage("Forbidden");
-		error.setDescription(ex.getMessage());
-		return error;
+		return error(request.getRequestURL().toString(), 403, "Forbidden", ex.getMessage());
 	}
-	 
+
     @ExceptionHandler({NoResultException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND) 
     private @ResponseBody Error notFound(HttpServletRequest request, HttpServletResponse response, Exception ex) 
     {
-    	Error error = new Error();
-    	error.setUrl(request.getRequestURL().toString());
-    	error.setStatus(404);
-    	error.setMessage("Not Found"); 
-        error.setDescription(ex.getMessage());
-        return error;
+		return error(request.getRequestURL().toString(), 404, "Not Found", ex.getMessage());
     }
     
     /**** 50X ****/
@@ -54,23 +44,23 @@ public class GlobalExceptionHandler
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) 
     private @ResponseBody Error badRequest(HttpServletRequest request, HttpServletResponse response, Exception ex) 
     {
-    	Error error = new Error();
-    	error.setUrl(request.getRequestURL().toString());
-    	error.setStatus(500);
-    	error.setMessage("Internal Server Error"); 
-        error.setDescription(ex.getMessage());
-        return error;
+		return error(request.getRequestURL().toString(), 500, "Internal Server Error", ex.getMessage());
     }
     
     @ExceptionHandler(ConfigException.class)
     @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE) 
     private @ResponseBody Error configError(HttpServletRequest request, HttpServletResponse response, Exception ex) 
     {
-    	Error error = new Error();
-    	error.setUrl(request.getRequestURL().toString());
-    	error.setStatus(503);
-    	error.setMessage("Service Unavailable"); 
-        error.setDescription("Configuration Error: " + ex.getMessage());
-        return error;
+        return error(request.getRequestURL().toString(), 503, "Service Unavailable", ex.getMessage());
     }
+
+    private Error error(String url, int status, String message, String description)
+	{
+		Error error = new Error();
+		error.setUrl(url);
+		error.setStatus(status);
+		error.setMessage(message);
+		error.setDescription(description);
+		return error;
+	}
 }

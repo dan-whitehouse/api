@@ -6,6 +6,7 @@ import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.School;
 import org.ricone.api.model.core.SchoolCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,8 +20,18 @@ public class CalendarService implements ICalendarService
 	CalendarDAO dao;
 
 	@Override
-	public List<SchoolCalendar> findAll() throws Exception {
-		return dao.findAll();
+	public List<SchoolCalendar> findAll(Pageable pageRequest) throws Exception {
+		return dao.findAll(pageRequest);
+	}
+
+	@Override
+	public List<SchoolCalendar> findAllByLea(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByLeaRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<SchoolCalendar> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(pageRequest, refId);
 	}
 
 	@Override

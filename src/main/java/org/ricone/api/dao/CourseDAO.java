@@ -1,14 +1,18 @@
 package org.ricone.api.dao;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
+import org.ricone.api.exception.NoContentException;
 import org.ricone.api.exception.NotFoundException;
-import org.ricone.api.model.core.Course;
-import org.ricone.api.model.core.School;
+import org.ricone.api.model.core.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository("courseDAO")
@@ -18,19 +22,26 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
-	public List<Course> findAll() throws NotFoundException {
+	public List<Course> findAll(Pageable pageRequest) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final Root<Course> from = select.from(Course.class);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
 
-		Criteria criteria = createEntityCriteria();
-		List<Course> instance = (List<Course>)criteria.list();
-		if(instance != null)
-		{
-			for(Course o : instance)
-			{
-				Hibernate.initialize(o.getSchool());
-				Hibernate.initialize(o.getCourseIdentifiers());
-				Hibernate.initialize(o.getCourseGrades());
-			}
-		}
+
+		select.distinct(true);
+		select.select(from);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		System.out.println(pageRequest.getPageNumber() + " | " + pageRequest.getPageSize());
+
+		Query<Course> q = getSession().createQuery(select);
+		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+		q.setMaxResults(pageRequest.getPageSize());
+		List<Course> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
@@ -53,17 +64,17 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 
 	@Override
 	public void save(Course instance) {
-		persist(instance);
+		super.persist(instance);
 	}
 
 	@Override
 	public void update(Course instance) {
-		saveOrUpdate(instance);
+		super.saveOrUpdate(instance);
 	}
 
 	@Override
 	public void delete(Course instance) {
-		delete(instance);
+		super.delete(instance);
 	}
 
 	@Override
@@ -72,7 +83,7 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		Course instance = (Course)criteria.uniqueResult();
-		delete(instance);
+		super.delete(instance);
 	}
 }
 

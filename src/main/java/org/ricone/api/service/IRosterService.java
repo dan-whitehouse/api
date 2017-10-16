@@ -3,6 +3,7 @@ package org.ricone.api.service;
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.CourseSection;
 import org.ricone.api.model.core.School;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface IRosterService
 {
-    List<CourseSection> findAll() throws Exception;
+    List<CourseSection> findAll(Pageable pageRequest) throws Exception;
 
     CourseSection findByRefId(String refId) throws Exception;
 

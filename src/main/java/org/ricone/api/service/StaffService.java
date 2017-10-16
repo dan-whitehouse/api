@@ -1,9 +1,9 @@
 package org.ricone.api.service;
 
 import org.ricone.api.dao.StaffDAO;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Staff;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,8 +17,33 @@ public class StaffService implements IStaffService
 	StaffDAO dao;
 
 	@Override
-	public List<Staff> findAll() throws Exception {
-		return dao.findAll();
+	public List<Staff> findAll(Pageable paging) throws Exception {
+		return dao.findAll(paging);
+	}
+
+	@Override
+	public List<Staff> findAllByLea(Pageable paging, String refId) throws Exception {
+		return dao.findAllByLea(paging, refId);
+	}
+
+	@Override
+	public List<Staff> findAllBySchool(Pageable paging, String refId) throws Exception {
+		return dao.findAllBySchool(paging, refId);
+	}
+
+	@Override
+	public List<Staff> findAllByCourse(Pageable paging, String refId) throws Exception {
+		return dao.findAllByCourse(paging, refId);
+	}
+
+	@Override
+	public List<Staff> findAllByRoster(Pageable paging, String refId) throws Exception {
+		return dao.findAllByRoster(paging, refId);
+	}
+
+	@Override
+	public List<Staff> findAllByStudent(Pageable paging, String refId) throws Exception {
+		return dao.findAllByStudent(paging, refId);
 	}
 
 	@Override

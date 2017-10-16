@@ -1,12 +1,15 @@
 package org.ricone.api.dao;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
+import org.ricone.api.exception.NoContentException;
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -14,195 +17,115 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository("rosterDAO")
+@SuppressWarnings("unchecked")
 public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IRosterDAO
 {
 	private final String PRIMARY_KEY = "courseSectionRefId";
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
-	public List<CourseSection> findAll() throws NotFoundException
+	public List<CourseSection> findAll(Pageable pageRequest) throws Exception
 	{
-		// #0
-		/*CriteriaBuilder builder = getSession().getCriteriaBuilder();
-		CriteriaQuery<Object[]> criteria = builder.createQuery(Object[].class);
-		Root<CourseSection> root = criteria.from( CourseSection.class );
-		*//*Root<Course> courseRoot = criteria.from(Course.class);
-		Root<SchoolCalendarSession> schoolCalendarSessionRoot = criteria.from(SchoolCalendarSession.class);
-		Root<CourseSectionSchedule> courseSectionScheduleRoot = criteria.from(CourseSectionSchedule.class);
-		Root<StaffCourseSection> staffCourseSectionRoot = criteria.from(StaffCourseSection.class);
-		Root<StudentCourseSection> studentCourseSectionRoot = criteria.from(StudentCourseSection.class);*//*
+		System.err.println("Building Query");
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>) from.<CourseSection, Course>fetch("course", JoinType.INNER);
+		final Join<Course, School> school = (Join<Course, School>) course.<Course, School>fetch("school", JoinType.LEFT);
 
-			Join<CourseSection, SchoolCalendarSession> schoolCalendarSessionJoin = root.join("schoolCalendarSession", JoinType.LEFT);
-			Join<CourseSection, Course> courseJoin = root.join("course", JoinType.LEFT);
-				Join<Course, School> schoolJoin = courseJoin.join("school", JoinType.LEFT);
-			Join<CourseSection, CourseSectionSchedule> courseSectionSchedulesJoin = root.join( "courseSectionSchedules" , JoinType.LEFT);
-			Join<CourseSection, StaffCourseSection> staffCourseSectionsJoin = root.join( "staffCourseSections" , JoinType.LEFT);
-			Join<CourseSection, StudentCourseSection> studentCourseSectionsJoin = root.join( "studentCourseSections" , JoinType.LEFT);
+		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = (Join<CourseSection, SchoolCalendarSession>) from.<CourseSection, SchoolCalendarSession>fetch("schoolCalendarSession", JoinType.LEFT);
+		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = (Join<SchoolCalendarSession, SchoolCalendar>) schoolCalendarSession.<SchoolCalendarSession, SchoolCalendar>fetch("schoolCalendar", JoinType.INNER);
 
-		criteria.distinct(true);
-		criteria.multiselect(root, schoolCalendarSessionJoin, courseJoin, schoolJoin, courseSectionSchedulesJoin, staffCourseSectionsJoin, studentCourseSectionsJoin );
-		//criteriaQuery.where(builder.equal(courseSectionRoot.get("course"), courseRoot.get("courseRefId")));
-		//criteriaQuery.where(builder.equal(courseSectionRoot.get("schoolCalendarSession"), schoolCalendarSessionRoot.get("schoolRefId")));
+		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>fetch("courseSectionSchedules", JoinType.LEFT);
 
-		Query<Object[]> query = getSession().createQuery(criteria);
-		List<Object[]> list = query.getResultList();
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = (Join<StaffCourseSection, Staff>) staffCourseSections.<StaffCourseSection, Staff>fetch("staff", JoinType.INNER);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 
-		List<CourseSection> instance = new ArrayList<>();
-		for (Object[] objects : list)
-		{
-			System.out.println(objects[0].toString());
-			CourseSection courseSection = (CourseSection)objects[0];
-			Course course = (Course)objects[1];
-			School school = (School)objects[2];
-			//SchoolCalendarSession schoolCalendarSession = (SchoolCalendarSession)objects[3];
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>fetch("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>) studentCourseSections.<StudentEnrollment, Student>fetch("student", JoinType.INNER);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>fetch("studentIdentifiers", JoinType.LEFT);
 
-			//courseSection.setSchoolCalendarSession(schoolCalendarSession);
+		select.distinct(true);
+		select.select(from);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-			course.setSchool(school);
-			courseSection.setCourse(course);
-			instance.add(courseSection);
-		}
-		return instance;*/
+		Query<CourseSection> q = getSession().createQuery(select);
+		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+		q.setMaxResults(pageRequest.getPageSize());
+		System.err.println("Getting Data");
+		List<CourseSection> instance = q.getResultList();
+		System.err.println("Initializing School Calendar Session");
 
-		// #1
-		/*CriteriaBuilder builder = getSession().getCriteriaBuilder();
-		CriteriaQuery<CourseSection> criteria = builder.createQuery(CourseSection.class );
-		Root<CourseSection> root = criteria.from( CourseSection.class );
-			Join<CourseSection, SchoolCalendarSession> schoolCalendarSessionJoin = root.join("schoolCalendarSession", JoinType.LEFT);
-			Join<CourseSection, Course> courseJoin = root.join("course", JoinType.LEFT);
-				Join<Course, School> schoolJoin = courseJoin.join("school", JoinType.LEFT);
-			Join<CourseSection, CourseSectionSchedule> courseSectionSchedulesJoin = root.join( "courseSectionSchedules" , JoinType.LEFT);
-			Join<CourseSection, StaffCourseSection> staffCourseSectionsJoin = root.join( "staffCourseSections" , JoinType.LEFT);
-			Join<CourseSection, StudentCourseSection> studentCourseSectionsJoin = root.join( "studentCourseSections" , JoinType.LEFT);
+		instance.forEach(sc -> {
+			Hibernate.initialize(sc.getSchoolCalendarSession());
+			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
+			Hibernate.initialize(sc.getCourseSectionSchedules());
+			Hibernate.initialize(sc.getStaffCourseSections());
+			sc.getStaffCourseSections().forEach(tcs -> {
+				Hibernate.initialize(tcs.getStaff());
+				Hibernate.initialize(tcs.getStaff().getStaffIdentifiers());
+			});
+			Hibernate.initialize(sc.getStudentCourseSections());
+			sc.getStudentCourseSections().forEach(scs -> {
+				Hibernate.initialize(scs.getStudent());
+				Hibernate.initialize(scs.getStudent().getStudentIdentifiers());
+			});
+		});
 
-		criteria.distinct(true);
-		//criteria.select(root);
-		criteria.multiselect(root);
-		List<CourseSection> instance = getSession().createQuery( criteria ).getResultList();
-		for (CourseSection cs : instance)
-		{
-			cs.getStudentCourseSections();
-			cs.getSchoolCalendarSession();
-			cs.getStaffCourseSections();
-			cs.getCourseSectionSchedules();
-			cs.getCourse();
-			cs.getCourse().getSchool();
-		}
-		return instance;*/
 
-		// #2
-		/*CriteriaBuilder builder = getSession().getCriteriaBuilder();
-		// Using FROM and JOIN
-		CriteriaQuery<Object[]> criteriaQuery = builder.createQuery(Object[].class);
-		Root<CourseSection> courseSectionRoot = criteriaQuery.from(CourseSection.class);
-		Root<Course> courseRoot = criteriaQuery.from(Course.class);
-		Root<SchoolCalendarSession> schoolCalendarSessionRoot = criteriaQuery.from(SchoolCalendarSession.class);
-
-		criteriaQuery.multiselect(courseSectionRoot, courseRoot, schoolCalendarSessionRoot);
-		//criteriaQuery.where(builder.equal(courseSectionRoot.get("course"), courseRoot.get("courseRefId")));
-		//criteriaQuery.where(builder.equal(courseSectionRoot.get("schoolCalendarSession"), schoolCalendarSessionRoot.get("schoolRefId")));
-
-		Query<Object[]> query = getSession().createQuery(criteriaQuery);
-		List<Object[]> list = query.getResultList();
-
-		List<CourseSection> instance = new ArrayList<>();
-		for (Object[] objects : list)
-		{
-			CourseSection courseSection = (CourseSection)objects[0];
-			Course course = (Course)objects[1];
-			SchoolCalendarSession schoolCalendarSession = (SchoolCalendarSession)objects[2];
-
-			courseSection.setSchoolCalendarSession(schoolCalendarSession);
-			courseSection.setCourse(course);
-			instance.add(courseSection);
-		}
-		return instance;*/
-
-		// #1
-		Criteria criteria = createEntityCriteria();
-		List<CourseSection> instance = (List<CourseSection>)criteria.list();
-		if(instance != null)
-		{
-			for(CourseSection o : instance)
-			{
-				Hibernate.initialize(o.getCourse());
-				Hibernate.initialize(o.getCourse().getSchool());
-				Hibernate.initialize(o.getCourseSectionSchedules());
-				Hibernate.initialize(o.getSchoolCalendarSession());
-				Hibernate.initialize(o.getSchoolCalendarSession().getSchoolCalendar());
-
-				Hibernate.initialize(o.getStaffCourseSections());
-				for(StaffCourseSection staffCourseSection : o.getStaffCourseSections())
-				{
-					Hibernate.initialize(staffCourseSection.getStaff());
-					for(StaffIdentifier id : staffCourseSection.getStaff().getStaffIdentifiers())
-					{
-						Hibernate.initialize(id);
-					}
-				}
-
-				Hibernate.initialize(o.getStudentCourseSections());
-				for(StudentCourseSection studentCourseSection : o.getStudentCourseSections())
-				{
-					Hibernate.initialize(studentCourseSection.getStudent());
-					for(StudentIdentifier id : studentCourseSection.getStudent().getStudentIdentifiers())
-					{
-						Hibernate.initialize(id);
-					}
-				}
-			}
-		}
+		System.err.println("Ending");
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public CourseSection findByRefId(String refId) throws NotFoundException
+	public CourseSection findByRefId(String refId) throws Exception
 	{
-		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
-		CourseSection instance = (CourseSection)criteria.uniqueResult();
-		if(instance != null)
-		{
-			Hibernate.initialize(instance.getCourse());
-			Hibernate.initialize(instance.getCourse().getSchool());
-			Hibernate.initialize(instance.getCourseSectionSchedules());
-			Hibernate.initialize(instance.getSchoolCalendarSession());
-			Hibernate.initialize(instance.getSchoolCalendarSession().getSchoolCalendar());
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>) from.<CourseSection, Course>fetch("course", JoinType.INNER);
+		final Join<Course, School> school = (Join<Course, School>) course.<Course, School>fetch("school", JoinType.LEFT);
 
-			Hibernate.initialize(instance.getStaffCourseSections());
-			for(StaffCourseSection staffCourseSection : instance.getStaffCourseSections())
-			{
-				Hibernate.initialize(staffCourseSection.getStaff());
-				for(StaffIdentifier id : staffCourseSection.getStaff().getStaffIdentifiers())
-				{
-					Hibernate.initialize(id);
-				}
-			}
+		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = (Join<CourseSection, SchoolCalendarSession>) from.<CourseSection, SchoolCalendarSession>fetch("schoolCalendarSession", JoinType.LEFT);
+		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = (Join<SchoolCalendarSession, SchoolCalendar>) schoolCalendarSession.<SchoolCalendarSession, SchoolCalendar>fetch("schoolCalendar", JoinType.INNER);
 
-			Hibernate.initialize(instance.getStudentCourseSections());
-			instance.getStudentCourseSections().forEach(scs ->
-			{
-				Hibernate.initialize(scs.getStudent());
-				scs.getStudent().getStudentIdentifiers().forEach(Hibernate::initialize);
-			});
-			return instance;
-		}
-		throw new NotFoundException("No record found with refId: " + refId);
+		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>fetch("courseSectionSchedules", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = (Join<StaffCourseSection, Staff>) staffCourseSections.<StaffCourseSection, Staff>fetch("staff", JoinType.INNER);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>fetch("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>) studentCourseSections.<StudentEnrollment, Student>fetch("student", JoinType.INNER);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>fetch("studentIdentifiers", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where( cb.equal(from.get(PRIMARY_KEY), refId));
+		Query<CourseSection> q = getSession().createQuery(select);
+		CourseSection instance = q.getSingleResult();
+
+		Hibernate.initialize(instance.getSchoolCalendarSession());
+		Hibernate.initialize(instance.getSchoolCalendarSession().getSchoolCalendar());
+		Hibernate.initialize(instance.getCourseSectionSchedules());
+		return instance;
 	}
 
 	@Override
 	public void save(CourseSection instance) {
-		persist(instance);
+		super.persist(instance);
 	}
 
 	@Override
 	public void update(CourseSection instance) {
-		saveOrUpdate(instance);
+		super.saveOrUpdate(instance);
 	}
 
 	@Override
 	public void delete(CourseSection instance) {
-		delete(instance);
+		super.delete(instance);
 	}
 
 	@Override
@@ -211,6 +134,6 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
 		CourseSection instance = (CourseSection)criteria.uniqueResult();
-		delete(instance);
+		super.delete(instance);
 	}
 }

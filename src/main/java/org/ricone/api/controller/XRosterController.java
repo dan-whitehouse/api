@@ -10,6 +10,7 @@ import org.ricone.api.model.xpress.*;
 import org.ricone.api.service.ICourseService;
 import org.ricone.api.service.IRosterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,9 +39,9 @@ public class XRosterController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xRosters", tags = { "xRosters" })
     @RequestMapping(value = "/requests/xRosters", method = RequestMethod.GET)
-    public XRostersResponse getMulti(HttpServletResponse response) throws Exception
+    public XRostersResponse getMulti(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<CourseSection> instance = service.findAll();
+        List<CourseSection> instance = service.findAll(getPaging(pageRequest));
         return mapper.convert(instance);
     }
 
