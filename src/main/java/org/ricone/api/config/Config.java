@@ -13,8 +13,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -23,6 +26,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import java.util.List;
 
 @Configuration
 @ComponentScan(basePackages = "org.ricone.api")
@@ -36,7 +41,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @EnableScheduling
 @EnableSpringDataWebSupport
-public class Config extends WebMvcConfigurerAdapter 
+public class Config extends WebMvcConfigurerAdapter
 {
 	@Bean(name="viewProject")
 	public ViewResolver viewResolver()
@@ -69,5 +74,12 @@ public class Config extends WebMvcConfigurerAdapter
 		registry.addInterceptor(logHandler);
 	}
 
-
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+		PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+		resolver.setOneIndexedParameters(true);
+		resolver.setFallbackPageable(Pageable.unpaged());
+		argumentResolvers.add(resolver);
+		super.addArgumentResolvers(argumentResolvers);
+	}
 }

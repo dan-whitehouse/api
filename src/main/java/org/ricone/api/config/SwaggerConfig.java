@@ -34,8 +34,8 @@ import java.util.List;
 
 import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
-@Configuration
-@EnableSwagger2
+//@Configuration
+//@EnableSwagger2
 @PropertySource("classpath:database.properties")
 
 //http://www.baeldung.com/swagger-2-documentation-for-spring-rest-api

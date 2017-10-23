@@ -17,17 +17,9 @@ public class StaffCourseSection implements java.io.Serializable
     private BigDecimal contributionPercentage;
     private String classroomPositionType;
 
-    public StaffCourseSection()
-    {
-    }
-
-    public StaffCourseSection(String staffCourseSectionRefId, CourseSection courseSection, Staff staff)
-    {
-        this.staffCourseSectionRefId = staffCourseSectionRefId;
-        this.courseSection = courseSection;
-        this.staff = staff;
-    }
-
+    public StaffCourseSection() { }
+    public StaffCourseSection(String staffCourseSectionRefId) { this.staffCourseSectionRefId = staffCourseSectionRefId; }
+    public StaffCourseSection(String staffCourseSectionRefId, Staff staff) { this.staffCourseSectionRefId = staffCourseSectionRefId;this.staff = staff; }
     public StaffCourseSection(String staffCourseSectionRefId, CourseSection courseSection, Staff staff, Boolean teacherOfRecord, BigDecimal contributionPercentage, String classroomPositionType)
     {
         this.staffCourseSectionRefId = staffCourseSectionRefId;
@@ -44,11 +36,7 @@ public class StaffCourseSection implements java.io.Serializable
     {
         return this.staffCourseSectionRefId;
     }
-
-    public void setStaffCourseSectionRefId(String staffCourseSectionRefId)
-    {
-        this.staffCourseSectionRefId = staffCourseSectionRefId;
-    }
+    public void setStaffCourseSectionRefId(String staffCourseSectionRefId) { this.staffCourseSectionRefId = staffCourseSectionRefId; }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseSectionRefId", nullable = false)
@@ -56,7 +44,6 @@ public class StaffCourseSection implements java.io.Serializable
     {
         return this.courseSection;
     }
-
     public void setCourseSection(CourseSection courseSection)
     {
         this.courseSection = courseSection;
@@ -68,7 +55,6 @@ public class StaffCourseSection implements java.io.Serializable
     {
         return this.staff;
     }
-
     public void setStaff(Staff staff)
     {
         this.staff = staff;
@@ -79,7 +65,6 @@ public class StaffCourseSection implements java.io.Serializable
     {
         return this.teacherOfRecord;
     }
-
     public void setTeacherOfRecord(Boolean teacherOfRecord)
     {
         this.teacherOfRecord = teacherOfRecord;
@@ -90,21 +75,13 @@ public class StaffCourseSection implements java.io.Serializable
     {
         return this.contributionPercentage;
     }
-
-    public void setContributionPercentage(BigDecimal contributionPercentage)
-    {
-        this.contributionPercentage = contributionPercentage;
-    }
+    public void setContributionPercentage(BigDecimal contributionPercentage) { this.contributionPercentage = contributionPercentage; }
 
     @Column(name = "ClassroomPositionType", length = 50)
     public String getClassroomPositionType()
     {
         return this.classroomPositionType;
     }
-
-    public void setClassroomPositionType(String classroomPositionType)
-    {
-        this.classroomPositionType = classroomPositionType;
-    }
+    public void setClassroomPositionType(String classroomPositionType) { this.classroomPositionType = classroomPositionType; }
 
 }

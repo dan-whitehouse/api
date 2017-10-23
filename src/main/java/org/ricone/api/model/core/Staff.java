@@ -24,11 +24,11 @@ public class Staff implements java.io.Serializable
     private String usCitizenshipStatusCode;
     private Long slk;
     private String type;
-    private Set<StaffCourseSection> staffCourseSection = new HashSet<StaffCourseSection>(0);
-    private Set<StaffIdentifier> staffIdentifiers = new HashSet<StaffIdentifier>(0);
-    private Set<StudentEnrollment> studentEnrollments = new HashSet<StudentEnrollment>(0);
-    private Set<StaffEmail> staffEmails = new HashSet<StaffEmail>(0);
-    private Set<StaffAssignment> staffAssignments = new HashSet<StaffAssignment>(0);
+    private Set<StaffCourseSection> staffCourseSections = new HashSet<>(0);
+    private Set<StaffIdentifier> staffIdentifiers = new HashSet<>(0);
+    private Set<StudentEnrollment> studentEnrollments = new HashSet<>(0);
+    private Set<StaffEmail> staffEmails = new HashSet<>(0);
+    private Set<StaffAssignment> staffAssignments = new HashSet<>(0);
 
     public Staff()
     {
@@ -53,7 +53,7 @@ public class Staff implements java.io.Serializable
         this.usCitizenshipStatusCode = uscitizenshipStatusCode;
         this.slk = slk;
         this.type = type;
-        this.staffCourseSection = staffcoursesections;
+        this.staffCourseSections = staffcoursesections;
         this.staffIdentifiers = staffidentifiers;
         this.studentEnrollments = studentenrollments;
         this.staffEmails = staffemails;
@@ -66,7 +66,6 @@ public class Staff implements java.io.Serializable
     {
         return this.staffRefId;
     }
-
     public void setStaffRefId(String staffRefId)
     {
         this.staffRefId = staffRefId;
@@ -77,7 +76,6 @@ public class Staff implements java.io.Serializable
     {
         return this.firstName;
     }
-
     public void setFirstName(String firstName)
     {
         this.firstName = firstName;
@@ -88,7 +86,6 @@ public class Staff implements java.io.Serializable
     {
         return this.middleName;
     }
-
     public void setMiddleName(String middleName)
     {
         this.middleName = middleName;
@@ -99,7 +96,6 @@ public class Staff implements java.io.Serializable
     {
         return this.lastName;
     }
-
     public void setLastName(String lastName)
     {
         this.lastName = lastName;
@@ -110,7 +106,6 @@ public class Staff implements java.io.Serializable
     {
         return this.generationCode;
     }
-
     public void setGenerationCode(String generationCode)
     {
         this.generationCode = generationCode;
@@ -121,7 +116,6 @@ public class Staff implements java.io.Serializable
     {
         return this.prefix;
     }
-
     public void setPrefix(String prefix)
     {
         this.prefix = prefix;
@@ -133,7 +127,6 @@ public class Staff implements java.io.Serializable
     {
         return this.birthdate;
     }
-
     public void setBirthdate(Date birthdate)
     {
         this.birthdate = birthdate;
@@ -144,7 +137,6 @@ public class Staff implements java.io.Serializable
     {
         return this.sexCode;
     }
-
     public void setSexCode(String sexCode)
     {
         this.sexCode = sexCode;
@@ -155,29 +147,20 @@ public class Staff implements java.io.Serializable
     {
         return this.hispanicLatinoEthnicity;
     }
-
-    public void setHispanicLatinoEthnicity(Boolean hispanicLatinoEthnicity)
-    {
-        this.hispanicLatinoEthnicity = hispanicLatinoEthnicity;
-    }
+    public void setHispanicLatinoEthnicity(Boolean hispanicLatinoEthnicity) { this.hispanicLatinoEthnicity = hispanicLatinoEthnicity; }
 
     @Column(name = "USCitizenshipStatusCode", length = 50)
     public String getUsCitizenshipStatusCode()
     {
         return this.usCitizenshipStatusCode;
     }
-
-    public void setUsCitizenshipStatusCode(String uscitizenshipStatusCode)
-    {
-        this.usCitizenshipStatusCode = uscitizenshipStatusCode;
-    }
+    public void setUsCitizenshipStatusCode(String uscitizenshipStatusCode) { this.usCitizenshipStatusCode = uscitizenshipStatusCode; }
 
     @Column(name = "SLK")
     public Long getSlk()
     {
         return this.slk;
     }
-
     public void setSlk(Long slk)
     {
         this.slk = slk;
@@ -188,7 +171,6 @@ public class Staff implements java.io.Serializable
     {
         return type;
     }
-
     public void setType(String type)
     {
         this.type = type;
@@ -197,20 +179,15 @@ public class Staff implements java.io.Serializable
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
     public Set<StaffCourseSection> getStaffCourseSections()
     {
-        return this.staffCourseSection;
+        return this.staffCourseSections;
     }
-
-    public void setStaffCourseSections(Set<StaffCourseSection> staffcoursesections)
-    {
-        this.staffCourseSection = staffcoursesections;
-    }
+    public void setStaffCourseSections(Set<StaffCourseSection> staffcoursesections) { this.staffCourseSections = staffcoursesections; }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
     public Set<StaffIdentifier> getStaffIdentifiers()
     {
         return this.staffIdentifiers;
     }
-
     public void setStaffIdentifiers(Set<StaffIdentifier> staffidentifiers)
     {
         this.staffIdentifiers = staffidentifiers;
@@ -221,18 +198,13 @@ public class Staff implements java.io.Serializable
     {
         return this.studentEnrollments;
     }
-
-    public void setStudentEnrollments(Set<StudentEnrollment> studentenrollments)
-    {
-        this.studentEnrollments = studentenrollments;
-    }
+    public void setStudentEnrollments(Set<StudentEnrollment> studentenrollments) { this.studentEnrollments = studentenrollments; }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
     public Set<StaffEmail> getStaffEmails()
     {
         return this.staffEmails;
     }
-
     public void setStaffEmails(Set<StaffEmail> staffemails)
     {
         this.staffEmails = staffemails;
@@ -243,7 +215,6 @@ public class Staff implements java.io.Serializable
     {
         return this.staffAssignments;
     }
-
     public void setStaffAssignments(Set<StaffAssignment> staffassignments)
     {
         this.staffAssignments = staffassignments;

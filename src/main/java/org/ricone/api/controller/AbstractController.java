@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,9 +39,13 @@ public abstract class AbstractController
             Integer size = NumberUtils.toInt(request.getHeader("size"));
 
             if(size != null && size < 1) throw new ForbiddenException("Page size must not be less than one!");
-
-            return new PageRequest(page, size);
+            return PageRequest.of(page, size);
         }
+
+        if(pageRequest.isUnpaged()) {
+            return Pageable.unpaged();
+        }
+
         return pageRequest;
     }
 

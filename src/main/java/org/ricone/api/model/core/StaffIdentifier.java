@@ -14,15 +14,11 @@ public class StaffIdentifier implements java.io.Serializable
     private String identificationSystemCode;
     private String staffId;
 
-    public StaffIdentifier()
-    {
-    }
-
+    public StaffIdentifier() { }
     public StaffIdentifier(String staffIdentifierRefId)
     {
         this.staffIdentifierRefId = staffIdentifierRefId;
     }
-
     public StaffIdentifier(String staffIdentifierRefId, Staff staff, String identificationSystemCode, String staffId)
     {
         this.staffIdentifierRefId = staffIdentifierRefId;
@@ -37,7 +33,6 @@ public class StaffIdentifier implements java.io.Serializable
     {
         return this.staffIdentifierRefId;
     }
-
     public void setStaffIdentifierRefId(String staffIdentifierRefId)
     {
         this.staffIdentifierRefId = staffIdentifierRefId;
@@ -49,7 +44,6 @@ public class StaffIdentifier implements java.io.Serializable
     {
         return this.staff;
     }
-
     public void setStaff(Staff staff)
     {
         this.staff = staff;
@@ -60,7 +54,6 @@ public class StaffIdentifier implements java.io.Serializable
     {
         return this.identificationSystemCode;
     }
-
     public void setIdentificationSystemCode(String identificationSystemCode)
     {
         this.identificationSystemCode = identificationSystemCode;
@@ -71,7 +64,6 @@ public class StaffIdentifier implements java.io.Serializable
     {
         return this.staffId;
     }
-
     public void setStaffId(String staffId)
     {
         this.staffId = staffId;

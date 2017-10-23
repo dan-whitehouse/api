@@ -34,8 +34,6 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 		select.select(from);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		System.out.println(pageRequest.getPageNumber() + " | " + pageRequest.getPageSize());
-
 		Query<Course> q = getSession().createQuery(select);
 		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
 		q.setMaxResults(pageRequest.getPageSize());

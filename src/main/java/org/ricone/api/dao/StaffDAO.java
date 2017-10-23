@@ -29,7 +29,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
+		//final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
@@ -53,7 +53,6 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
@@ -79,7 +78,6 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
@@ -101,16 +99,18 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 
 	@Override
 	public List<Staff> findAllByCourse(Pageable pageRequest, String refId) throws Exception {
+		//TODO - Not working correctly.
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
-		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSection.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
 		final Join<CourseSection, Course> course = (Join<CourseSection, Course>) courseSection.<CourseSection, Course>fetch("course", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+
 
 		select.distinct(true);
 		select.select(from);
@@ -122,6 +122,10 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		q.setMaxResults(pageRequest.getPageSize());
 		List<Staff> instance = q.getResultList();
 
+		instance.forEach(staff -> {
+			Hibernate.initialize(staff.getStaffCourseSections());
+		});
+
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
@@ -131,8 +135,8 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
-		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSection.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
@@ -157,8 +161,8 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
-		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSection.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
 		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) courseSection.<CourseSection, StudentCourseSection>fetch("studentCourseSections", JoinType.LEFT);
 		final Join<StudentCourseSection, Student> student = (Join<StudentCourseSection, Student>) studentCourseSections.<StudentCourseSection, Student>fetch("student", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
@@ -186,7 +190,6 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
@@ -206,7 +209,6 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
