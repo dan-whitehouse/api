@@ -48,8 +48,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -70,8 +72,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -93,8 +97,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -116,8 +122,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -140,8 +148,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -164,8 +174,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -188,8 +200,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -214,8 +228,10 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();

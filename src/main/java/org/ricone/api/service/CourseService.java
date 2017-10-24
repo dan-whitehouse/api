@@ -26,6 +26,21 @@ public class CourseService implements ICourseService
 	}
 
 	@Override
+	public List<Course> findAllByLea(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByLeaRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<Course> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<Course> findAllByRoster(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByRosterRefId(pageRequest, refId);
+	}
+
+	@Override
 	public Course findByRefId(String refId) throws Exception {
 		return dao.findByRefId(refId);
 	}

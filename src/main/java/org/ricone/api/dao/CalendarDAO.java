@@ -36,11 +36,12 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<SchoolCalendar> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<SchoolCalendar> instance = q.getResultList();
 
-		//Need to initialize SchoolCalendarSessions -idk why, maybe amount of data?
 		instance.forEach(sc -> {
 			sc.getSchoolCalendarSessions().forEach(scs -> scs.getSchoolCalendar());
 		});
@@ -64,8 +65,10 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<SchoolCalendar> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<SchoolCalendar> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -86,8 +89,10 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<SchoolCalendar> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<SchoolCalendar> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();

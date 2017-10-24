@@ -25,8 +25,7 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
-	public List<CourseSection> findAll(Pageable pageRequest) throws Exception
-	{
+	public List<CourseSection> findAll(Pageable pageRequest) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
@@ -47,6 +46,283 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 
 		select.distinct(true);
 		select.select(from);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<CourseSection> q = getSession().createQuery(select);
+		//TODO - Implement this isPaged check on all other DAO methods for each class
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
+		List<CourseSection> instance = q.getResultList();
+
+		instance.forEach(sc -> {
+			Hibernate.initialize(sc.getCourse());
+			Hibernate.initialize(sc.getCourse().getSchool());
+			Hibernate.initialize(sc.getSchoolCalendarSession());
+			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
+			Hibernate.initialize(sc.getCourseSectionSchedules());
+			Hibernate.initialize(sc.getStaffCourseSections());
+			sc.getStaffCourseSections().forEach(tcs -> {
+				Hibernate.initialize(tcs.getStaff());
+				Hibernate.initialize(tcs.getStaff().getStaffIdentifiers());
+			});
+			Hibernate.initialize(sc.getStudentCourseSections());
+			sc.getStudentCourseSections().forEach(scs -> {
+				Hibernate.initialize(scs.getStudent());
+				Hibernate.initialize(scs.getStudent().getStudentIdentifiers());
+			});
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<CourseSection> findAllByLeaRefId(Pageable pageRequest, String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
+		final Join<Course, School> school = course.join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+
+		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
+		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
+		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.equal(lea.get("leaRefId"), refId));
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<CourseSection> q = getSession().createQuery(select);
+		//TODO - Implement this isPaged check on all other DAO methods for each class
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
+		List<CourseSection> instance = q.getResultList();
+
+		instance.forEach(sc -> {
+			Hibernate.initialize(sc.getCourse());
+			Hibernate.initialize(sc.getCourse().getSchool());
+			Hibernate.initialize(sc.getCourse().getSchool().getLea());
+			Hibernate.initialize(sc.getSchoolCalendarSession());
+			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
+			Hibernate.initialize(sc.getCourseSectionSchedules());
+			Hibernate.initialize(sc.getStaffCourseSections());
+			sc.getStaffCourseSections().forEach(tcs -> {
+				Hibernate.initialize(tcs.getStaff());
+				Hibernate.initialize(tcs.getStaff().getStaffIdentifiers());
+			});
+			Hibernate.initialize(sc.getStudentCourseSections());
+			sc.getStudentCourseSections().forEach(scs -> {
+				Hibernate.initialize(scs.getStudent());
+				Hibernate.initialize(scs.getStudent().getStudentIdentifiers());
+			});
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<CourseSection> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
+		final Join<Course, School> school = course.join("school", JoinType.LEFT);
+
+		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
+		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
+		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.equal(school.get("schoolRefId"), refId));
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<CourseSection> q = getSession().createQuery(select);
+		//TODO - Implement this isPaged check on all other DAO methods for each class
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
+		List<CourseSection> instance = q.getResultList();
+
+		instance.forEach(sc -> {
+			Hibernate.initialize(sc.getCourse());
+			Hibernate.initialize(sc.getCourse().getSchool());
+			Hibernate.initialize(sc.getSchoolCalendarSession());
+			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
+			Hibernate.initialize(sc.getCourseSectionSchedules());
+			Hibernate.initialize(sc.getStaffCourseSections());
+			sc.getStaffCourseSections().forEach(tcs -> {
+				Hibernate.initialize(tcs.getStaff());
+				Hibernate.initialize(tcs.getStaff().getStaffIdentifiers());
+			});
+			Hibernate.initialize(sc.getStudentCourseSections());
+			sc.getStudentCourseSections().forEach(scs -> {
+				Hibernate.initialize(scs.getStudent());
+				Hibernate.initialize(scs.getStudent().getStudentIdentifiers());
+			});
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<CourseSection> findAllByCourseRefId(Pageable pageRequest, String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
+		final Join<Course, School> school = course.join("school", JoinType.LEFT);
+
+		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
+		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
+		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.equal(course.get("courseRefId"), refId));
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<CourseSection> q = getSession().createQuery(select);
+		//TODO - Implement this isPaged check on all other DAO methods for each class
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
+		List<CourseSection> instance = q.getResultList();
+
+		instance.forEach(sc -> {
+			Hibernate.initialize(sc.getCourse());
+			Hibernate.initialize(sc.getCourse().getSchool());
+			Hibernate.initialize(sc.getSchoolCalendarSession());
+			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
+			Hibernate.initialize(sc.getCourseSectionSchedules());
+			Hibernate.initialize(sc.getStaffCourseSections());
+			sc.getStaffCourseSections().forEach(tcs -> {
+				Hibernate.initialize(tcs.getStaff());
+				Hibernate.initialize(tcs.getStaff().getStaffIdentifiers());
+			});
+			Hibernate.initialize(sc.getStudentCourseSections());
+			sc.getStudentCourseSections().forEach(scs -> {
+				Hibernate.initialize(scs.getStudent());
+				Hibernate.initialize(scs.getStudent().getStudentIdentifiers());
+			});
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<CourseSection> findAllByStaffRefId(Pageable pageRequest, String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
+		final Join<Course, School> school = course.join("school", JoinType.LEFT);
+
+		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
+		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
+		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.equal(staff.get("staffRefId"), refId));
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<CourseSection> q = getSession().createQuery(select);
+		//TODO - Implement this isPaged check on all other DAO methods for each class
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
+		List<CourseSection> instance = q.getResultList();
+
+		instance.forEach(sc -> {
+			Hibernate.initialize(sc.getCourse());
+			Hibernate.initialize(sc.getCourse().getSchool());
+			Hibernate.initialize(sc.getSchoolCalendarSession());
+			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
+			Hibernate.initialize(sc.getCourseSectionSchedules());
+			Hibernate.initialize(sc.getStaffCourseSections());
+			sc.getStaffCourseSections().forEach(tcs -> {
+				Hibernate.initialize(tcs.getStaff());
+				Hibernate.initialize(tcs.getStaff().getStaffIdentifiers());
+			});
+			Hibernate.initialize(sc.getStudentCourseSections());
+			sc.getStudentCourseSections().forEach(scs -> {
+				Hibernate.initialize(scs.getStudent());
+				Hibernate.initialize(scs.getStudent().getStudentIdentifiers());
+			});
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<CourseSection> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
+		final Join<Course, School> school = course.join("school", JoinType.LEFT);
+
+		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
+		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
+		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.equal(student.get("studentRefId"), refId));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<CourseSection> q = getSession().createQuery(select);

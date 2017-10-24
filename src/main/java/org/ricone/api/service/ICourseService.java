@@ -16,6 +16,12 @@ public interface ICourseService
 {
     List<Course> findAll(Pageable pageRequest) throws Exception;
 
+    List<Course> findAllByLea(Pageable pageRequest, String refId) throws Exception;
+
+    List<Course> findAllBySchool(Pageable pageRequest, String refId) throws Exception;
+
+    List<Course> findAllByRoster(Pageable pageRequest, String refId) throws Exception;
+
     Course findByRefId(String refId) throws Exception;
 
     void save(Course instance);

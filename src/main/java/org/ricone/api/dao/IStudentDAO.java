@@ -2,16 +2,17 @@ package org.ricone.api.dao;
 
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Student;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IStudentDAO
 {
-    List<Student> findAll() throws NotFoundException;
+    List<Student> findAll(Pageable pageRequest) throws Exception;
 
-    Student findByRefId(String refId) throws NotFoundException;
+    Student findByRefId(String refId) throws Exception;
 
-    Student findByLocalId(String localId) throws NotFoundException;
+    Student findByLocalId(String localId) throws Exception;
 
     void save(Student instance);
 

@@ -1,6 +1,10 @@
 package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -82,11 +86,7 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.studentEnrollmentRefId;
     }
-
-    public void setStudentEnrollmentRefId(String studentEnrollmentRefId)
-    {
-        this.studentEnrollmentRefId = studentEnrollmentRefId;
-    }
+    public void setStudentEnrollmentRefId(String studentEnrollmentRefId) { this.studentEnrollmentRefId = studentEnrollmentRefId; }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudentRefId", nullable = false)
@@ -94,7 +94,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.student;
     }
-
     public void setStudent(Student student)
     {
         this.student = student;
@@ -106,7 +105,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.counselor;
     }
-
     public void setCounselor(Staff staff)
     {
         this.counselor = staff;
@@ -118,7 +116,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return teacher;
     }
-
     public void setTeacher(Staff teacher)
     {
         this.teacher = teacher;
@@ -130,7 +127,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.school;
     }
-
     public void setSchool(School school)
     {
         this.school = school;
@@ -141,7 +137,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.entryGradeLevelCode;
     }
-
     public void setEntryGradeLevelCode(String entryGradeLevelCode)
     {
         this.entryGradeLevelCode = entryGradeLevelCode;
@@ -152,18 +147,13 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.enrollmentStatusCode;
     }
-
-    public void setEnrollmentStatusCode(String enrollmentStatusCode)
-    {
-        this.enrollmentStatusCode = enrollmentStatusCode;
-    }
+    public void setEnrollmentStatusCode(String enrollmentStatusCode) { this.enrollmentStatusCode = enrollmentStatusCode; }
 
     @Column(name = "EntryTypeCode", length = 50)
     public String getEntryTypeCode()
     {
         return this.entryTypeCode;
     }
-
     public void setEntryTypeCode(String entryTypeCode)
     {
         this.entryTypeCode = entryTypeCode;
@@ -174,7 +164,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.exitGradeLevelCode;
     }
-
     public void setExitGradeLevelCode(String exitGradeLevelCode)
     {
         this.exitGradeLevelCode = exitGradeLevelCode;
@@ -185,40 +174,27 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.exitOrWithdrawalStatusCode;
     }
-
-    public void setExitOrWithdrawalStatusCode(String exitOrWithdrawalStatusCode)
-    {
-        this.exitOrWithdrawalStatusCode = exitOrWithdrawalStatusCode;
-    }
+    public void setExitOrWithdrawalStatusCode(String exitOrWithdrawalStatusCode) { this.exitOrWithdrawalStatusCode = exitOrWithdrawalStatusCode; }
 
     @Column(name = "ExitOrWithdrawalTypeCode", length = 50)
     public String getExitOrWithdrawalTypeCode()
     {
         return this.exitOrWithdrawalTypeCode;
     }
-
-    public void setExitOrWithdrawalTypeCode(String exitOrWithdrawalTypeCode)
-    {
-        this.exitOrWithdrawalTypeCode = exitOrWithdrawalTypeCode;
-    }
+    public void setExitOrWithdrawalTypeCode(String exitOrWithdrawalTypeCode) { this.exitOrWithdrawalTypeCode = exitOrWithdrawalTypeCode; }
 
     @Column(name = "DisplacedStudentStatus")
     public Boolean getDisplacedStudentStatus()
     {
         return this.displacedStudentStatus;
     }
-
-    public void setDisplacedStudentStatus(Boolean displacedStudentStatus)
-    {
-        this.displacedStudentStatus = displacedStudentStatus;
-    }
+    public void setDisplacedStudentStatus(Boolean displacedStudentStatus) { this.displacedStudentStatus = displacedStudentStatus; }
 
     @Column(name = "EndOfTermStatusCode", length = 50)
     public String getEndOfTermStatusCode()
     {
         return this.endOfTermStatusCode;
     }
-
     public void setEndOfTermStatusCode(String endOfTermStatusCode)
     {
         this.endOfTermStatusCode = endOfTermStatusCode;
@@ -229,7 +205,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.promotionReasonCode;
     }
-
     public void setPromotionReasonCode(String promotionReasonCode)
     {
         this.promotionReasonCode = promotionReasonCode;
@@ -240,11 +215,7 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.foodServiceEligibilityCode;
     }
-
-    public void setFoodServiceEligibilityCode(String foodServiceEligibilityCode)
-    {
-        this.foodServiceEligibilityCode = foodServiceEligibilityCode;
-    }
+    public void setFoodServiceEligibilityCode(String foodServiceEligibilityCode) { this.foodServiceEligibilityCode = foodServiceEligibilityCode; }
 
     @Temporal(TemporalType.DATE)
     @Column(name = "FirstEntryDateIntoUSSchool", length = 10)
@@ -252,18 +223,13 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.firstEntryDateIntoUsschool;
     }
-
-    public void setFirstEntryDateIntoUsschool(Date firstEntryDateIntoUsschool)
-    {
-        this.firstEntryDateIntoUsschool = firstEntryDateIntoUsschool;
-    }
+    public void setFirstEntryDateIntoUsschool(Date firstEntryDateIntoUsschool) { this.firstEntryDateIntoUsschool = firstEntryDateIntoUsschool; }
 
     @Column(name = "HomeRoomIdentifier", length = 30)
     public String getHomeroomIdentifier()
     {
         return this.homeroomIdentifier;
     }
-
     public void setHomeroomIdentifier(String homeRoomIdentifier)
     {
         this.homeroomIdentifier = homeRoomIdentifier;
@@ -274,18 +240,13 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.responsibleSchoolTypeCode;
     }
-
-    public void setResponsibleSchoolTypeCode(String responsibleSchoolTypeCode)
-    {
-        this.responsibleSchoolTypeCode = responsibleSchoolTypeCode;
-    }
+    public void setResponsibleSchoolTypeCode(String responsibleSchoolTypeCode) { this.responsibleSchoolTypeCode = responsibleSchoolTypeCode; }
 
     @Column(name = "MembershipTypeCode", length = 50)
     public String getMembershipTypeCode()
     {
         return this.membershipTypeCode;
     }
-
     public void setMembershipTypeCode(String membershipTypeCode)
     {
         this.membershipTypeCode = membershipTypeCode;
@@ -297,7 +258,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.enrollmentEntryDate;
     }
-
     public void setEnrollmentEntryDate(Date enrollmentEntryDate)
     {
         this.enrollmentEntryDate = enrollmentEntryDate;
@@ -309,7 +269,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.enrollmentExitDate;
     }
-
     public void setEnrollmentExitDate(Date enrollmentExitDate)
     {
         this.enrollmentExitDate = enrollmentExitDate;
@@ -320,7 +279,6 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return this.currentGradeLevel;
     }
-
     public void setCurrentGradeLevel(String currentGradeLevel)
     {
         this.currentGradeLevel = currentGradeLevel;
@@ -331,18 +289,13 @@ public class StudentEnrollment implements java.io.Serializable
     {
         return studentSchoolAssociationRefId;
     }
+    public void setStudentSchoolAssociationRefId(String studentSchoolAssociationRefId) { this.studentSchoolAssociationRefId = studentSchoolAssociationRefId; }
 
-    public void setStudentSchoolAssociationRefId(String studentSchoolAssociationRefId)
-    {
-        this.studentSchoolAssociationRefId = studentSchoolAssociationRefId;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentEnrollment")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentEnrollment") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<EntryExitCode> getEntryExitCodes()
     {
         return entryExitCodes;
     }
-
     public void setEntryExitCodes(Set<EntryExitCode> entryExitCodes)
     {
         this.entryExitCodes = entryExitCodes;

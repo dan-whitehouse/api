@@ -41,8 +41,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -65,8 +67,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -90,8 +94,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -115,8 +121,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -141,8 +149,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -167,8 +177,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -193,8 +205,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -221,8 +235,10 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<School> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();

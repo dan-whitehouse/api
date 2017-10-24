@@ -25,6 +25,31 @@ public class RosterService implements IRosterService
 	}
 
 	@Override
+	public List<CourseSection> findAllByLea(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByLeaRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<CourseSection> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<CourseSection> findAllByCourse(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByCourseRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<CourseSection> findAllByStaff(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByStaffRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<CourseSection> findAllByStudent(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByStudentRefId(pageRequest, refId);
+	}
+
+	@Override
 	public CourseSection findByRefId(String refId) throws Exception {
 		return dao.findByRefId(refId);
 	}

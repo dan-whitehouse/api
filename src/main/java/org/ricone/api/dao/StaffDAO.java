@@ -40,8 +40,10 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Staff> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -65,8 +67,10 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Staff> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -89,8 +93,10 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Staff> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -118,10 +124,12 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
-		List<Staff> instance = q.getResultList();
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 
+		List<Staff> instance = q.getResultList();
 		instance.forEach(staff -> {
 			Hibernate.initialize(staff.getStaffCourseSections());
 		});
@@ -148,8 +156,10 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Staff> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -176,8 +186,10 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-		q.setMaxResults(pageRequest.getPageSize());
+		if(pageRequest.isPaged()){
+			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
+			q.setMaxResults(pageRequest.getPageSize());
+		}
 		List<Staff> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();

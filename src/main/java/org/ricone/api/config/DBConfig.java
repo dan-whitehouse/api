@@ -45,12 +45,11 @@ public class DBConfig {
 	public DataSource dataSource() throws ConfigException
 	{
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		
 		dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
 
 		try 
 		{
-			dataSource.setUrl(ConfigProperties.getInstance().getProperty("db.core.url"));
+			dataSource.setUrl(ConfigProperties.getInstance().getProperty("db.core.url")+"&useSSL=false");
 			dataSource.setUsername(ConfigProperties.getInstance().getProperty("db.core.username"));
 			dataSource.setPassword(ConfigProperties.getInstance().getProperty("db.core.password"));
 		} 
@@ -58,8 +57,6 @@ public class DBConfig {
 		{
 			throw new ConfigException("test");
 		}
-		
-		
 		return dataSource;
 	}
 	

@@ -15,6 +15,12 @@ public interface ICourseDAO
 {
     List<Course> findAll(Pageable pageRequest) throws Exception;
 
+    List<Course> findAllByLeaRefId(Pageable pageRequest, String refId) throws Exception;
+
+    List<Course> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception;
+
+    List<Course> findAllByRosterRefId(Pageable pageRequest, String refId) throws Exception;
+
     Course findByRefId(String refId) throws Exception;
 
     void save(Course instance);

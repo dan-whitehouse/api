@@ -15,6 +15,16 @@ public interface IRosterService
 {
     List<CourseSection> findAll(Pageable pageRequest) throws Exception;
 
+    List<CourseSection> findAllByLea(Pageable paging, String refId) throws Exception;
+
+    List<CourseSection> findAllBySchool(Pageable paging, String refId) throws Exception;
+
+    List<CourseSection> findAllByCourse(Pageable paging, String refId) throws Exception;
+
+    List<CourseSection> findAllByStaff(Pageable paging, String refId) throws Exception;
+
+    List<CourseSection> findAllByStudent(Pageable paging, String refId) throws Exception;
+
     CourseSection findByRefId(String refId) throws Exception;
 
     void save(CourseSection instance);
