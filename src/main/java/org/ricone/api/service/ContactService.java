@@ -1,9 +1,9 @@
 package org.ricone.api.service;
 
 import org.ricone.api.dao.ContactDAO;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.StudentContact;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,8 +17,23 @@ public class ContactService implements IContactService
 	ContactDAO dao;
 
 	@Override
-	public List<StudentContact> findAll() throws Exception {
-		return dao.findAll();
+	public List<StudentContact> findAll(Pageable pageRequest) throws Exception {
+		return dao.findAll(pageRequest);
+	}
+
+	@Override
+	public List<StudentContact> findAllByLea(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByLeaRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<StudentContact> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(pageRequest, refId);
+	}
+
+	@Override
+	public List<StudentContact> findAllByStudent(Pageable pageRequest, String refId) throws Exception {
+		return dao.findAllByStudentRefId(pageRequest, refId);
 	}
 
 	@Override

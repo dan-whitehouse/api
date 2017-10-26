@@ -8,6 +8,7 @@ import org.ricone.api.model.xpress.XContactResponse;
 import org.ricone.api.model.xpress.XContactsResponse;
 import org.ricone.api.service.IContactService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +28,7 @@ public class XContactController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return xContacts by refId", tags = { "xContacts" })
     @RequestMapping(value= "/requests/xContacts/{refId}", method = RequestMethod.GET)
-    public XContactResponse getSingle(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XContactResponse getXContact(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
     {
         StudentContact instance = service.findByRefId(refId);
         return mapper.convert(instance);
@@ -36,9 +37,9 @@ public class XContactController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xContacts", tags = { "xContacts" })
     @RequestMapping(value = "/requests/xContacts", method = RequestMethod.GET)
-    public XContactsResponse getMulti(HttpServletResponse response) throws Exception
+    public XContactsResponse getXContacts(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<StudentContact> instance = service.findAll();
+        List<StudentContact> instance = service.findAll(getPaging(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -46,8 +47,27 @@ public class XContactController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xContacts by xLea refId", tags = { "xContacts" })
     @RequestMapping(value= "/requests/xLeas/{refId}/xContacts", method = RequestMethod.GET)
-    public XContactsResponse getMultiByObject(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XContactsResponse getXContactsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        return null;
+        List<StudentContact> instance = service.findAllByLea(getPaging(pageRequest), refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xContacts by xSchool refId", tags = { "xContacts" })
+    @RequestMapping(value= "/requests/xSchools/{refId}/xContacts", method = RequestMethod.GET)
+    public XContactsResponse getXContactsBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<StudentContact> instance = service.findAllBySchool(getPaging(pageRequest), refId);
+        return mapper.convert(instance);
+    }
+
+    @ResponseBody
+    @ApiOperation(value="Return all xContacts by xStudent refId", tags = { "xContacts" })
+    @RequestMapping(value= "/requests/xStudents/{refId}/xContacts", method = RequestMethod.GET)
+    public XContactsResponse getXContactsByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
+    {
+        List<StudentContact> instance = service.findAllByStudent(getPaging(pageRequest), refId);
+        return mapper.convert(instance);
     }
 }

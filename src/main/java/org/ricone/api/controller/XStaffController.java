@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -29,9 +30,9 @@ public class XStaffController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return xStaff by refId", tags = { "xStaffs" })
     @RequestMapping(value= "/requests/xStaffs/{refId}", method = RequestMethod.GET)
-    public XStaffResponse getXStaff(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XStaffResponse getXStaff(HttpServletResponse response, HttpServletRequest request, @PathVariable(value="refId") String refId) throws Exception
     {
-        Staff instance = service.findByRefId(refId);
+        Staff instance = service.findById(request, refId);
         return mapper.convert(instance);
     }
 

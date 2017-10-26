@@ -1,6 +1,10 @@
 package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,7 +69,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.studentContactRefId;
     }
-
     public void setStudentContactRefId(String studentContactRefId)
     {
         this.studentContactRefId = studentContactRefId;
@@ -76,7 +79,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.firstName;
     }
-
     public void setFirstName(String firstName)
     {
         this.firstName = firstName;
@@ -87,7 +89,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.middleName;
     }
-
     public void setMiddleName(String middleName)
     {
         this.middleName = middleName;
@@ -98,7 +99,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.lastName;
     }
-
     public void setLastName(String lastName)
     {
         this.lastName = lastName;
@@ -109,7 +109,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.generationCode;
     }
-
     public void setGenerationCode(String generationCode)
     {
         this.generationCode = generationCode;
@@ -120,7 +119,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.prefix;
     }
-
     public void setPrefix(String prefix)
     {
         this.prefix = prefix;
@@ -131,7 +129,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.sexCode;
     }
-
     public void setSexCode(String sexCode)
     {
         this.sexCode = sexCode;
@@ -142,7 +139,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.languageCode;
     }
-
     public void setLanguageCode(String languageCode)
     {
         this.languageCode = languageCode;
@@ -153,7 +149,6 @@ public class StudentContact implements java.io.Serializable
     {
         return this.languageUseTypeCode;
     }
-
     public void setLanguageUseTypeCode(String languageUseTypeCode)
     {
         this.languageUseTypeCode = languageUseTypeCode;
@@ -164,7 +159,6 @@ public class StudentContact implements java.io.Serializable
     {
         return type;
     }
-
     public void setType(String type)
     {
         this.type = type;
@@ -175,75 +169,50 @@ public class StudentContact implements java.io.Serializable
     {
         return employerType;
     }
-
     public void setEmployerType(String employerType)
     {
         this.employerType = employerType;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StudentContactRelationship> getStudentContactRelationships()
     {
         return this.studentContactRelationships;
     }
+    public void setStudentContactRelationships(Set<StudentContactRelationship> studentcontactrelationships) { this.studentContactRelationships = studentcontactrelationships; }
 
-    public void setStudentContactRelationships(Set<StudentContactRelationship> studentcontactrelationships)
-    {
-        this.studentContactRelationships = studentcontactrelationships;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StudentContactEmail> getStudentContactEmails()
     {
         return this.studentContactEmails;
     }
+    public void setStudentContactEmails(Set<StudentContactEmail> studentcontactemails) { this.studentContactEmails = studentcontactemails; }
 
-    public void setStudentContactEmails(Set<StudentContactEmail> studentcontactemails)
-    {
-        this.studentContactEmails = studentcontactemails;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StudentContactAddress> getStudentContactAddresses()
     {
         return this.studentContactAddresses;
     }
+    public void setStudentContactAddresses(Set<StudentContactAddress> studentcontactaddresses) { this.studentContactAddresses = studentcontactaddresses; }
 
-    public void setStudentContactAddresses(Set<StudentContactAddress> studentcontactaddresses)
-    {
-        this.studentContactAddresses = studentcontactaddresses;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StudentContactTelephone> getStudentContactTelephones()
     {
         return this.studentContactTelephones;
     }
+    public void setStudentContactTelephones(Set<StudentContactTelephone> studentcontacttelephones) { this.studentContactTelephones = studentcontacttelephones; }
 
-    public void setStudentContactTelephones(Set<StudentContactTelephone> studentcontacttelephones)
-    {
-        this.studentContactTelephones = studentcontacttelephones;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StudentContactIdentifier> getStudentContactIdentifiers()
     {
         return this.studentContactIdentifiers;
     }
+    public void setStudentContactIdentifiers(Set<StudentContactIdentifier> studentcontactidentifiers) { this.studentContactIdentifiers = studentcontactidentifiers; }
 
-    public void setStudentContactIdentifiers(Set<StudentContactIdentifier> studentcontactidentifiers)
-    {
-        this.studentContactIdentifiers = studentcontactidentifiers;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentContact") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StudentContactOtherName> getStudentContactOtherNames()
     {
         return studentContactOtherNames;
     }
-
-    public void setStudentContactOtherNames(Set<StudentContactOtherName> studentContactOtherNames)
-    {
-        this.studentContactOtherNames = studentContactOtherNames;
-    }
+    public void setStudentContactOtherNames(Set<StudentContactOtherName> studentContactOtherNames) { this.studentContactOtherNames = studentContactOtherNames; }
 }

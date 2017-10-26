@@ -247,6 +247,7 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 
 	@Override
 	public School findByRefId(String refId) throws Exception {
+		//TODO - Not Working
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<School> select = cb.createQuery(School.class);
 		final Root<School> from = select.from(School.class);

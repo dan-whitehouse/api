@@ -20,7 +20,7 @@ import java.util.List;
 public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 {
 	private final String PRIMARY_KEY = "staffRefId";
-	private final String LOCAL_ID_KEY = "staffId";
+	private final String ID_KEY = "staffId";
 	private final String IDENTIFICATION_SYSTEM_CODE = "identificationSystemCode";
 	private final CacheContainer cacheContainer = new CacheContainer();
 
@@ -51,7 +51,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByLea(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllByLeaRefId(Pageable pageRequest, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -78,7 +78,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -104,7 +104,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByCourse(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllByCourseRefId(Pageable pageRequest, String refId) throws Exception {
 		//TODO - Not working correctly.
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
@@ -139,7 +139,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByRoster(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllByRosterRefId(Pageable pageRequest, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -167,7 +167,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByStudent(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -228,7 +228,25 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.and(cb.equal(staffIdentifiers.get(LOCAL_ID_KEY), localId), cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), "District")));
+		select.where(cb.and(cb.equal(staffIdentifiers.get(ID_KEY), localId), cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), "District")));
+
+		Query<Staff> q = getSession().createQuery(select);
+		return q.getSingleResult();
+	}
+
+	@Override
+	public Staff findByStateId(String stateId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final Root<Staff> from = select.from(Staff.class);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.and(cb.equal(staffIdentifiers.get(ID_KEY), stateId), cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), "State")));
 
 		Query<Staff> q = getSession().createQuery(select);
 		return q.getSingleResult();

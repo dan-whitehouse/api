@@ -2,10 +2,13 @@ package org.ricone.api.service;
 
 import org.ricone.api.dao.StaffDAO;
 import org.ricone.api.model.core.Staff;
+import org.ricone.api.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -23,37 +26,43 @@ public class StaffService implements IStaffService
 
 	@Override
 	public List<Staff> findAllByLea(Pageable paging, String refId) throws Exception {
-		return dao.findAllByLea(paging, refId);
+		return dao.findAllByLeaRefId(paging, refId);
 	}
 
 	@Override
 	public List<Staff> findAllBySchool(Pageable paging, String refId) throws Exception {
-		return dao.findAllBySchool(paging, refId);
+		return dao.findAllBySchoolRefId(paging, refId);
 	}
 
 	@Override
 	public List<Staff> findAllByCourse(Pageable paging, String refId) throws Exception {
-		return dao.findAllByCourse(paging, refId);
+		return dao.findAllByCourseRefId(paging, refId);
 	}
 
 	@Override
 	public List<Staff> findAllByRoster(Pageable paging, String refId) throws Exception {
-		return dao.findAllByRoster(paging, refId);
+		return dao.findAllByRosterRefId(paging, refId);
 	}
 
 	@Override
 	public List<Staff> findAllByStudent(Pageable paging, String refId) throws Exception {
-		return dao.findAllByStudent(paging, refId);
+		return dao.findAllByStudentRefId(paging, refId);
 	}
 
 	@Override
-	public Staff findByRefId(String refId) throws Exception {
-		return dao.findByRefId(refId);
-	}
-
-	@Override
-	public Staff findByLocalId(String localId) throws Exception {
-		return dao.findByLocalId(localId);
+	public Staff findById(HttpServletRequest request, String id) throws Exception {
+		if (Util.isRefId(id)) {
+			return dao.findByRefId(id);
+		}
+		else if(request.getHeader("IdType").equalsIgnoreCase("local")) {
+			return dao.findByLocalId(id);
+		}
+		else if(request.getHeader("IdType").equalsIgnoreCase("state")) {
+			return dao.findByStateId(id);
+		}
+		else {
+			throw new NoResultException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
+		}
 	}
 
 	@Override
