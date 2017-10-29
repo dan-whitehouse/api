@@ -53,6 +53,10 @@ public class XSchool {
     public XSchool() {
     }
 
+    public XSchool(String refId) {
+        this.refId = refId;
+    }
+
     public XSchool(String refId, String leaRefId, String localId, String stateProvinceId, OtherIds otherIds, String schoolName, GradeLevels gradeLevels, Address address, PhoneNumber phoneNumber, OtherPhoneNumbers otherPhoneNumbers) {
         super();
         this.refId = refId;

@@ -1,12 +1,10 @@
 package org.ricone.api.dao;
 
-import org.ricone.api.exception.NoContentException;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Lea;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @project: ricone
@@ -29,6 +27,8 @@ public interface ILeaDAO
     List<Lea> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception;
 
     List<Lea> findAllByContactRefId(Pageable pageRequest, String refId) throws Exception;
+
+    List<Lea> findByRefIds(Set<String> refIds) throws Exception;
 
     Lea findByRefId(String refId) throws Exception;
 

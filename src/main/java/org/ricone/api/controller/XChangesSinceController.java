@@ -2,7 +2,7 @@ package org.ricone.api.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ricone.api.mapping.xPress.XChangesSinceMapper;
+import org.ricone.api.mapping.xPress.XEventLogMapper;
 import org.ricone.api.model.core.EventLog;
 import org.ricone.api.model.xpress.XChangesSinceResponse;
 import org.ricone.api.service.IChangesSinceService;
@@ -23,77 +23,79 @@ public class XChangesSinceController extends AbstractController
     IChangesSinceService service;
 
     @Autowired
-    XChangesSinceMapper mapper;
+    XEventLogMapper mapper;
 
     @ResponseBody
-    @ApiOperation(value="Return all xLeas which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xLeas", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xLeas which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xLeas", method = RequestMethod.GET , params = {"changesSinceMarker"})
+    //http://localhost:8080/api/requests/xLeas?changesSinceMarker=2000-01-31T00:00:00.000-00:00
+    public XChangesSinceResponse getXChangesSinceByLea(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByLea(getPaging(pageRequest), iso8601);
+        List<EventLog> instance = service.findAllByLea(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
     @ResponseBody
-    @ApiOperation(value="Return all xSchools which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xSchools", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xSchools which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xSchools", method = RequestMethod.GET, params = {"changesSinceMarker"})
+    public XChangesSinceResponse getXChangesSinceBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllBySchool(getPaging(pageRequest), iso8601);
+        List<EventLog> instance = service.findAllBySchool(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
     @ResponseBody
-    @ApiOperation(value="Return all xCalendars which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xCalendars", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceByCalendar(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xCalendars which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xCalendars", method = RequestMethod.GET, params = {"changesSinceMarker"})
+    public XChangesSinceResponse getXChangesSinceByCalendar(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByCalendar(getPaging(pageRequest), iso8601);
+        List<EventLog> instance = service.findAllByCalendar(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
     @ResponseBody
-    @ApiOperation(value="Return all xCourses which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xSCourses", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xCourses which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xCourses", method = RequestMethod.GET, params = {"changesSinceMarker"})
+    public XChangesSinceResponse getXChangesSinceByCourse(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByCourse(getPaging(pageRequest), iso8601);
+        List<EventLog> instance = service.findAllByCourse(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
     @ResponseBody
-    @ApiOperation(value="Return all xRosters which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xRosters", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xRosters which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xRosters", method = RequestMethod.GET, params = {"changesSinceMarker"})
+    public XChangesSinceResponse getXChangesSinceByRoster(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByRoster(getPaging(pageRequest), iso8601);
+        List<EventLog> instance = service.findAllByRoster(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
     @ResponseBody
-    @ApiOperation(value="Return all xStaffs which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xStaffs", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceByStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xStaffs which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xStaffs", method = RequestMethod.GET, params = {"changesSinceMarker"})
+    public XChangesSinceResponse getXChangesSinceByStaff(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByStaff(getPaging(pageRequest), iso8601);
+        List<EventLog> instance = service.findAllByStaff(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
     @ResponseBody
-    @ApiOperation(value="Return all xStudents which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xStudents", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xStudents which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xStudents", method = RequestMethod.GET, params = {"changesSinceMarker"})
+    public XChangesSinceResponse getXChangesSinceByStudent(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByStudent(getPaging(pageRequest), iso8601);
+        List<EventLog> instance = service.findAllByStudent(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
     @ResponseBody
-    @ApiOperation(value="Return all xContacts which have change events", tags = { "xChangesSince" })
-    @RequestMapping(value= "/requests/xChangesSince/{iso8601}/xContacts", method = RequestMethod.GET)
-    public XChangesSinceResponse getXChangesSinceByContact(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="iso8601") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime iso8601) throws Exception
+    @ApiOperation(value="Return all xContacts which have change extension", tags = { "xChangesSince" })
+    @RequestMapping(value= "/requests/xContacts", method = RequestMethod.GET, params = {"changesSinceMarker"})
+    public XChangesSinceResponse getXChangesSinceByContact(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByContact(getPaging(pageRequest), iso8601);
+        //TODO - Not returning anything, even after setting the iso year to 2000 when I know there are values in the db with year values of 2016
+        List<EventLog> instance = service.findAllByContact(getPaging(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 }

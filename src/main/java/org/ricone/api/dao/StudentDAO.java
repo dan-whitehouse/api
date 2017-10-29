@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Set;
 
 @Repository("StudentDAO")
 @SuppressWarnings("unchecked")
@@ -324,6 +325,53 @@ public class StudentDAO extends AbstractDAO<Integer, Student> implements IStuden
 			Hibernate.initialize(o.getStudentRaces());
 			Hibernate.initialize(o.getStudentTelephones());
 			Hibernate.initialize(o.getStudentContactRelationships());
+			Hibernate.initialize(o.getStudentEnrollments());
+			o.getStudentEnrollments().forEach(se ->
+			{
+				if(se.getCounselor() != null) {
+					Hibernate.initialize(se.getCounselor());
+					se.getCounselor().getStaffIdentifiers().forEach(Hibernate::initialize);
+				}
+
+				if(se.getTeacher() != null) {
+					Hibernate.initialize(se.getTeacher());
+					se.getTeacher().getStaffIdentifiers().forEach(Hibernate::initialize);
+				}
+
+				Hibernate.initialize(se.getEntryExitCodes());
+				Hibernate.initialize(se.getSchool());
+			});
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<Student> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Student> select = cb.createQuery(Student.class);
+		final Root<Student> from = select.from(Student.class);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+
+		Query<Student> q = getSession().createQuery(select);
+
+		List<Student> instance = q.getResultList();
+		instance.forEach(o -> {
+			Hibernate.initialize(o.getStudentAcademicRecords());
+			Hibernate.initialize(o.getStudentAddresses());
+			Hibernate.initialize(o.getStudentEmails());
+			Hibernate.initialize(o.getStudentIdentifiers());
+			Hibernate.initialize(o.getStudentLanguages());
+			Hibernate.initialize(o.getStudentOtherNames());
+			Hibernate.initialize(o.getStudentRaces());
+			Hibernate.initialize(o.getStudentTelephones());
+
+			Hibernate.initialize(o.getStudentContactRelationships());
+
 			Hibernate.initialize(o.getStudentEnrollments());
 			o.getStudentEnrollments().forEach(se ->
 			{

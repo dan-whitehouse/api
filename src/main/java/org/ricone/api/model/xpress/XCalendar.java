@@ -34,6 +34,10 @@ public class XCalendar {
     public XCalendar() {
     }
 
+    public XCalendar(String refId) {
+        this.refId = refId;
+    }
+
     public XCalendar(String refId, String schoolRefId, String schoolYear, Sessions sessions) {
         super();
         this.refId = refId;
@@ -41,6 +45,8 @@ public class XCalendar {
         this.schoolYear = schoolYear;
         this.sessions = sessions;
     }
+
+
 
     @JsonProperty("@refId")
     public String getRefId() {

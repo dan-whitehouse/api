@@ -59,6 +59,10 @@ public class XCourse {
     public XCourse() {
     }
 
+    public XCourse(String refId) {
+        this.refId = refId;
+    }
+
     public XCourse(String refId, String schoolRefId, String schoolCourseId, String leaCourseId, OtherIds otherIds, String courseTitle, String description, String subject, ApplicableEducationLevels applicableEducationLevels) {
         super();
         this.refId = refId;
@@ -71,6 +75,8 @@ public class XCourse {
         this.subject = subject;
         this.applicableEducationLevels = applicableEducationLevels;
     }
+
+
 
     @JsonProperty("@refId")
     public String getRefId() {

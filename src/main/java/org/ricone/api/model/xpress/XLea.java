@@ -46,6 +46,10 @@ public class XLea {
     public XLea() {
     }
 
+    public XLea(String refId) {
+        this.refId = refId;
+    }
+
     public XLea(String refId, String localId, String stateProvinceId, String ncesId, String leaName, Address address, PhoneNumber phoneNumber, OtherPhoneNumbers otherPhoneNumbers) {
         super();
         this.refId = refId;
@@ -57,6 +61,8 @@ public class XLea {
         this.phoneNumber = phoneNumber;
         this.otherPhoneNumbers = otherPhoneNumbers;
     }
+
+
 
     @JsonProperty("@refId")
     public String getRefId() {

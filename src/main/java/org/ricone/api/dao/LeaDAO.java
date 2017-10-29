@@ -1,25 +1,18 @@
 package org.ricone.api.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
-import org.ricone.api.cache.AppCache;
 import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.exception.NoContentException;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.List;
+import java.util.Set;
 
 @Repository("leaDAO")
 @SuppressWarnings("unchecked")
@@ -38,10 +31,6 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
 		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-
-		//List<String> appLeaRefIds = new ArrayList<>();
-		//appLeaRefIds.add("1098EFC6-5374-4D7D-AEAE-58E021CCB146");
-		//select.where(from.get(PRIMARY_KEY).in(appLeaRefIds));
 
 		select.distinct(true);
 		select.select(from);
@@ -232,6 +221,25 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
 			q.setMaxResults(pageRequest.getPageSize());
 		}
+		List<Lea> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<Lea> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final Root<Lea> from = select.from(Lea.class);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+
+		Query<Lea> q = getSession().createQuery(select);
 		List<Lea> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Set;
 
 @Repository("StaffDAO")
 @SuppressWarnings("unchecked")
@@ -190,6 +191,28 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
 			q.setMaxResults(pageRequest.getPageSize());
 		}
+		List<Staff> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<Staff> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final Root<Staff> from = select.from(Staff.class);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+
+		Query<Staff> q = getSession().createQuery(select);
 		List<Staff> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();

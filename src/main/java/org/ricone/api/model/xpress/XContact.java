@@ -61,6 +61,10 @@ public class XContact {
     public XContact() {
     }
 
+    public XContact(String refId) {
+        this.refId = refId;
+    }
+
     public XContact(String refId, Name name, OtherNames otherNames, String localId, OtherIds otherIds, Address address, PhoneNumber phoneNumber, OtherPhoneNumbers otherPhoneNumbers, Email email, OtherEmails otherEmails, String sex, String employerType, Relationships relationships) {
         super();
         this.refId = refId;

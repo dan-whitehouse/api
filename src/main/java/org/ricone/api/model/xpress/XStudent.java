@@ -73,6 +73,10 @@ public class XStudent {
     public XStudent() {
     }
 
+    public XStudent(String refId) {
+        this.refId = refId;
+    }
+
     public XStudent(String refId, Name name, OtherNames otherNames, String localId, String stateProvinceId, OtherIds otherIds, Address address, PhoneNumber phoneNumber, OtherPhoneNumbers otherPhoneNumbers, Email email, OtherEmails otherEmails, Demographics demographics, Enrollment enrollment, OtherEnrollments otherEnrollments, AcademicSummary academicSummary, StudentContacts studentContacts, Languages languages) {
         super();
         this.refId = refId;

@@ -3,19 +3,14 @@ package org.ricone.api.model.core;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.ricone.api.model.core.extension.EventObject;
+import org.ricone.api.model.core.extension.EventObjectConverter;
+import org.ricone.api.model.core.extension.EventType;
+import org.ricone.api.model.core.extension.EventTypeConverter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * @author      Dan Whitehouse <daniel.whitehouse@neric.org>
- * @version     0.8.1
- * @since       2015-08-07 
- */
- 
 @Entity
 @Table(name = "eventlog")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -24,17 +19,26 @@ public class EventLog implements java.io.Serializable
 {
     private static final long serialVersionUID = -2958634207891103587L;
 	private String eventRefId;
-	private String eventType;
+	private EventType eventType;
 	private LocalDateTime eventTimestamp;
 	private String leaRefId;
-	private String object;
+	private EventObject object;
 	private String objectRefId;
+	private Lea lea;
+	private School school;
+	private SchoolCalendar calendar;
+	private Course course;
+	private CourseSection roster;
+	private Staff staff;
+	private Student student;
+	private StudentContact contact;
+
 
 	public EventLog()
 	{
 	}
 
-	public EventLog(String eventRefId, String eventType, LocalDateTime  eventTimestamp, String learefId, String object, String objectRefId)
+	public EventLog(String eventRefId, EventType eventType, LocalDateTime  eventTimestamp, String learefId, EventObject object, String objectRefId)
 	{
 		this.eventRefId = eventRefId;
 		this.eventType = eventType;
@@ -56,11 +60,12 @@ public class EventLog implements java.io.Serializable
 	}
 
 	@Column(name = "EventType", nullable = false, length = 30)
-	public String getEventType()
+	@Convert(converter = EventTypeConverter.class)
+	public EventType getEventType()
 	{
 		return this.eventType;
 	}
-	public void setEventType(String eventType)
+	public void setEventType(EventType eventType)
 	{
 		this.eventType = eventType;
 	}
@@ -83,11 +88,12 @@ public class EventLog implements java.io.Serializable
 	}
 
 	@Column(name = "Object", nullable = false)
-	public String getObject()
+	@Convert(converter = EventObjectConverter.class)
+	public EventObject getObject()
 	{
 		return this.object;
 	}
-	public void setObject(String object)
+	public void setObject(EventObject object)
 	{
 		this.object = object;
 	}
@@ -100,5 +106,49 @@ public class EventLog implements java.io.Serializable
 	public void setObjectRefId(String objectRefId)
 	{
 		this.objectRefId = objectRefId;
+	}
+
+	@Transient
+	public Lea getLea() { return lea; }
+	public void setLea(Lea lea) { this.lea = lea; }
+
+	@Transient
+	public School getSchool() { return school; }
+	public void setSchool(School school) { this.school = school; }
+
+	@Transient
+	public SchoolCalendar getCalendar() { return calendar; }
+	public void setCalendar(SchoolCalendar calendar) { this.calendar = calendar; }
+
+	@Transient
+	public Course getCourse() { return course; }
+	public void setCourse(Course course) { this.course = course; }
+
+	@Transient
+	public CourseSection getRoster() { return roster; }
+	public void setRoster(CourseSection roster) { this.roster = roster; }
+
+	@Transient
+	public Staff getStaff() { return staff; }
+	public void setStaff(Staff staff) { this.staff = staff; }
+
+	@Transient
+	public Student getStudent() { return student; }
+	public void setStudent(Student student) { this.student = student; }
+
+	@Transient
+	public StudentContact getContact() { return contact; }
+	public void setContact(StudentContact contact) { this.contact = contact; }
+
+	@Override
+	public String toString() {
+		return "EventLog{" +
+				"eventRefId='" + eventRefId + '\'' +
+				", eventType='" + eventType + '\'' +
+				", eventTimestamp=" + eventTimestamp +
+				", leaRefId='" + leaRefId + '\'' +
+				", object='" + object + '\'' +
+				", objectRefId='" + objectRefId + '\'' +
+				'}';
 	}
 }

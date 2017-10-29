@@ -2,18 +2,21 @@ package org.ricone.api.dao;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.exception.NoContentException;
 import org.ricone.api.exception.NotFoundException;
-import org.ricone.api.model.core.*;
+import org.ricone.api.model.core.Lea;
+import org.ricone.api.model.core.School;
+import org.ricone.api.model.core.SchoolCalendar;
+import org.ricone.api.model.core.SchoolCalendarSession;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Set;
 
 @Repository("calendarDAO")
 @SuppressWarnings("unchecked")
@@ -94,6 +97,29 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 			q.setMaxResults(pageRequest.getPageSize());
 		}
 		List<SchoolCalendar> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<SchoolCalendar> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<SchoolCalendar> select = cb.createQuery(SchoolCalendar.class);
+		final Root<SchoolCalendar> from = select.from(SchoolCalendar.class);
+		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>fetch("school", JoinType.LEFT);
+		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>fetch("schoolCalendarSessions", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+
+		Query<SchoolCalendar> q = getSession().createQuery(select);
+		List<SchoolCalendar> instance = q.getResultList();
+
+		instance.forEach(sc -> {
+			sc.getSchoolCalendarSessions().forEach(scs -> scs.getSchoolCalendar());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;

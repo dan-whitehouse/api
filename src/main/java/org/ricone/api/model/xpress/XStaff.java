@@ -49,6 +49,10 @@ public class XStaff {
     public XStaff() {
     }
 
+    public XStaff(String refId) {
+        this.refId = refId;
+    }
+    
     public XStaff(String refId, Name name, String localId, String stateProvinceId, OtherIds otherIds, String sex, Email email, PrimaryAssignment primaryAssignment, OtherAssignments otherAssignments) {
         super();
         this.refId = refId;

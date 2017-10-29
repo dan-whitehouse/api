@@ -2,6 +2,7 @@ package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "studentcontact")
 @JsonInclude(value= JsonInclude.Include.NON_EMPTY)
+@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class StudentContact implements java.io.Serializable
 {
     private static final long serialVersionUID = -1949488111557559072L;

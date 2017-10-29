@@ -1,11 +1,10 @@
 package org.ricone.api.dao;
 
-import org.ricone.api.exception.NotFoundException;
-import org.ricone.api.model.core.Course;
 import org.ricone.api.model.core.CourseSection;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @project: ricone
@@ -25,6 +24,8 @@ public interface IRosterDAO
 
     List<CourseSection> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception;
 
+    List<CourseSection> findByRefIds(Set<String> refIds) throws Exception;
+
     CourseSection findByRefId(String refId) throws Exception;
 
     void save(CourseSection instance);
@@ -34,6 +35,4 @@ public interface IRosterDAO
     void delete(CourseSection instance);
 
     void deleteByRefId(String refId);
-
-
 }

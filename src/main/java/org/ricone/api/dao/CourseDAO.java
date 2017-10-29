@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Set;
 
 @Repository("courseDAO")
 public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDAO
@@ -115,6 +116,27 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
 			q.setMaxResults(pageRequest.getPageSize());
 		}
+		List<Course> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<Course> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final Root<Course> from = select.from(Course.class);
+		final Join<Course, School> school = from.join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+
+		Query<Course> q = getSession().createQuery(select);
 		List<Course> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();

@@ -1,11 +1,10 @@
 package org.ricone.api.dao;
 
-import org.ricone.api.exception.NotFoundException;
-import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.core.School;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @project: ricone
@@ -28,6 +27,8 @@ public interface ISchoolDAO
     List<School> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception;
 
     List<School> findAllByContactRefId(Pageable pageRequest, String refId) throws Exception;
+
+    List<School> findByRefIds(Set<String> refIds) throws Exception;
 
     School findByRefId(String refId) throws Exception;
 

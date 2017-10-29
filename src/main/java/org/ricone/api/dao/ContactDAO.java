@@ -7,13 +7,13 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.exception.NoContentException;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Set;
 
 @Repository("ContactDAO")
 @SuppressWarnings("unchecked")
@@ -166,13 +166,39 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 	}
 
 	@Override
+	public List<StudentContact> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
+		final Root<StudentContact> from = select.from(StudentContact.class);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+
+		Query<StudentContact> q = getSession().createQuery(select);
+
+		List<StudentContact> instance = q.getResultList();
+		instance.forEach(o -> {
+			Hibernate.initialize(o.getStudentContactAddresses());
+			Hibernate.initialize(o.getStudentContactEmails());
+			Hibernate.initialize(o.getStudentContactIdentifiers());
+			Hibernate.initialize(o.getStudentContactOtherNames());
+			Hibernate.initialize(o.getStudentContactTelephones());
+
+			Hibernate.initialize(o.getStudentContactRelationships());
+			o.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
 	public StudentContact findByRefId(String refId) throws Exception
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
 		final Root<StudentContact> from = select.from(StudentContact.class);
-		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>fetch("studentContactRelationships", JoinType.LEFT);
-		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>fetch("student", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);

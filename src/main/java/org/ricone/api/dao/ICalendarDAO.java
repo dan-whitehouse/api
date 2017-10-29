@@ -1,11 +1,10 @@
 package org.ricone.api.dao;
 
-import org.ricone.api.exception.NotFoundException;
-import org.ricone.api.model.core.School;
 import org.ricone.api.model.core.SchoolCalendar;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @project: ricone
@@ -18,6 +17,8 @@ public interface ICalendarDAO
     List<SchoolCalendar> findAllByLeaRefId(Pageable pageRequest, String refId) throws Exception;
 
     List<SchoolCalendar> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception;
+
+    List<SchoolCalendar> findByRefIds(Set<String> refIds) throws Exception;
 
     SchoolCalendar findByRefId(String refId) throws Exception;
 

@@ -7,15 +7,13 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.exception.NoContentException;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.MapAttribute;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Repository("rosterDAO")
 @SuppressWarnings("unchecked")
@@ -29,27 +27,12 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-
-		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
-		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
-		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
-		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
-		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<CourseSection> q = getSession().createQuery(select);
-		//TODO - Implement this isPaged check on all other DAO methods for each class
 		if(pageRequest.isPaged()){
 			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
 			q.setMaxResults(pageRequest.getPageSize());
@@ -83,21 +66,9 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
-
-		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
-		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
-		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
-		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
-		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
+		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -140,20 +111,8 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-
-		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
-		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
-		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
-		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
-		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
+		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -195,20 +154,7 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-
-		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
-		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
-		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
-		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
-		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -250,20 +196,10 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
 
-		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
-		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
-		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
-		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
-		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = (Join<StaffCourseSection, Staff>)staffCourseSections.<StaffCourseSection, Staff>fetch("staff", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -305,20 +241,10 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
 
-		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);
-		final Join<SchoolCalendarSession, SchoolCalendar> schoolCalendar = schoolCalendarSession.join("schoolCalendar", JoinType.LEFT);
-		final SetJoin<CourseSection, CourseSectionSchedule> courseSectionSchedules = (SetJoin<CourseSection, CourseSectionSchedule>) from.<CourseSection, CourseSectionSchedule>join("courseSectionSchedules", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StaffCourseSection> staffCourseSections = (SetJoin<CourseSection, StaffCourseSection>) from.<CourseSection, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, Staff> staff = staffCourseSections.join("staff", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
-
-		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
-		final Join<StudentEnrollment, Student> student = studentCourseSections.join("student", JoinType.LEFT);
-		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>join("studentIdentifiers", JoinType.LEFT);
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) from.<CourseSection, StudentCourseSection>fetch("studentCourseSections", JoinType.LEFT);
+		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>)studentCourseSections.<StudentEnrollment, Student>fetch("student", JoinType.LEFT);
+		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>fetch("studentIdentifiers", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -336,6 +262,42 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		instance.forEach(sc -> {
 			Hibernate.initialize(sc.getCourse());
 			Hibernate.initialize(sc.getCourse().getSchool());
+			Hibernate.initialize(sc.getSchoolCalendarSession());
+			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
+			Hibernate.initialize(sc.getCourseSectionSchedules());
+			Hibernate.initialize(sc.getStaffCourseSections());
+			sc.getStaffCourseSections().forEach(tcs -> {
+				Hibernate.initialize(tcs.getStaff());
+				Hibernate.initialize(tcs.getStaff().getStaffIdentifiers());
+			});
+			Hibernate.initialize(sc.getStudentCourseSections());
+			sc.getStudentCourseSections().forEach(scs -> {
+				Hibernate.initialize(scs.getStudent());
+				Hibernate.initialize(scs.getStudent().getStudentIdentifiers());
+			});
+		});
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<CourseSection> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+
+		Query<CourseSection> q = getSession().createQuery(select);
+		List<CourseSection> instance = q.getResultList();
+
+		instance.forEach(sc -> {
+			Hibernate.initialize(sc.getCourse());
+			Hibernate.initialize(sc.getCourse().getSchool());
+			Hibernate.initialize(sc.getCourse().getSchool().getLea());
 			Hibernate.initialize(sc.getSchoolCalendarSession());
 			Hibernate.initialize(sc.getSchoolCalendarSession().getSchoolCalendar());
 			Hibernate.initialize(sc.getCourseSectionSchedules());

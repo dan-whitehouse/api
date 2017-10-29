@@ -1,10 +1,10 @@
 package org.ricone.api.dao;
 
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Staff;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IStaffDAO
 {
@@ -19,6 +19,8 @@ public interface IStaffDAO
     List<Staff> findAllByRosterRefId(Pageable pageRequest, String refId) throws Exception;
 
     List<Staff> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception;
+
+    List<Staff> findByRefIds(Set<String> refIds) throws Exception;
 
     Staff findByRefId(String refId) throws Exception;
 

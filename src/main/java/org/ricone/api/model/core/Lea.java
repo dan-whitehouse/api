@@ -1,17 +1,17 @@
 package org.ricone.api.model.core;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "lea")
 @JsonInclude(value=Include.NON_EMPTY)
-@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Lea implements java.io.Serializable
 {
 	private static final long serialVersionUID = -2620417938122940193L;
@@ -220,5 +220,79 @@ public class Lea implements java.io.Serializable
 	public void setLeaTelephones(Set<LeaTelephone> leatelephones)
 	{
 		this.leaTelephones = leatelephones;
+	}
+
+	@Override
+	public String toString() {
+		return "Lea{" +
+				"leaRefId='" + leaRefId + '\'' +
+				", leaId='" + leaId + '\'' +
+				", leaSeaId='" + leaSeaId + '\'' +
+				", leaNcesId='" + leaNcesId + '\'' +
+				", leaName='" + leaName + '\'' +
+				", streetNumberAndName='" + streetNumberAndName + '\'' +
+				", city='" + city + '\'' +
+				", stateCode='" + stateCode + '\'' +
+				", postalCode='" + postalCode + '\'' +
+				", addressCountyName='" + addressCountyName + '\'' +
+				", leaVendorId='" + leaVendorId + '\'' +
+				", addressType='" + addressType + '\'' +
+				", line2='" + line2 + '\'' +
+				", countryCode='" + countryCode + '\'' +
+				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Lea)) return false;
+
+		Lea lea = (Lea) o;
+
+		if (getLeaRefId() != null ? !getLeaRefId().equals(lea.getLeaRefId()) : lea.getLeaRefId() != null) return false;
+		if (getLeaId() != null ? !getLeaId().equals(lea.getLeaId()) : lea.getLeaId() != null) return false;
+		if (getLeaSeaId() != null ? !getLeaSeaId().equals(lea.getLeaSeaId()) : lea.getLeaSeaId() != null) return false;
+		if (getLeaNcesId() != null ? !getLeaNcesId().equals(lea.getLeaNcesId()) : lea.getLeaNcesId() != null)
+			return false;
+		if (getLeaName() != null ? !getLeaName().equals(lea.getLeaName()) : lea.getLeaName() != null) return false;
+		if (getStreetNumberAndName() != null ? !getStreetNumberAndName().equals(lea.getStreetNumberAndName()) : lea.getStreetNumberAndName() != null)
+			return false;
+		if (getCity() != null ? !getCity().equals(lea.getCity()) : lea.getCity() != null) return false;
+		if (getStateCode() != null ? !getStateCode().equals(lea.getStateCode()) : lea.getStateCode() != null)
+			return false;
+		if (getPostalCode() != null ? !getPostalCode().equals(lea.getPostalCode()) : lea.getPostalCode() != null)
+			return false;
+		if (getAddressCountyName() != null ? !getAddressCountyName().equals(lea.getAddressCountyName()) : lea.getAddressCountyName() != null)
+			return false;
+		if (getLeaVendorId() != null ? !getLeaVendorId().equals(lea.getLeaVendorId()) : lea.getLeaVendorId() != null)
+			return false;
+		if (getAddressType() != null ? !getAddressType().equals(lea.getAddressType()) : lea.getAddressType() != null)
+			return false;
+		if (getLine2() != null ? !getLine2().equals(lea.getLine2()) : lea.getLine2() != null) return false;
+		if (getCountryCode() != null ? !getCountryCode().equals(lea.getCountryCode()) : lea.getCountryCode() != null)
+			return false;
+		if (getSchools() != null ? !getSchools().equals(lea.getSchools()) : lea.getSchools() != null) return false;
+		return getLeaTelephones() != null ? getLeaTelephones().equals(lea.getLeaTelephones()) : lea.getLeaTelephones() == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = getLeaRefId() != null ? getLeaRefId().hashCode() : 0;
+		result = 31 * result + (getLeaId() != null ? getLeaId().hashCode() : 0);
+		result = 31 * result + (getLeaSeaId() != null ? getLeaSeaId().hashCode() : 0);
+		result = 31 * result + (getLeaNcesId() != null ? getLeaNcesId().hashCode() : 0);
+		result = 31 * result + (getLeaName() != null ? getLeaName().hashCode() : 0);
+		result = 31 * result + (getStreetNumberAndName() != null ? getStreetNumberAndName().hashCode() : 0);
+		result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
+		result = 31 * result + (getStateCode() != null ? getStateCode().hashCode() : 0);
+		result = 31 * result + (getPostalCode() != null ? getPostalCode().hashCode() : 0);
+		result = 31 * result + (getAddressCountyName() != null ? getAddressCountyName().hashCode() : 0);
+		result = 31 * result + (getLeaVendorId() != null ? getLeaVendorId().hashCode() : 0);
+		result = 31 * result + (getAddressType() != null ? getAddressType().hashCode() : 0);
+		result = 31 * result + (getLine2() != null ? getLine2().hashCode() : 0);
+		result = 31 * result + (getCountryCode() != null ? getCountryCode().hashCode() : 0);
+		result = 31 * result + (getSchools() != null ? getSchools().hashCode() : 0);
+		result = 31 * result + (getLeaTelephones() != null ? getLeaTelephones().hashCode() : 0);
+		return result;
 	}
 }

@@ -64,6 +64,10 @@ public class XRoster {
     public XRoster() {
     }
 
+    public XRoster(String refId) {
+        this.refId = refId;
+    }
+
     public XRoster(String refId, String courseRefId, String courseTitle, String sectionRefId, String subject, String schoolRefId, String schoolSectionId, String schoolYear, String sessionCode, String schoolCalendarRefId, MeetingTimes meetingTimes, Students students, PrimaryStaff primaryStaff, OtherStaffs otherStaffs) {
         super();
         this.refId = refId;

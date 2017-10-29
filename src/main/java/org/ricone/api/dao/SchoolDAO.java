@@ -2,19 +2,17 @@ package org.ricone.api.dao;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.exception.NoContentException;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Set;
 
 @Repository("schoolDAO")
 @SuppressWarnings("unchecked")
@@ -239,6 +237,28 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
 			q.setMaxResults(pageRequest.getPageSize());
 		}
+		List<School> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<School> findByRefIds(Set<String> refIds) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<School> select = cb.createQuery(School.class);
+		final Root<School> from = select.from(School.class);
+		final SetJoin<School, SchoolGrade> schoolGrades = (SetJoin<School, SchoolGrade>) from.<School, SchoolGrade>fetch("schoolGrades", JoinType.LEFT);
+		final SetJoin<School, SchoolTelephone> schoolTelephones = (SetJoin<School, SchoolTelephone>) from.<School, SchoolTelephone>fetch("schoolTelephones", JoinType.LEFT);
+		final SetJoin<School, SchoolIdentifier> schoolIdentifiers = (SetJoin<School, SchoolIdentifier>) from.<School, SchoolIdentifier>fetch("schoolIdentifiers", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) from.<School, Lea>fetch("lea", JoinType.INNER);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(from.get(PRIMARY_KEY).in(refIds));
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<School> q = getSession().createQuery(select);
 		List<School> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
