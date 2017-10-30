@@ -47,7 +47,7 @@ public class AuthRequest
         return isHeader;
     }
 
-    String getToken() {
+    public String getToken() {
         return token;
     }
 

@@ -1,8 +1,8 @@
 package org.ricone.api.mapping.xPress;
 
 import org.ricone.api.model.core.EventLog;
-import org.ricone.api.model.core.extension.EventObject;
-import org.ricone.api.model.core.extension.EventType;
+import org.ricone.api.model.core.extension.event.EventObject;
+import org.ricone.api.model.core.extension.event.EventType;
 import org.ricone.api.model.xpress.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

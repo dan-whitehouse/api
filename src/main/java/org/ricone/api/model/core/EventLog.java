@@ -3,10 +3,10 @@ package org.ricone.api.model.core;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.ricone.api.model.core.extension.EventObject;
-import org.ricone.api.model.core.extension.EventObjectConverter;
-import org.ricone.api.model.core.extension.EventType;
-import org.ricone.api.model.core.extension.EventTypeConverter;
+import org.ricone.api.model.core.extension.event.EventObject;
+import org.ricone.api.model.core.extension.event.EventObjectConverter;
+import org.ricone.api.model.core.extension.event.EventType;
+import org.ricone.api.model.core.extension.event.EventTypeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

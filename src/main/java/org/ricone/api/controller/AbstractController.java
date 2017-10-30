@@ -2,13 +2,13 @@ package org.ricone.api.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.exception.ConfigException;
 import org.ricone.api.exception.ForbiddenException;
-import org.ricone.api.security.AuthRequest;
+import org.ricone.api.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +47,22 @@ public abstract class AbstractController
         }
 
         return pageRequest;
+    }
+
+    public MetaData getMetaData(Pageable pageRequest) throws Exception
+    {
+        AuthRequest authRequest = new AuthRequest(request);
+        DecodedToken token = TokenDecoder.decodeToken(authRequest.getToken());
+        Session session = SessionManager.getInstance().getSession(token.getApplication_id());
+
+        Pageable pageable = getPaging(pageRequest);
+
+        MetaData metaData = new MetaData();
+        metaData.setApp(session.getApp());
+        metaData.setToken(session.getToken());
+        metaData.setPaging(pageable);
+
+        return metaData;
     }
 
     public AuthRequest getAuthRequest() throws ConfigException {

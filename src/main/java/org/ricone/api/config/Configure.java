@@ -1,15 +1,14 @@
 package org.ricone.api.config;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-
 import org.ricone.api.cache.AppCache;
-import org.ricone.api.cache.ProfileCache;
 import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.component.config.model.App;
-import org.ricone.api.component.config.model.Profile;
+import org.ricone.api.component.config.model.District;
 import org.ricone.api.exception.ConfigException;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class Configure 
 {
@@ -20,9 +19,8 @@ public class Configure
 			setConfigProperties();
 			ConfigService.getInstance().initializeCredential();
 			initializeAppCache();
-			initializeProfileCache();
 		} 
-		catch (ConfigException | IOException e) 
+		catch (ConfigException e)
 		{
 			e.printStackTrace();
 		}
@@ -68,17 +66,27 @@ public class Configure
 	public static void initializeAppCache() throws ConfigException
 	{
 		System.out.println("Loading App Cache....");
-		App[] apps = null; 
+		App[] apps = null;
+
 		try
 		{
 			apps = ConfigService.getInstance().getApps();
 		}
+		catch(Exception e) { e.printStackTrace();}
 		finally
 		{
 			if(apps != null)
 			{
 				for(App app : apps)
 				{
+
+					List<District> districts = ConfigService.getInstance().getDistrictsByApp(app.getId());
+					/*districts.forEach(district -> {
+						HashMap<String, String> kv = ConfigService.getInstance().getDistrictAPIKV(district.getId());
+						district.setKv(kv);
+					});*/
+
+					app.setDistricts(districts);
 					AppCache.getInstance().put(app.getId(), app);
 				}
 			}
@@ -88,28 +96,5 @@ public class Configure
 			}
 		}
 	}
-	
-	public static void initializeProfileCache() throws ConfigException, IOException
-	{
-		System.out.println("Loading Profile Cache....");
-		Profile[] profiles = null;
-		try
-		{
-			profiles = ConfigService.getInstance().getProfiles();
-		}
-		finally
-		{
-			if(profiles != null)
-			{
-				for(Profile profile : profiles)
-				{
-					ProfileCache.getInstance().put(profile.getId(), profile);
-				}
-			}
-			else
-			{
-				throw new ConfigException("Failed to create Profile Cache");				
-			}
-		}
-	}
+
 }

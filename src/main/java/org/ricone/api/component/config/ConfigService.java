@@ -1,26 +1,23 @@
 package org.ricone.api.component.config;
 
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.HashMap;
-
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.api.component.config.model.App;
-import org.ricone.api.component.config.model.Credential;
-import org.ricone.api.component.config.model.DistrictKV;
-import org.ricone.api.component.config.model.Login;
-import org.ricone.api.component.config.model.Profile;
-import org.ricone.api.component.config.model.Provider;
-import org.ricone.api.component.config.model.ProviderKV;
+import org.ricone.api.component.config.model.*;
 import org.ricone.api.config.ConfigProperties;
 import org.ricone.api.exception.ConfigException;
 import org.ricone.api.model.info.Config;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 
 public class ConfigService
 {
@@ -160,7 +157,7 @@ public class ConfigService
 		catch(Exception e){}	
 		return null;
 	}
-	
+
 	public App getApp(String appId)
 	{		
 		RestTemplate rt = new RestTemplate();
@@ -233,6 +230,25 @@ public class ConfigService
 		}
 		catch(Exception e){}	
 		return null;	
+	}
+
+	public List<District> getDistrictsByApp(String appId)
+	{
+		RestTemplate rt = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		ResponseEntity<List<District>> response = null;
+		try
+		{
+			headers.set("Authorization", getAccessToken());
+			HttpEntity<?> entity = new HttpEntity<Object>(headers);
+			response = rt.exchange((getUrl() +  "/app/" + appId + "/district"), HttpMethod.GET, entity, new ParameterizedTypeReference<List<District>>() {});
+			return response.getBody();
+		}
+		catch (ConfigException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	private static long ISO8601toLong(String iso)

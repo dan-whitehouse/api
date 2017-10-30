@@ -1,15 +1,17 @@
 package org.ricone.api.security;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.cache.AppCache;
-import org.ricone.api.cache.ProfileCache;
+import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.component.config.model.App;
+import org.ricone.api.component.config.model.District;
 import org.ricone.api.exception.UnauthorizedException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 public class AuthHandler extends HandlerInterceptorAdapter 
 {
@@ -33,11 +35,13 @@ public class AuthHandler extends HandlerInterceptorAdapter
 				}
 				else
 				{
+					App app = AppCache.getInstance().get(decodedToken.getApplication_id());
+					List<District> districts = ConfigService.getInstance().getDistrictsByApp(app.getId());
+					app.setDistricts(districts);
+
 					session = new Session();
 					session.setToken(decodedToken);
-					App app = AppCache.getInstance().get(decodedToken.getApplication_id());
 					session.setApp(app);
-					session.setProfile(ProfileCache.getInstance().get(app.getProfile_id()));
 					SessionManager.getInstance().addSession(decodedToken.getApplication_id(), session);
 				}
 				return super.preHandle(request, response, handler);

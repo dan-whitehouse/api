@@ -5,7 +5,7 @@ import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.exception.NoContentException;
 import org.ricone.api.model.core.EventLog;
-import org.ricone.api.model.core.extension.EventObject;
+import org.ricone.api.model.core.extension.event.EventObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 

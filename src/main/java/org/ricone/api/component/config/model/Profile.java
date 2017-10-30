@@ -56,5 +56,16 @@ public class Profile
 	public void setFilterType(String filterType)
 	{
 		this.filterType = filterType;
-	} 
+	}
+
+	@Override
+	public String toString() {
+		return "Profile{" +
+				"name='" + name + '\'' +
+				", title='" + title + '\'' +
+				", id='" + id + '\'' +
+				", description='" + description + '\'' +
+				", filterType='" + filterType + '\'' +
+				'}';
+	}
 }

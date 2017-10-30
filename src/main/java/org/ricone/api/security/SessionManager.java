@@ -1,6 +1,7 @@
 package org.ricone.api.security;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SessionManager
 {
@@ -16,9 +17,12 @@ public class SessionManager
 		return instance;
 	}
 
-	public HashMap<String, Session> getSessions() {
-		return sessions;
+	public Session getSession(String appId)
+	{
+		return sessions.entrySet().stream().filter(entry -> entry.getKey().equalsIgnoreCase(appId)).map(Map.Entry::getValue).findFirst().get();
 	}
+
+	public HashMap<String, Session> getSessions() { return sessions; }
 
 	void addSession(String appId, Session session)
 	{

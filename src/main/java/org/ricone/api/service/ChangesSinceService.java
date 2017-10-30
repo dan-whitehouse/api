@@ -2,7 +2,7 @@ package org.ricone.api.service;
 
 import org.ricone.api.dao.*;
 import org.ricone.api.model.core.*;
-import org.ricone.api.model.core.extension.EventType;
+import org.ricone.api.model.core.extension.event.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -51,4 +51,14 @@ public class DistrictKV
 	{
 		this.value = value;
 	}
+
+	@Override
+	public String toString() {
+		return "DistrictKV{" +
+				"id='" + id + '\'' +
+				", district_id='" + district_id + '\'' +
+				", field='" + field + '\'' +
+				", value='" + value + '\'' +
+				'}';
+	}
 }

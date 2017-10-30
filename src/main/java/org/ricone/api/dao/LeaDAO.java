@@ -5,9 +5,9 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.exception.NoContentException;
 import org.ricone.api.model.core.*;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -26,7 +26,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
-	public List<Lea> findAll(Pageable pageRequest) throws Exception {
+	public List<Lea> findAll(MetaData metaData) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -34,12 +34,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
+		//TODO - Implement this where clause everywhere (modifying existing ones of course)
+		select.where(from.get(LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -48,7 +50,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Lea> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -61,9 +63,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -72,7 +74,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findAllByCalendarRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Lea> findAllByCalendarRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -86,9 +88,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -97,7 +99,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findAllByCourseRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Lea> findAllByCourseRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -111,9 +113,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -122,7 +124,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findAllByRosterRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Lea> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -137,9 +139,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -148,7 +150,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findAllByStaffRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Lea> findAllByStaffRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -163,9 +165,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -174,7 +176,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Lea> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -189,9 +191,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -200,7 +202,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findAllByContactRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Lea> findAllByContactRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -217,9 +219,9 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Lea> instance = q.getResultList();
 
@@ -271,6 +273,23 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		select.distinct(true);
 		select.select(from);
 		select.where(cb.equal(from.get(LOCAL_ID_KEY), localId));
+
+		Query<Lea> q = getSession().createQuery(select);
+		return q.getSingleResult();
+	}
+
+	@Override
+	public Lea findBySchoolRefId(String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final Root<Lea> from = select.from(Lea.class);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(cb.equal(schools.get("schoolRefId"), refId));
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
 		return q.getSingleResult();

@@ -1,4 +1,4 @@
-package org.ricone.api.model.core.extension;
+package org.ricone.api.model.core.extension.event;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

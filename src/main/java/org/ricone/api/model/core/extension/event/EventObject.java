@@ -1,4 +1,4 @@
-package org.ricone.api.model.core.extension;
+package org.ricone.api.model.core.extension.event;
 
 import org.apache.commons.lang3.StringUtils;
 

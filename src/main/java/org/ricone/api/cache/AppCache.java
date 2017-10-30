@@ -1,12 +1,13 @@
 package org.ricone.api.cache;
 
-import java.util.concurrent.TimeUnit;
-import javax.inject.Singleton;
-import org.ricone.api.component.config.ConfigService;
-import org.ricone.api.component.config.model.App;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.ricone.api.component.config.ConfigService;
+import org.ricone.api.component.config.model.App;
+
+import javax.inject.Singleton;
+import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class AppCache
@@ -14,7 +15,7 @@ public class AppCache
 	private static AppCache instance = null;
 	private static final Integer EXPIRE = 2;
 	private final LoadingCache<String, App> cache;
-	 	
+
 	public static AppCache getInstance()
 	{
 		if(instance == null)
