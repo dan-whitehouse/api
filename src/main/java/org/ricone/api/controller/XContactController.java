@@ -28,9 +28,9 @@ public class XContactController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return xContacts by refId", tags = { "xContacts" })
     @RequestMapping(value= "/requests/xContacts/{refId}", method = RequestMethod.GET)
-    public XContactResponse getXContact(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XContactResponse getXContact(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        StudentContact instance = service.findByRefId(refId);
+        StudentContact instance = service.findByRefId(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -39,7 +39,7 @@ public class XContactController extends AbstractController
     @RequestMapping(value = "/requests/xContacts", method = RequestMethod.GET)
     public XContactsResponse getXContacts(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<StudentContact> instance = service.findAll(getPaging(pageRequest));
+        List<StudentContact> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -49,7 +49,7 @@ public class XContactController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xContacts", method = RequestMethod.GET)
     public XContactsResponse getXContactsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<StudentContact> instance = service.findAllByLea(getPaging(pageRequest), refId);
+        List<StudentContact> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -58,7 +58,7 @@ public class XContactController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xContacts", method = RequestMethod.GET)
     public XContactsResponse getXContactsBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<StudentContact> instance = service.findAllBySchool(getPaging(pageRequest), refId);
+        List<StudentContact> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -67,7 +67,7 @@ public class XContactController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}/xContacts", method = RequestMethod.GET)
     public XContactsResponse getXContactsByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<StudentContact> instance = service.findAllByStudent(getPaging(pageRequest), refId);
+        List<StudentContact> instance = service.findAllByStudent(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

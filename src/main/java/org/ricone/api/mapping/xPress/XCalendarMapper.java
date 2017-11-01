@@ -4,7 +4,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.MappingException;
-import org.ricone.api.model.core.*;
+import org.ricone.api.model.core.SchoolCalendar;
+import org.ricone.api.model.core.SchoolCalendarSession;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
 

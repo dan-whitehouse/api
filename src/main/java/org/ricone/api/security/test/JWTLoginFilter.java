@@ -1,8 +1,6 @@
 package org.ricone.api.security.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.ricone.api.security.test.TokenAuthenticationService;
-import org.ricone.api.security.test.AccountCredentials;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

@@ -2,6 +2,8 @@ package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "school")
 @JsonInclude(value= JsonInclude.Include.NON_EMPTY)
+@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class School implements java.io.Serializable
 {
     private static final long serialVersionUID = -4011491046830009714L;

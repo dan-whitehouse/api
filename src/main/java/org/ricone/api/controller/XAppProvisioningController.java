@@ -36,7 +36,7 @@ public class XAppProvisioningController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.POST, params = {"createUsers"})
     public void provisionXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isProvisioned = service.provisionStaffsBySchool(getPaging(pageRequest), refId);
+        boolean isProvisioned = service.provisionStaffsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseStatus(value = HttpStatus.OK)
@@ -44,7 +44,7 @@ public class XAppProvisioningController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.GET, params = {"deleteUsers"})
     public void deleteXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam boolean isDelete, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isDeleted = service.deleteStaffsBySchool(getPaging(pageRequest), refId);
+        boolean isDeleted = service.deleteStaffsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseBody
@@ -52,7 +52,7 @@ public class XAppProvisioningController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.GET, params = {"getUsers"})
     public XStaffsResponse getXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam boolean isGet, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findStaffsBySchool(getPaging(pageRequest), refId);
+        List<Staff> instance = service.findStaffsBySchool(getMetaData(pageRequest), refId);
         return xStaffMapper.convert(instance);
     }
 
@@ -63,7 +63,7 @@ public class XAppProvisioningController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.POST, params = {"createUsers"})
     public void provisionXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isProvisioned = service.provisionStudentsBySchool(getPaging(pageRequest), refId);
+        boolean isProvisioned = service.provisionStudentsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseStatus(value = HttpStatus.OK)
@@ -71,7 +71,7 @@ public class XAppProvisioningController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.GET, params = {"deleteUsers"})
     public void deleteXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam boolean isDelete, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isDeleted = service.deleteStudentsBySchool(getPaging(pageRequest), refId);
+        boolean isDeleted = service.deleteStudentsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseBody
@@ -79,7 +79,7 @@ public class XAppProvisioningController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.GET, params = {"getUsers"})
     public XStudentsResponse getXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam boolean isGet, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Student> instance = service.findStudentsBySchool(getPaging(pageRequest), refId);
+        List<Student> instance = service.findStudentsBySchool(getMetaData(pageRequest), refId);
         return xStudentMapper.convert(instance);
     }
 }

@@ -1,9 +1,7 @@
 package org.ricone.api.service;
 
-import org.ricone.api.exception.NotFoundException;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.model.core.CourseSection;
-import org.ricone.api.model.core.School;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,25 +11,23 @@ import java.util.List;
  */
 public interface IRosterService
 {
-    List<CourseSection> findAll(Pageable pageRequest) throws Exception;
+    List<CourseSection> findAll(MetaData metaData) throws Exception;
 
-    List<CourseSection> findAllByLea(Pageable paging, String refId) throws Exception;
+    List<CourseSection> findAllByLea(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllBySchool(Pageable paging, String refId) throws Exception;
+    List<CourseSection> findAllBySchool(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllByCourse(Pageable paging, String refId) throws Exception;
+    List<CourseSection> findAllByCourse(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllByStaff(Pageable paging, String refId) throws Exception;
+    List<CourseSection> findAllByStaff(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllByStudent(Pageable paging, String refId) throws Exception;
+    List<CourseSection> findAllByStudent(MetaData metaData, String refId) throws Exception;
 
-    CourseSection findByRefId(String refId) throws Exception;
+    CourseSection findByRefId(MetaData metaData, String refId) throws Exception;
 
     void save(CourseSection instance);
 
     void update(CourseSection instance);
 
     void delete(CourseSection instance);
-
-    void deleteByRefId(String refId);
 }

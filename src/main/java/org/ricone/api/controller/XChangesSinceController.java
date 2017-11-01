@@ -31,7 +31,7 @@ public class XChangesSinceController extends AbstractController
     //http://localhost:8080/api/requests/xLeas?changesSinceMarker=2000-01-31T00:00:00.000-00:00
     public XChangesSinceResponse getXChangesSinceByLea(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByLea(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllByLea(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
@@ -40,7 +40,7 @@ public class XChangesSinceController extends AbstractController
     @RequestMapping(value= "/requests/xSchools", method = RequestMethod.GET, params = {"changesSinceMarker"})
     public XChangesSinceResponse getXChangesSinceBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllBySchool(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllBySchool(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
@@ -49,7 +49,7 @@ public class XChangesSinceController extends AbstractController
     @RequestMapping(value= "/requests/xCalendars", method = RequestMethod.GET, params = {"changesSinceMarker"})
     public XChangesSinceResponse getXChangesSinceByCalendar(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByCalendar(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllByCalendar(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
@@ -58,7 +58,7 @@ public class XChangesSinceController extends AbstractController
     @RequestMapping(value= "/requests/xCourses", method = RequestMethod.GET, params = {"changesSinceMarker"})
     public XChangesSinceResponse getXChangesSinceByCourse(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByCourse(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllByCourse(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
@@ -67,7 +67,7 @@ public class XChangesSinceController extends AbstractController
     @RequestMapping(value= "/requests/xRosters", method = RequestMethod.GET, params = {"changesSinceMarker"})
     public XChangesSinceResponse getXChangesSinceByRoster(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByRoster(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllByRoster(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
@@ -76,7 +76,7 @@ public class XChangesSinceController extends AbstractController
     @RequestMapping(value= "/requests/xStaffs", method = RequestMethod.GET, params = {"changesSinceMarker"})
     public XChangesSinceResponse getXChangesSinceByStaff(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByStaff(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllByStaff(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
@@ -85,7 +85,7 @@ public class XChangesSinceController extends AbstractController
     @RequestMapping(value= "/requests/xStudents", method = RequestMethod.GET, params = {"changesSinceMarker"})
     public XChangesSinceResponse getXChangesSinceByStudent(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
-        List<EventLog> instance = service.findAllByStudent(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllByStudent(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 
@@ -95,7 +95,7 @@ public class XChangesSinceController extends AbstractController
     public XChangesSinceResponse getXChangesSinceByContact(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
         //TODO - Not returning anything, even after setting the iso year to 2000 when I know there are values in the db with year values of 2016
-        List<EventLog> instance = service.findAllByContact(getPaging(pageRequest), changesSinceMarker);
+        List<EventLog> instance = service.findAllByContact(getMetaData(pageRequest), changesSinceMarker);
         return mapper.convert(instance);
     }
 }

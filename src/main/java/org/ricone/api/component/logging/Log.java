@@ -1,9 +1,9 @@
 package org.ricone.api.component.logging;
 
+import org.apache.logging.log4j.Level;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.logging.log4j.Level;
 
 public class Log 
 {

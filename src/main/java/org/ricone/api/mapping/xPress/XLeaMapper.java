@@ -4,13 +4,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.core.LeaTelephone;
-import org.ricone.api.model.core.School;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component("XLeaMapper")
 public class XLeaMapper {

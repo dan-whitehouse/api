@@ -1,18 +1,14 @@
 package org.ricone.api.service;
 
-import org.ricone.api.dao.LeaDAO;
+import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.SchoolDAO;
-import org.ricone.api.exception.NotFoundException;
-import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.core.School;
 import org.ricone.api.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -24,57 +20,57 @@ public class SchoolService implements ISchoolService
 	SchoolDAO dao;
 
 	@Override
-	public List<School> findAll(Pageable pageRequest) throws Exception {
-		return dao.findAll(pageRequest);
+	public List<School> findAll(MetaData metaData) throws Exception {
+		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<School> findAllByLea(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByLeaRefId(pageRequest, refId);
+	public List<School> findAllByLea(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByLeaRefId(metaData, refId);
 	}
 
 	@Override
-	public List<School> findAllByCalendar(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByCalendarRefId(pageRequest, refId);
+	public List<School> findAllByCalendar(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByCalendarRefId(metaData, refId);
 	}
 
 	@Override
-	public List<School> findAllByCourse(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByCourseRefId(pageRequest, refId);
+	public List<School> findAllByCourse(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByCourseRefId(metaData, refId);
 	}
 
 	@Override
-	public List<School> findAllByRoster(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByRosterRefId(pageRequest, refId);
+	public List<School> findAllByRoster(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByRosterRefId(metaData, refId);
 	}
 
 	@Override
-	public List<School> findAllByStaff(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByStaffRefId(pageRequest, refId);
+	public List<School> findAllByStaff(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByStaffRefId(metaData, refId);
 	}
 
 	@Override
-	public List<School> findAllByStudent(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByStudentRefId(pageRequest, refId);
+	public List<School> findAllByStudent(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByStudentRefId(metaData, refId);
 	}
 
 	@Override
-	public List<School> findAllByContact(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByContactRefId(pageRequest, refId);
+	public List<School> findAllByContact(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByContactRefId(metaData, refId);
 	}
 
 	@Override
-	public School findById(HttpServletRequest request, String id) throws Exception {
+	public School findById(MetaData metaData, String id) throws Exception {
 		if (Util.isRefId(id)) {
-			return dao.findByRefId(id);
+			return dao.findByRefId(metaData, id);
 		}
-		else if(request.getHeader("IdType").equalsIgnoreCase("local"))
+		else if(StringUtils.equalsIgnoreCase(metaData.getHeaders().get("IdType"), "local"))
 		{
-			return dao.findByLocalId(id);
+			return dao.findByLocalId(metaData, id);
 		}
-		else if(request.getHeader("IdType").equalsIgnoreCase("BEDS"))
+		else if(StringUtils.equalsIgnoreCase(metaData.getHeaders().get("IdType"), "BEDS"))
 		{
-			return dao.findByBEDSId(id);
+			return dao.findByBEDSId(metaData, id);
 		}
 		else
 		{
@@ -95,10 +91,5 @@ public class SchoolService implements ISchoolService
 	@Override
 	public void delete(School instance) {
 		dao.delete(instance);
-	}
-
-	@Override
-	public void deleteByRefId(String refId) {
-		dao.deleteByRefId(refId);
 	}
 }

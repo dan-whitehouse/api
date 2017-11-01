@@ -1,7 +1,7 @@
 package org.ricone.api.dao;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.model.core.SchoolCalendar;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -12,21 +12,19 @@ import java.util.Set;
  */
 public interface ICalendarDAO
 {
-    List<SchoolCalendar> findAll(Pageable pageRequest) throws Exception;
+    List<SchoolCalendar> findAll(MetaData metaData) throws Exception;
 
-    List<SchoolCalendar> findAllByLeaRefId(Pageable pageRequest, String refId) throws Exception;
+    List<SchoolCalendar> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
 
-    List<SchoolCalendar> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception;
+    List<SchoolCalendar> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
 
-    List<SchoolCalendar> findByRefIds(Set<String> refIds) throws Exception;
+    List<SchoolCalendar> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
 
-    SchoolCalendar findByRefId(String refId) throws Exception;
+    SchoolCalendar findByRefId(MetaData metaData, String refId) throws Exception;
 
     void save(SchoolCalendar instance);
 
     void update(SchoolCalendar instance);
 
     void delete(SchoolCalendar instance);
-
-    void deleteByRefId(String refId);
 }

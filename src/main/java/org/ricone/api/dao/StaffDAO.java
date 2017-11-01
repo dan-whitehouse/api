@@ -1,15 +1,13 @@
 package org.ricone.api.dao;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.exception.NoContentException;
 import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.*;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -26,33 +24,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
-	public List<Staff> findAll(Pageable pageRequest) throws Exception {
-		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
-		final Root<Staff> from = select.from(Staff.class);
-		//final SetJoin<Staff, StaffCourseSection> staffCourseSection = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSection", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-
-		select.distinct(true);
-		select.select(from);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
-
-		Query<Staff> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
-		}
-		List<Staff> instance = q.getResultList();
-
-		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
-		return instance;
-	}
-
-	@Override
-	public List<Staff> findAllByLeaRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAll(MetaData metaData) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -64,13 +36,13 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(lea.get("leaRefId"), refId));
+		select.where(lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Staff> instance = q.getResultList();
 
@@ -79,7 +51,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -87,16 +59,24 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(school.get("schoolRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(lea.get("leaRefId"), refId),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Staff> instance = q.getResultList();
 
@@ -105,7 +85,41 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByCourseRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final Root<Staff> from = select.from(Staff.class);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(from);
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(school.get("schoolRefId"), refId),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query<Staff> q = getSession().createQuery(select);
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
+		}
+		List<Staff> instance = q.getResultList();
+
+		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
+		return instance;
+	}
+
+	@Override
+	public List<Staff> findAllByCourseRefId(MetaData metaData, String refId) throws Exception {
 		//TODO - Not working correctly.
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
@@ -117,17 +131,24 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(course.get("courseRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(course.get("courseRefId"), refId),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 
 		List<Staff> instance = q.getResultList();
@@ -140,7 +161,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByRosterRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -150,16 +171,24 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(courseSection.get("courseSectionRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(courseSection.get("courseSectionRefId"), refId),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Staff> instance = q.getResultList();
 
@@ -168,7 +197,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception {
+	public List<Staff> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -180,16 +209,24 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(student.get("studentRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(student.get("studentRefId"), refId),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Staff> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<Staff> instance = q.getResultList();
 
@@ -198,7 +235,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findByRefIds(Set<String> refIds) throws Exception {
+	public List<Staff> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -210,7 +247,14 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(from.get(PRIMARY_KEY).in(refIds));
+		select.where
+		(
+			cb.and
+			(
+					from.get(PRIMARY_KEY).in(refIds),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 
 		Query<Staff> q = getSession().createQuery(select);
 		List<Staff> instance = q.getResultList();
@@ -220,7 +264,7 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public Staff findByRefId(String refId) throws NotFoundException
+	public Staff findByRefId(MetaData metaData, String refId) throws NotFoundException
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
@@ -229,17 +273,25 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(from.get(PRIMARY_KEY), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(from.get(PRIMARY_KEY), refId),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 
 		Query<Staff> q = getSession().createQuery(select);
 		return q.getSingleResult();
 	}
 
 	@Override
-	public Staff findByLocalId(String localId) throws NotFoundException
+	public Staff findByLocalId(MetaData metaData, String localId) throws NotFoundException
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
@@ -248,17 +300,26 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.and(cb.equal(staffIdentifiers.get(ID_KEY), localId), cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), "District")));
+		select.where
+		(
+			cb.and
+			(
+					cb.equal(staffIdentifiers.get(ID_KEY), localId),
+					cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), "District"),
+					lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 
 		Query<Staff> q = getSession().createQuery(select);
 		return q.getSingleResult();
 	}
 
 	@Override
-	public Staff findByStateId(String stateId) throws Exception {
+	public Staff findByStateId(MetaData metaData, String stateId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
 		final Root<Staff> from = select.from(Staff.class);
@@ -266,10 +327,19 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
 		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
 		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.and(cb.equal(staffIdentifiers.get(ID_KEY), stateId), cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), "State")));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(staffIdentifiers.get(ID_KEY), stateId),
+				cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), "State"),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 
 		Query<Staff> q = getSession().createQuery(select);
 		return q.getSingleResult();
@@ -290,12 +360,4 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		super.delete(instance);
 	}
 
-	@Override
-	public void deleteByRefId(String refId)
-	{
-		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
-		Staff instance = (Staff)criteria.uniqueResult();
-		super.delete(instance);
-	}
 }

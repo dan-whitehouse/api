@@ -1,12 +1,5 @@
 package org.ricone.api.config;
 
-import java.util.HashMap;
-import java.util.Properties;
-
-
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-
 import org.ricone.api.exception.ConfigException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,6 +10,10 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+import java.util.Properties;
 
 
 @Configuration

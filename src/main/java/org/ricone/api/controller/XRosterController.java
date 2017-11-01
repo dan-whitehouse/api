@@ -2,13 +2,10 @@ package org.ricone.api.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ricone.api.mapping.xPress.XCourseMapper;
 import org.ricone.api.mapping.xPress.XRosterMapper;
-import org.ricone.api.model.core.Course;
 import org.ricone.api.model.core.CourseSection;
-import org.ricone.api.model.core.Lea;
-import org.ricone.api.model.xpress.*;
-import org.ricone.api.service.ICourseService;
+import org.ricone.api.model.xpress.XRosterResponse;
+import org.ricone.api.model.xpress.XRostersResponse;
 import org.ricone.api.service.IRosterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -30,9 +27,9 @@ public class XRosterController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return xRoster by refId", tags = { "xRosters" })
     @RequestMapping(value= "/requests/xRosters/{refId}", method = RequestMethod.GET)
-    public XRosterResponse getXRoster(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XRosterResponse getXRoster(HttpServletResponse response,  Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        CourseSection instance = service.findByRefId(refId);
+        CourseSection instance = service.findByRefId(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -41,7 +38,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value = "/requests/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRosters(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<CourseSection> instance = service.findAll(getPaging(pageRequest));
+        List<CourseSection> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -50,7 +47,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByLea(getPaging(pageRequest), refId);
+        List<CourseSection> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -59,7 +56,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllBySchool(getPaging(pageRequest), refId);
+        List<CourseSection> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -68,7 +65,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xCourses/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByCourse(getPaging(pageRequest), refId);
+        List<CourseSection> instance = service.findAllByCourse(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -77,7 +74,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xStaffs/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByStaff(getPaging(pageRequest), refId);
+        List<CourseSection> instance = service.findAllByStaff(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -86,7 +83,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByStudent(getPaging(pageRequest), refId);
+        List<CourseSection> instance = service.findAllByStudent(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

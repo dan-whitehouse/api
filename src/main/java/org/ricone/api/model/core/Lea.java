@@ -2,7 +2,10 @@ package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -202,7 +205,7 @@ public class Lea implements java.io.Serializable
 		this.countryCode = countryCode;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lea")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lea") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
 	public Set<School> getSchools()
 	{
 		return this.schools;
@@ -212,7 +215,7 @@ public class Lea implements java.io.Serializable
 		this.schools = schools;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lea")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lea") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
 	public Set<LeaTelephone> getLeaTelephones()
 	{
 		return this.leaTelephones;

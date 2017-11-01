@@ -23,13 +23,11 @@ public interface ILeaService
 
     List<Lea> findAllByContact(MetaData metaData, String refId) throws Exception;
 
-    Lea findById(String refId) throws Exception;
+    Lea findById(MetaData metaData, String refId) throws Exception;
 
     void save(Lea instance);
 
     void update(Lea instance);
 
     void delete(Lea instance);
-
-    void deleteByRefId(String refId);
 }

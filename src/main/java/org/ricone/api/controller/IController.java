@@ -1,7 +1,9 @@
 package org.ricone.api.controller;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.PathVariable;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface IController<T>
 {

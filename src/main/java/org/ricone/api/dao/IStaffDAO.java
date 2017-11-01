@@ -1,38 +1,36 @@
 package org.ricone.api.dao;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.model.core.Staff;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
 
 public interface IStaffDAO
 {
-    List<Staff> findAll(Pageable paging)throws Exception;
+    List<Staff> findAll(MetaData metaData)throws Exception;
 
-    List<Staff> findAllByLeaRefId(Pageable pageRequest, String refId) throws Exception;
+    List<Staff> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllBySchoolRefId(Pageable pageRequest, String refId) throws Exception;
+    List<Staff> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllByCourseRefId(Pageable pageRequest, String refId) throws Exception;
+    List<Staff> findAllByCourseRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllByRosterRefId(Pageable pageRequest, String refId) throws Exception;
+    List<Staff> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllByStudentRefId(Pageable pageRequest, String refId) throws Exception;
+    List<Staff> findAllByStudentRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findByRefIds(Set<String> refIds) throws Exception;
+    List<Staff> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
 
-    Staff findByRefId(String refId) throws Exception;
+    Staff findByRefId(MetaData metaData, String refId) throws Exception;
 
-    Staff findByLocalId(String localId) throws Exception;
+    Staff findByLocalId(MetaData metaData, String localId) throws Exception;
 
-    Staff findByStateId(String id) throws Exception;
+    Staff findByStateId(MetaData metaData, String id) throws Exception;
 
     void save(Staff instance);
 
     void update(Staff instance);
 
     void delete(Staff instance);
-
-    void deleteByRefId(String refId);
 }

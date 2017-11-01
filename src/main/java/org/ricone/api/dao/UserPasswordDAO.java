@@ -1,10 +1,10 @@
 package org.ricone.api.dao;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.model.core.Staff;
 import org.ricone.api.model.core.Student;
 import org.ricone.api.model.core.UserPassword;
 import org.ricone.api.model.core.extension.userpassword.EntityType;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,23 +26,23 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         return false;
     }
 
-    public boolean deleteStaffsBySchool(Pageable pageRequest, String refId) throws Exception {
+    public boolean deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
         return false;
     }
 
-    public List<Staff> findStaffsBySchool(Pageable pageRequest, String refId) throws Exception {
+    public List<Staff> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
         return null;
     }
 
-    public boolean provisionStudentsBySchool(Pageable pageRequest, String refId) throws Exception {
+    public boolean provisionStudentsBySchool(MetaData metaData, String refId) throws Exception {
         return false;
     }
 
-    public boolean deleteStudentsBySchool(Pageable pageRequest, String refId) throws Exception {
+    public boolean deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
         return false;
     }
 
-    public List<Student> findStudentsBySchool(Pageable pageRequest, String refId) throws Exception {
+    public List<Student> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
         return null;
     }
 

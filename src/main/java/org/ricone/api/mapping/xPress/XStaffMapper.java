@@ -2,13 +2,15 @@ package org.ricone.api.mapping.xPress;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.MappingException;
-import org.ricone.api.model.core.*;
+import org.ricone.api.model.core.Staff;
+import org.ricone.api.model.core.StaffAssignment;
+import org.ricone.api.model.core.StaffEmail;
+import org.ricone.api.model.core.StaffIdentifier;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Component("XStaffMapper")
 public class XStaffMapper {

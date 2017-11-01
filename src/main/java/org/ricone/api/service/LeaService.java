@@ -58,13 +58,13 @@ public class LeaService implements ILeaService
 	}
 
 	@Override
-	public Lea findById(String id) throws Exception
+	public Lea findById(MetaData metaData, String id) throws Exception
 	{
 		if (Util.isRefId(id)) {
-			return dao.findByRefId(id);
+			return dao.findByRefId(metaData, id);
 		}
 		else {
-			return dao.findByLocalId(id);
+			return dao.findByLocalId(metaData, id);
 		}
 	}
 
@@ -82,11 +82,4 @@ public class LeaService implements ILeaService
 	public void delete(Lea instance) {
 		dao.delete(instance);
 	}
-
-	@Override
-	public void deleteByRefId(String refId) {
-		dao.deleteByRefId(refId);
-	}
-
-
 }

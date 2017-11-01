@@ -1,7 +1,7 @@
 package org.ricone.api.dao;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.model.core.EventLog;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,19 +12,19 @@ import java.util.List;
  */
 public interface IEventLogDAO {
 
-    List<EventLog> findAllByLea(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
-    List<EventLog> findAllBySchool(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
-    List<EventLog> findAllByCalendar(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllByCalendar(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
-    List<EventLog> findAllByCourse(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllByCourse(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
-    List<EventLog> findAllByRoster(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllByRoster(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
-    List<EventLog> findAllByStaff(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllByStaff(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
-    List<EventLog> findAllByStudent(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllByStudent(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
-    List<EventLog> findAllByContact(Pageable pageRequest, LocalDateTime iso8601) throws Exception;
+    List<EventLog> findAllByContact(MetaData metaData, LocalDateTime iso8601) throws Exception;
 }

@@ -1,12 +1,9 @@
 package org.ricone.api.service;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.RosterDAO;
-import org.ricone.api.dao.SchoolDAO;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.CourseSection;
-import org.ricone.api.model.core.School;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,38 +17,38 @@ public class RosterService implements IRosterService
 	RosterDAO dao;
 
 	@Override
-	public List<CourseSection> findAll(Pageable pageRequest) throws Exception {
-		return dao.findAll(pageRequest);
+	public List<CourseSection> findAll(MetaData metaData) throws Exception {
+		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<CourseSection> findAllByLea(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByLeaRefId(pageRequest, refId);
+	public List<CourseSection> findAllByLea(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByLeaRefId(metaData, refId);
 	}
 
 	@Override
-	public List<CourseSection> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllBySchoolRefId(pageRequest, refId);
+	public List<CourseSection> findAllBySchool(MetaData metaData, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(metaData, refId);
 	}
 
 	@Override
-	public List<CourseSection> findAllByCourse(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByCourseRefId(pageRequest, refId);
+	public List<CourseSection> findAllByCourse(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByCourseRefId(metaData, refId);
 	}
 
 	@Override
-	public List<CourseSection> findAllByStaff(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByStaffRefId(pageRequest, refId);
+	public List<CourseSection> findAllByStaff(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByStaffRefId(metaData, refId);
 	}
 
 	@Override
-	public List<CourseSection> findAllByStudent(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByStudentRefId(pageRequest, refId);
+	public List<CourseSection> findAllByStudent(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByStudentRefId(metaData, refId);
 	}
 
 	@Override
-	public CourseSection findByRefId(String refId) throws Exception {
-		return dao.findByRefId(refId);
+	public CourseSection findByRefId(MetaData metaData, String refId) throws Exception {
+		return dao.findByRefId(metaData, refId);
 	}
 
 	@Override
@@ -67,10 +64,5 @@ public class RosterService implements IRosterService
 	@Override
 	public void delete(CourseSection instance) {
 		dao.delete(instance);
-	}
-
-	@Override
-	public void deleteByRefId(String refId) {
-		dao.deleteByRefId(refId);
 	}
 }

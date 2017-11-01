@@ -28,9 +28,9 @@ public class XLeaController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return xLea by refId or localId", tags = { "xLeas" })
     @RequestMapping(value= "/requests/xLeas/{refId}", method = RequestMethod.GET)
-    public XLeaResponse getXLea(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XLeaResponse getXLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        Lea instance = service.findById(refId);
+        Lea instance = service.findById(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 

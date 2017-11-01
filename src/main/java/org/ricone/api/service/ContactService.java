@@ -1,9 +1,9 @@
 package org.ricone.api.service;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.ContactDAO;
 import org.ricone.api.model.core.StudentContact;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,28 +17,28 @@ public class ContactService implements IContactService
 	ContactDAO dao;
 
 	@Override
-	public List<StudentContact> findAll(Pageable pageRequest) throws Exception {
-		return dao.findAll(pageRequest);
+	public List<StudentContact> findAll(MetaData metaData) throws Exception {
+		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<StudentContact> findAllByLea(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByLeaRefId(pageRequest, refId);
+	public List<StudentContact> findAllByLea(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByLeaRefId(metaData, refId);
 	}
 
 	@Override
-	public List<StudentContact> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllBySchoolRefId(pageRequest, refId);
+	public List<StudentContact> findAllBySchool(MetaData metaData, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(metaData, refId);
 	}
 
 	@Override
-	public List<StudentContact> findAllByStudent(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByStudentRefId(pageRequest, refId);
+	public List<StudentContact> findAllByStudent(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByStudentRefId(metaData, refId);
 	}
 
 	@Override
-	public StudentContact findByRefId(String refId) throws Exception {
-		return dao.findByRefId(refId);
+	public StudentContact findByRefId(MetaData metaData, String refId) throws Exception {
+		return dao.findByRefId(metaData, refId);
 	}
 
 	@Override
@@ -54,10 +54,5 @@ public class ContactService implements IContactService
 	@Override
 	public void delete(StudentContact instance) {
 		dao.delete(instance);
-	}
-
-	@Override
-	public void deleteByRefId(String refId) {
-		dao.deleteByRefId(refId);
 	}
 }

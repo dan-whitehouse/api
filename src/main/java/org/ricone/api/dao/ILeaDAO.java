@@ -28,21 +28,19 @@ public interface ILeaDAO
 
     List<Lea> findAllByContactRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findByRefIds(Set<String> refIds) throws Exception;
+    List<Lea> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
 
-    Lea findByRefId(String refId) throws Exception;
+    Lea findByRefId(MetaData metaData, String refId) throws Exception;
 
-    Lea findByLocalId(String localId) throws Exception;
+    Lea findByLocalId(MetaData metaData, String localId) throws Exception;
 
-    Lea findBySchoolRefId(String refId) throws Exception;
+    Lea findBySchoolRefId(MetaData metaData, String refId) throws Exception;
 
     void save(Lea instance);
 
     void update(Lea instance);
 
     void delete(Lea instance);
-
-    void deleteByRefId(String refId);
 
     Long count();
 }

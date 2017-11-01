@@ -1,13 +1,13 @@
 package org.ricone.api.config;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.exception.ConfigException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class ConfigProperties 
 {

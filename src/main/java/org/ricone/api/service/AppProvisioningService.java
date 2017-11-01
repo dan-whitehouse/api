@@ -1,6 +1,7 @@
 package org.ricone.api.service;
 
 import org.ricone.api.component.config.ConfigService;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.LeaDAO;
 import org.ricone.api.dao.StaffDAO;
 import org.ricone.api.dao.StudentDAO;
@@ -11,7 +12,6 @@ import org.ricone.api.model.core.StaffIdentifier;
 import org.ricone.api.model.core.Student;
 import org.ricone.api.util.UserPasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,10 +43,10 @@ public class AppProvisioningService implements IAppProvisioningService
 
 
 	@Override
-	public boolean provisionStaffsBySchool(Pageable pageRequest, String refId) throws Exception{
-		List<Staff> staffs = staffDAO.findAllBySchoolRefId(pageRequest, refId);
+	public boolean provisionStaffsBySchool(MetaData metaData, String refId) throws Exception{
+		List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
 
-		Lea l = leaDAO.findBySchoolRefId(refId);
+		Lea l = leaDAO.findBySchoolRefId(metaData, refId);
 
 		HashMap<String, String> kv = ConfigService.getInstance().getDistrictAPIKV(l.getLeaRefId());
 		staffs.forEach(t -> {
@@ -63,27 +63,27 @@ public class AppProvisioningService implements IAppProvisioningService
 	}
 
 	@Override
-	public boolean deleteStaffsBySchool(Pageable pageRequest, String refId) throws Exception {
-		return userPasswordDAO.deleteStaffsBySchool(pageRequest, refId);
+	public boolean deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
+		return userPasswordDAO.deleteStaffsBySchool(metaData, refId);
 	}
 
 	@Override
-	public List<Staff> findStaffsBySchool(Pageable pageRequest, String refId) throws Exception {
-		return userPasswordDAO.findStaffsBySchool(pageRequest, refId);
+	public List<Staff> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
+		return userPasswordDAO.findStaffsBySchool(metaData, refId);
 	}
 
 	@Override
-	public boolean provisionStudentsBySchool(Pageable pageRequest, String refId) throws Exception {
-		return userPasswordDAO.provisionStudentsBySchool(pageRequest, refId);
+	public boolean provisionStudentsBySchool(MetaData metaData, String refId) throws Exception {
+		return userPasswordDAO.provisionStudentsBySchool(metaData, refId);
 	}
 
 	@Override
-	public boolean deleteStudentsBySchool(Pageable pageRequest, String refId) throws Exception {
-		return userPasswordDAO.deleteStudentsBySchool(pageRequest, refId);
+	public boolean deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
+		return userPasswordDAO.deleteStudentsBySchool(metaData, refId);
 	}
 
 	@Override
-	public List<Student> findStudentsBySchool(Pageable pageRequest, String refId) throws Exception {
-		return userPasswordDAO.findStudentsBySchool(pageRequest, refId);
+	public List<Student> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
+		return userPasswordDAO.findStudentsBySchool(metaData, refId);
 	}
 }

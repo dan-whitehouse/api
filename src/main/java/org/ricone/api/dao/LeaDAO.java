@@ -1,8 +1,6 @@
 package org.ricone.api.dao;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.controller.extension.MetaData;
@@ -34,8 +32,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		//TODO - Implement this where clause everywhere (modifying existing ones of course)
-		select.where(from.get(LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
+		select.where(from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -59,7 +56,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(schools.get("schoolRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(schools.get("schoolRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -84,7 +88,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -109,7 +120,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(courses.get("courseRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(courses.get("courseRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -135,7 +153,15 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(courseSections.get("courseSectionRefId"), refId));
+		select.where();
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(courseSections.get("courseSectionRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -161,7 +187,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(staff.get("staffRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(staff.get("staffRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -187,7 +220,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(student.get("studentRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(student.get("studentRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -215,7 +255,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(contact.get("studentContactRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(contact.get("studentContactRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -230,7 +277,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public List<Lea> findByRefIds(Set<String> refIds) throws Exception {
+	public List<Lea> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -239,7 +286,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(from.get(PRIMARY_KEY).in(refIds));
+		select.where
+		(
+			cb.and
+			(
+				from.get(PRIMARY_KEY).in(refIds),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 
 		Query<Lea> q = getSession().createQuery(select);
 		List<Lea> instance = q.getResultList();
@@ -249,7 +303,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	}
 
 	@Override
-	public Lea findByRefId(String refId) throws Exception {
+	public Lea findByRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -257,14 +311,21 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where( cb.equal(from.get(PRIMARY_KEY), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(from.get(PRIMARY_KEY), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 
 		Query<Lea> q = getSession().createQuery(select);
 		return q.getSingleResult();
 	}
 
 	@Override
-	public Lea findByLocalId(String localId) throws Exception {
+	public Lea findByLocalId(MetaData metaData, String localId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -272,14 +333,21 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(from.get(LOCAL_ID_KEY), localId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(from.get(LOCAL_ID_KEY), localId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 
 		Query<Lea> q = getSession().createQuery(select);
 		return q.getSingleResult();
 	}
 
 	@Override
-	public Lea findBySchoolRefId(String refId) throws Exception {
+	public Lea findBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -288,7 +356,14 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 		select.distinct(true);
 		select.select(from);
-		select.where(cb.equal(schools.get("schoolRefId"), refId));
+		select.where
+		(
+			cb.and
+			(
+				cb.equal(schools.get("schoolRefId"), refId),
+				from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+			)
+		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query<Lea> q = getSession().createQuery(select);
@@ -307,14 +382,6 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 	@Override
 	public void delete(Lea instance) {
-		super.delete(instance);
-	}
-
-	@Override
-	public void deleteByRefId(String refId) {
-		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq(PRIMARY_KEY, refId));
-		Lea instance = (Lea) criteria.uniqueResult();
 		super.delete(instance);
 	}
 

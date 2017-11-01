@@ -1,11 +1,11 @@
 package org.ricone.api.task;
 
-import java.util.Date;
-
 import org.ricone.api.security.Session;
 import org.ricone.api.security.SessionManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class SessionTask 

@@ -1,15 +1,11 @@
 package org.ricone.api.service;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.CourseDAO;
-import org.ricone.api.dao.SchoolDAO;
-import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Course;
-import org.ricone.api.model.core.School;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -21,28 +17,28 @@ public class CourseService implements ICourseService
 	CourseDAO dao;
 
 	@Override
-	public List<Course> findAll(Pageable pageRequest) throws Exception {
-		return dao.findAll(pageRequest);
+	public List<Course> findAll(MetaData metaData) throws Exception {
+		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<Course> findAllByLea(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByLeaRefId(pageRequest, refId);
+	public List<Course> findAllByLea(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByLeaRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Course> findAllBySchool(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllBySchoolRefId(pageRequest, refId);
+	public List<Course> findAllBySchool(MetaData metaData, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Course> findAllByRoster(Pageable pageRequest, String refId) throws Exception {
-		return dao.findAllByRosterRefId(pageRequest, refId);
+	public List<Course> findAllByRoster(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByRosterRefId(metaData, refId);
 	}
 
 	@Override
-	public Course findByRefId(String refId) throws Exception {
-		return dao.findByRefId(refId);
+	public Course findByRefId(MetaData metaData, String refId) throws Exception {
+		return dao.findByRefId(metaData, refId);
 	}
 
 	@Override
@@ -58,10 +54,5 @@ public class CourseService implements ICourseService
 	@Override
 	public void delete(Course instance) {
 		dao.delete(instance);
-	}
-
-	@Override
-	public void deleteByRefId(String refId) {
-		dao.deleteByRefId(refId);
 	}
 }

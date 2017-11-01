@@ -1,6 +1,7 @@
 package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 
 @Entity

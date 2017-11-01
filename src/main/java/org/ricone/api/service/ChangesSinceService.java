@@ -1,10 +1,10 @@
 package org.ricone.api.service;
 
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.*;
 import org.ricone.api.model.core.*;
 import org.ricone.api.model.core.extension.event.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,16 +46,16 @@ public class ChangesSinceService implements IChangesSinceService
 
 
 	@Override
-	public List<EventLog> findAllByLea(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByLea(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllByLea(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<Lea> leas = lea.findByRefIds(refIds);
+		List<Lea> leas = lea.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			leas.forEach(lea -> {
 				if(lea.getLeaRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
@@ -68,16 +68,16 @@ public class ChangesSinceService implements IChangesSinceService
 	}
 
 	@Override
-	public List<EventLog> findAllBySchool(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllBySchool(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllBySchool(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<School> schools = school.findByRefIds(refIds);
+		List<School> schools = school.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			schools.forEach(school -> {
 				if(school.getSchoolRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
@@ -90,16 +90,16 @@ public class ChangesSinceService implements IChangesSinceService
 	}
 
 	@Override
-	public List<EventLog> findAllByCalendar(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByCalendar(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByCalendar(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllByCalendar(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<SchoolCalendar> calendars = calendar.findByRefIds(refIds);
+		List<SchoolCalendar> calendars = calendar.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			calendars.forEach(calendar -> {
 				if(calendar.getSchoolCalendarRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
@@ -112,16 +112,16 @@ public class ChangesSinceService implements IChangesSinceService
 	}
 
 	@Override
-	public List<EventLog> findAllByCourse(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByCourse(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByCourse(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllByCourse(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<Course> courses = course.findByRefIds(refIds);
+		List<Course> courses = course.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			courses.forEach(course -> {
 				if(course.getCourseRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
@@ -134,16 +134,16 @@ public class ChangesSinceService implements IChangesSinceService
 	}
 
 	@Override
-	public List<EventLog> findAllByRoster(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByRoster(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByRoster(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllByRoster(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<CourseSection> courseSections = roster.findByRefIds(refIds);
+		List<CourseSection> courseSections = roster.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			courseSections.forEach(courseSection -> {
 				if(courseSection.getCourseSectionRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
@@ -156,16 +156,16 @@ public class ChangesSinceService implements IChangesSinceService
 	}
 
 	@Override
-	public List<EventLog> findAllByStaff(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByStaff(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByStaff(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllByStaff(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<Staff> staffs = staff.findByRefIds(refIds);
+		List<Staff> staffs = staff.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			staffs.forEach(staff -> {
 				if(staff.getStaffRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
@@ -178,16 +178,16 @@ public class ChangesSinceService implements IChangesSinceService
 	}
 
 	@Override
-	public List<EventLog> findAllByStudent(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByStudent(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByStudent(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllByStudent(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<Student> students = student.findByRefIds(refIds);
+		List<Student> students = student.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			students.forEach(student -> {
 				if(student.getStudentRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
@@ -200,16 +200,16 @@ public class ChangesSinceService implements IChangesSinceService
 	}
 
 	@Override
-	public List<EventLog> findAllByContact(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByContact(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByContact(pageRequest, iso8601);
+		List<EventLog> eventLogs = dao.findAllByContact(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
 			if(!eventLog.getEventType().equals(EventType.DELETE)) {
 				refIds.add(eventLog.getObjectRefId());
 			}
 		});
 
-		List<StudentContact> contacts = contact.findByRefIds(refIds);
+		List<StudentContact> contacts = contact.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			contacts.forEach(contact -> {
 				if(contact.getStudentContactRefId().equalsIgnoreCase(eventLog.getObjectRefId())){

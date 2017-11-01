@@ -3,12 +3,10 @@ package org.ricone.api.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.mapping.xPress.XCalendarMapper;
-import org.ricone.api.mapping.xPress.XSchoolMapper;
-import org.ricone.api.model.core.School;
 import org.ricone.api.model.core.SchoolCalendar;
-import org.ricone.api.model.xpress.*;
+import org.ricone.api.model.xpress.XCalendarResponse;
+import org.ricone.api.model.xpress.XCalendarsResponse;
 import org.ricone.api.service.ICalendarService;
-import org.ricone.api.service.ISchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +28,9 @@ public class XCalendarController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return xCalendar by refId", tags = { "xCalendars" })
     @RequestMapping(value= "/requests/xCalendars/{refId}", method = RequestMethod.GET)
-    public XCalendarResponse getXCalendar(HttpServletResponse response, @PathVariable(value="refId") String refId) throws Exception
+    public XCalendarResponse getXCalendar(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        SchoolCalendar instance = service.findByRefId(refId);
+        SchoolCalendar instance = service.findByRefId(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -41,7 +39,7 @@ public class XCalendarController extends AbstractController
     @RequestMapping(value = "/requests/xCalendars", method = RequestMethod.GET)
     public XCalendarsResponse getXCalendars(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<SchoolCalendar> instance = service.findAll(getPaging(pageRequest));
+        List<SchoolCalendar> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -51,7 +49,7 @@ public class XCalendarController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xCalendars", method = RequestMethod.GET)
     public XCalendarsResponse getXCalendarsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<SchoolCalendar> instance = service.findAllByLea(getPaging(pageRequest), refId);
+        List<SchoolCalendar> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -60,7 +58,7 @@ public class XCalendarController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xCalendars", method = RequestMethod.GET)
     public XCalendarsResponse getXCalendarsBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<SchoolCalendar> instance = service.findAllBySchool(getPaging(pageRequest), refId);
+        List<SchoolCalendar> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

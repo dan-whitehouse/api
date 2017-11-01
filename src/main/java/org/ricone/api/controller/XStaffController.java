@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.mapping.xPress.XStaffMapper;
 import org.ricone.api.model.core.Staff;
-import org.ricone.api.model.xpress.XRoster;
 import org.ricone.api.model.xpress.XStaffResponse;
 import org.ricone.api.model.xpress.XStaffsResponse;
 import org.ricone.api.service.IStaffService;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -30,9 +28,9 @@ public class XStaffController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return xStaff by refId", tags = { "xStaffs" })
     @RequestMapping(value= "/requests/xStaffs/{refId}", method = RequestMethod.GET)
-    public XStaffResponse getXStaff(HttpServletResponse response, HttpServletRequest request, @PathVariable(value="refId") String refId) throws Exception
+    public XStaffResponse getXStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        Staff instance = service.findById(request, refId);
+        Staff instance = service.findById(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -41,7 +39,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value = "/requests/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffs(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<Staff> instance = service.findAll(getPaging(pageRequest));
+        List<Staff> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -51,7 +49,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByLea(getPaging(pageRequest), refId);
+        List<Staff> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -60,7 +58,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllBySchool(getPaging(pageRequest), refId);
+        List<Staff> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -69,7 +67,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xCourses/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByCourse(getPaging(pageRequest), refId);
+        List<Staff> instance = service.findAllByCourse(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -78,7 +76,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xRosters/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByRoster(getPaging(pageRequest), refId);
+        List<Staff> instance = service.findAllByRoster(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -87,7 +85,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByStudent(getPaging(pageRequest), refId);
+        List<Staff> instance = service.findAllByStudent(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

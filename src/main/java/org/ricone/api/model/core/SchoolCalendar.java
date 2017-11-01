@@ -1,6 +1,11 @@
 package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "schoolcalendar")
 @JsonInclude(value= JsonInclude.Include.NON_EMPTY)
+@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SchoolCalendar implements java.io.Serializable
 {
     private static final long serialVersionUID = -4748613855950099628L;
@@ -89,7 +95,7 @@ public class SchoolCalendar implements java.io.Serializable
         this.calendarYear = calendarYear;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "schoolCalendar")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "schoolCalendar") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<SchoolCalendarSession> getSchoolCalendarSessions()
     {
         return this.schoolCalendarSessions;

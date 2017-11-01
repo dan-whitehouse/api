@@ -1,6 +1,11 @@
 package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "course")
 @JsonInclude(value= JsonInclude.Include.NON_EMPTY)
+@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Course implements java.io.Serializable
 {
     private static final long serialVersionUID = -7068659701898642886L;
@@ -66,7 +72,6 @@ public class Course implements java.io.Serializable
     {
         return this.courseRefId;
     }
-
     public void setCourseRefId(String courseRefId)
     {
         this.courseRefId = courseRefId;
@@ -78,7 +83,6 @@ public class Course implements java.io.Serializable
     {
         return this.school;
     }
-
     public void setSchool(School school)
     {
         this.school = school;
@@ -89,7 +93,6 @@ public class Course implements java.io.Serializable
     {
         return this.title;
     }
-
     public void setTitle(String title)
     {
         this.title = title;
@@ -100,7 +103,6 @@ public class Course implements java.io.Serializable
     {
         return this.description;
     }
-
     public void setDescription(String description)
     {
         this.description = description;
@@ -111,7 +113,6 @@ public class Course implements java.io.Serializable
     {
         return this.subjectCode;
     }
-
     public void setSubjectCode(String subjectCode)
     {
         this.subjectCode = subjectCode;
@@ -122,7 +123,6 @@ public class Course implements java.io.Serializable
     {
         return this.scedCourseCode;
     }
-
     public void setScedCourseCode(String scedcourseCode)
     {
         this.scedCourseCode = scedcourseCode;
@@ -133,7 +133,6 @@ public class Course implements java.io.Serializable
     {
         return this.scedCourseLevelCode;
     }
-
     public void setScedCourseLevelCode(String scedcourseLevelCode)
     {
         this.scedCourseLevelCode = scedcourseLevelCode;
@@ -144,40 +143,30 @@ public class Course implements java.io.Serializable
     {
         return this.scedCourseSubjectAreaCode;
     }
+    public void setScedCourseSubjectAreaCode(String scedcourseSubjectAreaCode) { this.scedCourseSubjectAreaCode = scedcourseSubjectAreaCode; }
 
-    public void setScedCourseSubjectAreaCode(String scedcourseSubjectAreaCode)
-    {
-        this.scedCourseSubjectAreaCode = scedcourseSubjectAreaCode;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<CourseSection> getCourseSections()
     {
         return this.courseSections;
     }
-
     public void setCourseSections(Set<CourseSection> coursesections)
     {
         this.courseSections = coursesections;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<CourseIdentifier> getCourseIdentifiers()
     {
         return this.courseIdentifiers;
     }
+    public void setCourseIdentifiers(Set<CourseIdentifier> courseidentifiers) { this.courseIdentifiers = courseidentifiers; }
 
-    public void setCourseIdentifiers(Set<CourseIdentifier> courseidentifiers)
-    {
-        this.courseIdentifiers = courseidentifiers;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<CourseGrade> getCourseGrades()
     {
         return this.courseGrades;
     }
-
     public void setCourseGrades(Set<CourseGrade> coursegrades)
     {
         this.courseGrades = coursegrades;
@@ -188,7 +177,6 @@ public class Course implements java.io.Serializable
     {
         return isDeleted;
     }
-
     public void setIsDeleted(Boolean isDeleted)
     {
         this.isDeleted = isDeleted;

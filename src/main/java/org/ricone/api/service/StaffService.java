@@ -1,14 +1,14 @@
 package org.ricone.api.service;
 
+import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.StaffDAO;
 import org.ricone.api.model.core.Staff;
 import org.ricone.api.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -20,45 +20,45 @@ public class StaffService implements IStaffService
 	StaffDAO dao;
 
 	@Override
-	public List<Staff> findAll(Pageable paging) throws Exception {
-		return dao.findAll(paging);
+	public List<Staff> findAll(MetaData metaData) throws Exception {
+		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<Staff> findAllByLea(Pageable paging, String refId) throws Exception {
-		return dao.findAllByLeaRefId(paging, refId);
+	public List<Staff> findAllByLea(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByLeaRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Staff> findAllBySchool(Pageable paging, String refId) throws Exception {
-		return dao.findAllBySchoolRefId(paging, refId);
+	public List<Staff> findAllBySchool(MetaData metaData, String refId) throws Exception {
+		return dao.findAllBySchoolRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Staff> findAllByCourse(Pageable paging, String refId) throws Exception {
-		return dao.findAllByCourseRefId(paging, refId);
+	public List<Staff> findAllByCourse(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByCourseRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Staff> findAllByRoster(Pageable paging, String refId) throws Exception {
-		return dao.findAllByRosterRefId(paging, refId);
+	public List<Staff> findAllByRoster(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByRosterRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Staff> findAllByStudent(Pageable paging, String refId) throws Exception {
-		return dao.findAllByStudentRefId(paging, refId);
+	public List<Staff> findAllByStudent(MetaData metaData, String refId) throws Exception {
+		return dao.findAllByStudentRefId(metaData, refId);
 	}
 
 	@Override
-	public Staff findById(HttpServletRequest request, String id) throws Exception {
+	public Staff findById(MetaData metaData, String id) throws Exception {
 		if (Util.isRefId(id)) {
-			return dao.findByRefId(id);
+			return dao.findByRefId(metaData, id);
 		}
-		else if(request.getHeader("IdType").equalsIgnoreCase("local")) {
-			return dao.findByLocalId(id);
+		else if(StringUtils.equalsIgnoreCase(metaData.getHeaders().get("IdType"), "local")) {
+			return dao.findByLocalId(metaData, id);
 		}
-		else if(request.getHeader("IdType").equalsIgnoreCase("state")) {
-			return dao.findByStateId(id);
+		else if(StringUtils.equalsIgnoreCase(metaData.getHeaders().get("IdType"), "state")) {
+			return dao.findByStateId(metaData, id);
 		}
 		else {
 			throw new NoResultException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
@@ -78,10 +78,5 @@ public class StaffService implements IStaffService
 	@Override
 	public void delete(Staff instance) {
 		dao.delete(instance);
-	}
-
-	@Override
-	public void deleteByRefId(String refId) {
-		dao.deleteByRefId(refId);
 	}
 }

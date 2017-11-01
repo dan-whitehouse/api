@@ -2,14 +2,16 @@ package org.ricone.api.mapping.xPress;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.ricone.api.model.core.*;
+import org.ricone.api.model.core.School;
+import org.ricone.api.model.core.SchoolGrade;
+import org.ricone.api.model.core.SchoolIdentifier;
+import org.ricone.api.model.core.SchoolTelephone;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component("XSchoolMapper")
 public class XSchoolMapper {

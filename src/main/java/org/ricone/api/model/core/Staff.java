@@ -1,6 +1,11 @@
 package org.ricone.api.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -9,6 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "staff")
 @JsonInclude(value= JsonInclude.Include.NON_EMPTY)
+@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Staff implements java.io.Serializable
 {
     private static final long serialVersionUID = 1919054468978898526L;
@@ -176,14 +182,14 @@ public class Staff implements java.io.Serializable
         this.type = type;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StaffCourseSection> getStaffCourseSections()
     {
         return this.staffCourseSections;
     }
     public void setStaffCourseSections(Set<StaffCourseSection> staffcoursesections) { this.staffCourseSections = staffcoursesections; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StaffIdentifier> getStaffIdentifiers()
     {
         return this.staffIdentifiers;
@@ -193,14 +199,14 @@ public class Staff implements java.io.Serializable
         this.staffIdentifiers = staffidentifiers;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "teacher")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "teacher") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StudentEnrollment> getStudentEnrollments()
     {
         return this.studentEnrollments;
     }
     public void setStudentEnrollments(Set<StudentEnrollment> studentenrollments) { this.studentEnrollments = studentenrollments; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StaffEmail> getStaffEmails()
     {
         return this.staffEmails;
@@ -210,7 +216,7 @@ public class Staff implements java.io.Serializable
         this.staffEmails = staffemails;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StaffAssignment> getStaffAssignments()
     {
         return this.staffAssignments;

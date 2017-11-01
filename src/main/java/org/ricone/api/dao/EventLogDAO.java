@@ -3,10 +3,10 @@ package org.ricone.api.dao;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.query.Query;
 import org.ricone.api.cache.CacheContainer;
+import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.exception.NoContentException;
 import org.ricone.api.model.core.EventLog;
 import org.ricone.api.model.core.extension.event.EventObject;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -24,7 +24,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
-	public List<EventLog> findAllByLea(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -42,9 +42,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 
@@ -53,7 +53,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	}
 
 	@Override
-	public List<EventLog> findAllBySchool(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -71,9 +71,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 
@@ -82,7 +82,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	}
 
 	@Override
-	public List<EventLog> findAllByCalendar(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByCalendar(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -100,9 +100,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 
@@ -111,7 +111,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	}
 
 	@Override
-	public List<EventLog> findAllByCourse(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByCourse(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -129,9 +129,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 
@@ -142,7 +142,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 
 
 	@Override
-	public List<EventLog> findAllByRoster(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByRoster(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -160,9 +160,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 
@@ -171,7 +171,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	}
 
 	@Override
-	public List<EventLog> findAllByStaff(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByStaff(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -189,9 +189,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 
@@ -200,7 +200,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	}
 
 	@Override
-	public List<EventLog> findAllByStudent(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByStudent(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -218,9 +218,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 
@@ -229,7 +229,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	}
 
 	@Override
-	public List<EventLog> findAllByContact(Pageable pageRequest, LocalDateTime iso8601) throws Exception {
+	public List<EventLog> findAllByContact(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
@@ -247,9 +247,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
 		Query<EventLog> q = getSession().createQuery(select);
-		if(pageRequest.isPaged()){
-			q.setFirstResult(pageRequest.getPageNumber() * pageRequest.getPageSize());
-			q.setMaxResults(pageRequest.getPageSize());
+		if(metaData.getPaging().isPaged()){
+			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 		List<EventLog> instance = q.getResultList();
 

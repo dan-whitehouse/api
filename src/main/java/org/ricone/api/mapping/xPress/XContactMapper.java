@@ -2,12 +2,13 @@ package org.ricone.api.mapping.xPress;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.ricone.api.model.core.*;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Component("XContactMapper")
 public class XContactMapper {

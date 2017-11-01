@@ -1,8 +1,9 @@
 package org.ricone.api.mapping.xPress;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
-import org.ricone.api.model.core.*;
+import org.ricone.api.model.core.Course;
+import org.ricone.api.model.core.CourseGrade;
+import org.ricone.api.model.core.CourseIdentifier;
 import org.ricone.api.model.xpress.*;
 import org.springframework.stereotype.Component;
 
