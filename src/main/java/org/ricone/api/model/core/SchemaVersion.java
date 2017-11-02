@@ -43,7 +43,6 @@ public class SchemaVersion implements java.io.Serializable
 	{
 		return major;
 	}
-
 	public void setMajor(Integer major)
 	{
 		this.major = major;
@@ -54,7 +53,6 @@ public class SchemaVersion implements java.io.Serializable
 	{
 		return minor;
 	}
-
 	public void setMinor(Integer minor)
 	{
 		this.minor = minor;
@@ -65,7 +63,6 @@ public class SchemaVersion implements java.io.Serializable
 	{
 		return bugFix;
 	}
-
 	public void setBugFix(Integer bugFix)
 	{
 		this.bugFix = bugFix;
@@ -76,7 +73,6 @@ public class SchemaVersion implements java.io.Serializable
 	{
 		return description;
 	}
-
 	public void setDescription(String description)
 	{
 		this.description = description;
@@ -88,9 +84,14 @@ public class SchemaVersion implements java.io.Serializable
 	{
 		return dateApplied;
 	}
-
 	public void setDateApplied(Date dateApplied)
 	{
 		this.dateApplied = dateApplied;
+	}
+
+	@Transient
+	public String getVersion()
+	{
+		return major + "." + minor + "." + bugFix;
 	}
 }

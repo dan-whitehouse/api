@@ -1,58 +1,55 @@
 package org.ricone.api.dao;
 
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.ricone.api.cache.CacheContainer;
+import org.hibernate.query.Query;
 import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.config.ConfigProperties;
 import org.ricone.api.exception.ConfigException;
+import org.ricone.api.model.core.SchemaVersion;
 import org.ricone.api.model.info.Api;
 import org.ricone.api.model.info.Config;
 import org.ricone.api.model.info.Db;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Repository
-public class InfoDAO
+public class InfoDAO extends AbstractDAO<Integer, SchemaVersion>
 {
-	@Autowired
-	private SessionFactory sessionFactory;
-	private final CacheContainer cacheContainer = new CacheContainer();
+	private final String MAJOR = "major";
+	private final String MINOR = "minor";
+	private final String BUG = "bugFix";
 
 	@Resource
 	private Environment env;
 
-	private Session getCurrentSession() {
-		return sessionFactory.getCurrentSession();
-	}
-
 	public Db getDB()
 	{
+		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		final CriteriaQuery<SchemaVersion> select = cb.createQuery(SchemaVersion.class);
+		final Root<SchemaVersion> from = select.from(SchemaVersion.class);
+
+		select.distinct(true);
+		select.select(from);
+
+		select.orderBy(cb.desc(from.get(MAJOR)), cb.desc(from.get(MINOR)), cb.desc(from.get(BUG)));
+
+		Query<SchemaVersion> q = getSession().createQuery(select).setMaxResults(1);
+		SchemaVersion schemaVersion = q.getSingleResult();
+
 		Db db = new Db();
-		String version = null;
-		String query = "select concat(sv.major, '.', sv.minor, '.', sv.bugFix) as version from SchemaVersion sv order by sv.dateApplied desc";
-
-		try
-		{
-			version = (String) getCurrentSession().createQuery(query).setMaxResults(1).uniqueResult();
-		}
-		catch(Exception e) {}
-
-		if(StringUtils.isNotBlank(version))
-		{
-			db.setVersion(version);
+		if(schemaVersion != null) {
+			db.setVersion(schemaVersion.getVersion());
 			db.setStatus("Up");
 		}
-		else
-		{
+		else {
 			db.setStatus("Down");
 		}
 		return db;

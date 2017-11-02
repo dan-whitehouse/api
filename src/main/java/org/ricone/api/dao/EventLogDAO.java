@@ -6,16 +6,16 @@ import org.ricone.api.cache.CacheContainer;
 import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.exception.NoContentException;
 import org.ricone.api.model.core.EventLog;
+import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.core.extension.event.EventObject;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository("changesSinceDAO")
+@SuppressWarnings("unchecked")
 public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEventLogDAO
 {
 	private final String OBJECT = "object";
@@ -28,6 +28,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -35,8 +36,9 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		(
 			cb.and
 			(
-					cb.equal(from.get(OBJECT), EventObject.LEA),
-					cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.equal(from.get(OBJECT), EventObject.LEA),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
@@ -57,6 +59,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -65,7 +68,8 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 			cb.and
 			(
 				cb.equal(from.get(OBJECT), EventObject.SCHOOL),
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
@@ -86,6 +90,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -94,7 +99,8 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 			cb.and
 			(
 				cb.equal(from.get(OBJECT), EventObject.CALENDAR),
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
@@ -115,6 +121,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -123,7 +130,8 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 			cb.and
 			(
 				cb.equal(from.get(OBJECT), EventObject.COURSE),
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
@@ -146,6 +154,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -154,7 +163,8 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 			cb.and
 			(
 				cb.equal(from.get(OBJECT), EventObject.ROSTER),
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
@@ -175,6 +185,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -183,7 +194,8 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 			cb.and
 			(
 				cb.equal(from.get(OBJECT), EventObject.STAFF),
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
@@ -204,6 +216,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -212,7 +225,8 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 			cb.and
 			(
 				cb.equal(from.get(OBJECT), EventObject.STUDENT),
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
@@ -233,6 +247,7 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
 		final Root<EventLog> from = select.from(EventLog.class);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -241,7 +256,8 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 			cb.and
 			(
 				cb.equal(from.get(OBJECT), EventObject.CONTACT),
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601)
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIME_STAMP), iso8601),
+				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));

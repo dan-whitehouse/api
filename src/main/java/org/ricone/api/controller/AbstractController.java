@@ -31,6 +31,23 @@ public abstract class AbstractController
     public AbstractController(){
     }
 
+    public MetaData getMetaData(Pageable pageRequest) throws Exception
+    {
+        AuthRequest authRequest = new AuthRequest(request);
+        DecodedToken token = TokenDecoder.decodeToken(authRequest.getToken());
+        Session session = SessionManager.getInstance().getSession(token.getApplication_id());
+
+        Pageable pageable = getPaging(pageRequest);
+        Map<String, String> headers = getHeaders(request);
+
+        MetaData metaData = new MetaData();
+        metaData.setApp(session.getApp());
+        metaData.setToken(session.getToken());
+        metaData.setPaging(pageable);
+
+        return metaData;
+    }
+
     public Pageable getPaging(Pageable pageRequest) throws Exception
     {
         boolean hasPage = StringUtils.isNotBlank(request.getHeader("page"));
@@ -50,23 +67,6 @@ public abstract class AbstractController
         }
 
         return pageRequest;
-    }
-
-    public MetaData getMetaData(Pageable pageRequest) throws Exception
-    {
-        AuthRequest authRequest = new AuthRequest(request);
-        DecodedToken token = TokenDecoder.decodeToken(authRequest.getToken());
-        Session session = SessionManager.getInstance().getSession(token.getApplication_id());
-
-        Pageable pageable = getPaging(pageRequest);
-        Map<String, String> headers = getHeaders(request);
-
-        MetaData metaData = new MetaData();
-        metaData.setApp(session.getApp());
-        metaData.setToken(session.getToken());
-        metaData.setPaging(pageable);
-
-        return metaData;
     }
 
     public AuthRequest getAuthRequest() throws ConfigException {

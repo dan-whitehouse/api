@@ -50,6 +50,8 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 
 	@Override
 	public List<School> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
+		System.out.println("dao");
+
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<School> select = cb.createQuery(School.class);
 		final Root<School> from = select.from(School.class);
@@ -303,7 +305,6 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 
 		select.distinct(true);
 		select.select(from);
-		select.where();
 		select.where
 		(
 			cb.and

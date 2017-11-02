@@ -11,12 +11,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.api.model.core.extension.event.EventObject;
 import org.ricone.api.model.core.extension.event.EventType;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonPropertyOrder({
         "@refId",
+        "eventObject",
         "eventType",
         "eventDate",
         "xLea",
@@ -32,6 +34,8 @@ public class XChangeSince {
 
     @JsonProperty("@refId")
     private String refId;
+    @JsonProperty("eventObject")
+    private EventObject eventObject;
     @JsonProperty("eventType")
     private EventType eventType;
     @JsonProperty("eventDate")
@@ -56,9 +60,10 @@ public class XChangeSince {
     public XChangeSince() {
     }
 
-    public XChangeSince(String refId, EventType eventType, String eventDate) {
+    public XChangeSince(String refId, EventObject eventObject, EventType eventType, String eventDate) {
         super();
         this.refId = refId;
+        this.eventObject = eventObject;
         this.eventType = eventType;
         this.eventDate = eventDate;
     }
@@ -69,6 +74,11 @@ public class XChangeSince {
     }
     @JsonProperty("@refId")
     public void setRefId(String refId) { this.refId = refId; }
+
+    @JsonProperty("eventObject")
+    public EventObject getEventObject() { return eventObject; }
+    @JsonProperty("eventObject")
+    public void setEventObject(EventObject eventObject) { this.eventObject = eventObject; }
 
     @JsonProperty("eventType")
     public EventType getEventType() {
@@ -132,6 +142,7 @@ public class XChangeSince {
     public String toString() {
         return "XChangeSince{" +
                 "refId='" + refId + '\'' +
+                ", eventTObject='" + eventObject + '\'' +
                 ", eventType='" + eventType + '\'' +
                 ", eventDate=" + eventDate +
                 '}';

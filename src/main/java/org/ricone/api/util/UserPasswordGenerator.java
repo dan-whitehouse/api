@@ -3,14 +3,16 @@ package org.ricone.api.util;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.RandomStringGenerator;
 import org.ricone.api.model.core.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+
+import static org.apache.commons.text.CharacterPredicates.DIGITS;
 
 @Component
 public class UserPasswordGenerator
@@ -326,10 +328,11 @@ public class UserPasswordGenerator
     		}
     		else
     		{
-    			yy = RandomStringUtils.randomNumeric(2);
+				RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('0', '9').filteredBy(DIGITS).build();
+    			yy = generator.generate(2);
     		}
     		return (firstName.charAt(0) + "" + lastName.charAt(0) + "" + yy).toLowerCase();
-    	}   	
+    	}
     	return null;
     }
     
@@ -357,7 +360,8 @@ public class UserPasswordGenerator
 			}
 			else
 			{
-				localId = RandomStringUtils.randomNumeric(4);
+				RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('0', '9').filteredBy(DIGITS).build();
+				localId = generator.generate(4);
 			}
 			return (student.getFirstName().charAt(0) + "" + student.getLastName().charAt(0) + "" + localId).toLowerCase();
 		}
@@ -378,7 +382,8 @@ public class UserPasswordGenerator
 			}
 			else
 			{
-				localId = RandomStringUtils.randomNumeric(4);
+				RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('0', '9').filteredBy(DIGITS).build();
+				localId = generator.generate(4);
 			}
 			return (staff.getFirstName().charAt(0) + "" + staff.getLastName().charAt(0) + "" + localId).toLowerCase();
 		}

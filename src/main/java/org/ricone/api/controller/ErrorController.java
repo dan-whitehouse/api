@@ -5,7 +5,6 @@ import org.ricone.api.exception.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,14 +25,22 @@ public class ErrorController
 
 	@ResponseBody
 	@ExceptionHandler(UnauthorizedException.class)
-	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 	public Error unauthorized(HttpServletRequest request, HttpServletResponse response, Exception ex)
+	{
+		return error(request.getRequestURL().toString(), 401, "Unauthorized", ex.getMessage());
+	}
+
+	@ResponseBody
+	@ExceptionHandler(ForbiddenException.class)
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	public Error forbidden(HttpServletRequest request, HttpServletResponse response, Exception ex)
 	{
 		return error(request.getRequestURL().toString(), 403, "Forbidden", ex.getMessage());
 	}
 
 	@ResponseBody
-	@ExceptionHandler({NoResultException.class})
+	@ExceptionHandler({NotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND) 
     private Error notFound(HttpServletRequest request, HttpServletResponse response, Exception ex)
     {

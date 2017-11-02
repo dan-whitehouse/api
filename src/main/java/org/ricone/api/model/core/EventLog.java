@@ -1,5 +1,6 @@
 package org.ricone.api.model.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -21,10 +22,11 @@ public class EventLog implements java.io.Serializable
 	private String eventRefId;
 	private EventType eventType;
 	private LocalDateTime eventTimestamp;
-	private String leaRefId;
+	private Lea lea;
 	private EventObject object;
 	private String objectRefId;
-	private Lea lea;
+
+
 	private School school;
 	private SchoolCalendar calendar;
 	private Course course;
@@ -38,12 +40,12 @@ public class EventLog implements java.io.Serializable
 	{
 	}
 
-	public EventLog(String eventRefId, EventType eventType, LocalDateTime  eventTimestamp, String learefId, EventObject object, String objectRefId)
+	public EventLog(String eventRefId, EventType eventType, LocalDateTime  eventTimestamp, Lea lea, EventObject object, String objectRefId)
 	{
 		this.eventRefId = eventRefId;
 		this.eventType = eventType;
 		this.eventTimestamp = eventTimestamp;
-		this.leaRefId = learefId;
+		this.lea = lea;
 		this.object = object;
 		this.objectRefId = objectRefId;
 	}
@@ -77,14 +79,16 @@ public class EventLog implements java.io.Serializable
 	}
 	public void setEventTimestamp(LocalDateTime  eventTimestamp) { this.eventTimestamp = eventTimestamp; }
 
-	@Column(name = "LEARefId", nullable = false, length = 64)
-	public String getLeaRefId()
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "LEARefId", nullable = false)
+	public Lea getLea()
 	{
-		return this.leaRefId;
+		return this.lea;
 	}
-	public void setLeaRefId(String learefId)
+	public void setLea(Lea lea)
 	{
-		this.leaRefId = learefId;
+		this.lea = lea;
 	}
 
 	@Column(name = "Object", nullable = false)
@@ -108,9 +112,6 @@ public class EventLog implements java.io.Serializable
 		this.objectRefId = objectRefId;
 	}
 
-	@Transient
-	public Lea getLea() { return lea; }
-	public void setLea(Lea lea) { this.lea = lea; }
 
 	@Transient
 	public School getSchool() { return school; }
@@ -146,7 +147,7 @@ public class EventLog implements java.io.Serializable
 				"eventRefId='" + eventRefId + '\'' +
 				", eventType='" + eventType + '\'' +
 				", eventTimestamp=" + eventTimestamp +
-				", leaRefId='" + leaRefId + '\'' +
+				", lea='" + lea + '\'' +
 				", object='" + object + '\'' +
 				", objectRefId='" + objectRefId + '\'' +
 				'}';

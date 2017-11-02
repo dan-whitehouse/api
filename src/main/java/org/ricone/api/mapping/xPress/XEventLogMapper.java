@@ -59,6 +59,7 @@ public class XEventLogMapper {
 
         XChangeSince xChangeSince = new XChangeSince();
         xChangeSince.setRefId(eventLog.getEventRefId());
+        //xChangeSince.setEventObject(eventLog.getObject());
         xChangeSince.setEventType(eventLog.getEventType());
         xChangeSince.setEventDate(eventLog.getEventTimestamp().toString());
 

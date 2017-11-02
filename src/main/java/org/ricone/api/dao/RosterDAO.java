@@ -122,7 +122,8 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final Root<CourseSection> from = select.from(CourseSection.class);
 		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
 		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
+
 		select.distinct(true);
 		select.select(from);
 		select.where();
@@ -172,9 +173,8 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
 		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-
-		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -227,9 +227,9 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final Join<StaffCourseSection, Staff> staff = (Join<StaffCourseSection, Staff>)staffCourseSections.<StaffCourseSection, Staff>fetch("staff", JoinType.LEFT);
 		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
 
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
+		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -282,9 +282,9 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>)studentCourseSections.<StudentEnrollment, Student>fetch("student", JoinType.LEFT);
 		final SetJoin<Student, StudentIdentifier> studentIdentifiers = (SetJoin<Student, StudentIdentifier>) student.<Student, StudentIdentifier>fetch("studentIdentifiers", JoinType.LEFT);
 
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
+		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -333,9 +333,9 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
+		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);
@@ -380,9 +380,9 @@ public class RosterDAO extends AbstractDAO<Integer, CourseSection> implements IR
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<CourseSection> select = cb.createQuery(CourseSection.class);
 		final Root<CourseSection> from = select.from(CourseSection.class);
-		final Join<CourseSection, Course> course = from.join("course", JoinType.LEFT);
-		final Join<Course, School> school = course.join("school", JoinType.LEFT);
-		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>)from.<CourseSection, Course>fetch("course", JoinType.LEFT);
+		final Join<Course, School> school = (Join<Course, School>)course.<Course, School>fetch("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
 
 
 		final Join<CourseSection, SchoolCalendarSession> schoolCalendarSession = from.join("schoolCalendarSession", JoinType.LEFT);

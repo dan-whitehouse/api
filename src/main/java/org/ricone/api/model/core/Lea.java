@@ -34,6 +34,7 @@ public class Lea implements java.io.Serializable
 	private String countryCode;
 	private Set<School> schools = new HashSet<>(0);
 	private Set<LeaTelephone> leaTelephones = new HashSet<>(0);
+	private Set<EventLog> eventLogs = new HashSet<>(0);
 
 	public Lea()
 	{
@@ -224,6 +225,11 @@ public class Lea implements java.io.Serializable
 	{
 		this.leaTelephones = leatelephones;
 	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lea") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	public Set<EventLog> getEventLogs() { return eventLogs; }
+	public void setEventLogs(Set<EventLog> eventLogs) { this.eventLogs = eventLogs; }
+
 
 	@Override
 	public String toString() {

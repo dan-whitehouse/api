@@ -1,7 +1,9 @@
 package org.ricone.api.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.LeaDAO;
+import org.ricone.api.exception.NotFoundException;
 import org.ricone.api.model.core.Lea;
 import org.ricone.api.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +65,11 @@ public class LeaService implements ILeaService
 		if (Util.isRefId(id)) {
 			return dao.findByRefId(metaData, id);
 		}
-		else {
+		else if(StringUtils.equalsIgnoreCase(metaData.getHeader("IdType"), "local")) {
 			return dao.findByLocalId(metaData, id);
+		}
+		else {
+			throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
 		}
 	}
 

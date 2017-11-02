@@ -4,10 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * @project: ricone
- * @author: Dan on 9/27/2017.
- */
 public class Util
 {
     public static boolean isRefId(String refId)
@@ -15,20 +11,11 @@ public class Util
         return refId.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}");
     }
 
-    public static boolean isGradeGreater(String grade, String grade2)
-    {
-        if(getGradeAsInt(grade) > getGradeAsInt(grade2))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+    static boolean isGradeGreater(String grade, String grade2) {
+        return getGradeAsInt(grade) > getGradeAsInt(grade2);
     }
 
-    public static int getGradeAsInt(String grade)
-    {
+    private static int getGradeAsInt(String grade) {
         if(grade.equalsIgnoreCase("IT")) //Infant/toddler
         {
             return -4;
@@ -67,13 +54,12 @@ public class Util
         }
     }
 
-    public static boolean isInteger(String s)
+    private static boolean isInteger(String s)
     {
         return isInteger(s, 10);
     }
 
-    public static boolean isInteger(String s, int radix)
-    {
+    private static boolean isInteger(String s, int radix) {
         if(s.isEmpty())
         {
             return false;
@@ -101,8 +87,7 @@ public class Util
         return true;
     }
 
-    public static String get2DigitYear(Date d)
-    {
+    static String get2DigitYear(Date d) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.format(d).substring(2, 4);
     }

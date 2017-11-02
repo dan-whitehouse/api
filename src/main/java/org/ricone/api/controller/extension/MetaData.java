@@ -5,6 +5,7 @@ import org.ricone.api.security.DecodedToken;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class MetaData {
 
@@ -40,6 +41,16 @@ public class MetaData {
     }
 
     public Map<String, String> getHeaders() { return headers; }
+
+    public String getHeader(String header) {
+        if(headers != null) {
+            Optional<Map.Entry<String, String>> map =  headers.entrySet().stream().filter(entry -> entry.getKey().equalsIgnoreCase(header)).findAny();
+            if(map.isPresent()) {
+                return map.get().getValue();
+            }
+        }
+       return null;
+    }
 
     public void setHeaders(Map<String, String> headers) { this.headers = headers; }
 }
