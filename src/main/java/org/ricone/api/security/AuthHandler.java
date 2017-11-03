@@ -2,16 +2,13 @@ package org.ricone.api.security;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.cache.AppCache;
-import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.component.config.model.App;
-import org.ricone.api.component.config.model.District;
 import org.ricone.api.exception.UnauthorizedException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.List;
 
 public class AuthHandler extends HandlerInterceptorAdapter 
 {
@@ -35,10 +32,8 @@ public class AuthHandler extends HandlerInterceptorAdapter
 				}
 				else
 				{
+					//Call data from our App Cache which is pulled at startup and refresh every 2 hours
 					App app = AppCache.getInstance().get(decodedToken.getApplication_id());
-					List<District> districts = ConfigService.getInstance().getDistrictsByApp(app.getId());
-					app.setDistricts(districts);
-
 					session = new Session();
 					session.setToken(decodedToken);
 					session.setApp(app);

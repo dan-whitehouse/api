@@ -5,8 +5,11 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.ricone.api.component.config.ConfigService;
 import org.ricone.api.component.config.model.App;
+import org.ricone.api.component.config.model.District;
 
 import javax.inject.Singleton;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
@@ -47,10 +50,25 @@ public class AppCache
 	 {
 	      cache.put(appId, app);
 	 }
-	 
+
+	 public void clearCache()
+	 {
+	 	cache.invalidateAll();
+	 }
+
 	 private App loadCache(String appId) 
 	 {
 		 System.out.println("Loaded from Config: " + appId);
-		 return ConfigService.getInstance().getApp(appId);
+		 App app = ConfigService.getInstance().getApp(appId);
+		 if(app != null)
+		 {
+			 List<District> districts = ConfigService.getInstance().getDistrictsByApp(app.getId());
+			 districts.forEach(district -> {
+				 HashMap<String, String> kv = ConfigService.getInstance().getDistrictAPIKV(district.getId());
+				 district.setKv(kv);
+			 });
+			 app.setDistricts(districts);
+		 }
+		 return app;
 	 }
 }

@@ -5,6 +5,7 @@ import org.ricone.api.model.core.Staff;
 import org.ricone.api.model.core.Student;
 import org.ricone.api.model.core.UserPassword;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  * @author: Dan on 10/29/2017.
  */
 public interface IUserPasswordDAO {
-    boolean provisionStaffsBySchool(List<Staff> staffs) throws Exception;
+    boolean provisionStaffsBySchool(MetaData metaData, HashMap<String, String> kv, List<Staff> staffs) throws Exception;
 
     boolean deleteStaffsBySchool(MetaData metaData, String refId) throws Exception;
 

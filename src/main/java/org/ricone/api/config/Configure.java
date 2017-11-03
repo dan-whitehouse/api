@@ -18,7 +18,7 @@ public class Configure
 		{
 			setConfigProperties();
 			ConfigService.getInstance().initializeCredential();
-			initializeAppCache();
+			//initializeAppCache();
 		} 
 		catch (ConfigException e)
 		{
@@ -79,13 +79,11 @@ public class Configure
 			{
 				for(App app : apps)
 				{
-
 					List<District> districts = ConfigService.getInstance().getDistrictsByApp(app.getId());
-					/*districts.forEach(district -> {
+					districts.forEach(district -> {
 						HashMap<String, String> kv = ConfigService.getInstance().getDistrictAPIKV(district.getId());
 						district.setKv(kv);
-					});*/
-
+					});
 					app.setDistricts(districts);
 					AppCache.getInstance().put(app.getId(), app);
 				}

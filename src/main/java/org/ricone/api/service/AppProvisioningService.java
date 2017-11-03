@@ -1,11 +1,13 @@
 package org.ricone.api.service;
 
-import org.ricone.api.component.config.ConfigService;
+import org.apache.commons.collections.CollectionUtils;
+import org.ricone.api.component.config.model.District;
 import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.dao.LeaDAO;
 import org.ricone.api.dao.StaffDAO;
 import org.ricone.api.dao.StudentDAO;
 import org.ricone.api.dao.UserPasswordDAO;
+import org.ricone.api.exception.ForbiddenException;
 import org.ricone.api.model.core.Lea;
 import org.ricone.api.model.core.Staff;
 import org.ricone.api.model.core.StaffIdentifier;
@@ -15,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service("appProvisioning")
@@ -40,26 +42,27 @@ public class AppProvisioningService implements IAppProvisioningService
 	@Autowired
 	UserPasswordGenerator generator;
 
-
-
 	@Override
 	public boolean provisionStaffsBySchool(MetaData metaData, String refId) throws Exception{
-		List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
-
 		Lea l = leaDAO.findBySchoolRefId(metaData, refId);
+		Optional<District> district = metaData.getApp().getDistricts().stream().filter(d -> d.getId().equalsIgnoreCase(l.getLeaId())).findFirst();
 
-		HashMap<String, String> kv = ConfigService.getInstance().getDistrictAPIKV(l.getLeaRefId());
-		staffs.forEach(t -> {
-			StaffIdentifier ti = new StaffIdentifier();
-			ti.setIdentificationSystemCode(LOGIN_ID);
-			ti.setStaff(t);
-			ti.setStaffId(generator.getUsername(kv, t, null));
-			ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
-			t.getStaffIdentifiers().add(ti);
-			staffDAO.update(t);
-		});
-
-		return userPasswordDAO.provisionStaffsBySchool(staffs);
+		if(district.isPresent()){
+			if(CollectionUtils.isNotEmpty(district.get().getKv().entrySet())) {
+				List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
+				staffs.forEach(t -> {
+					StaffIdentifier ti = new StaffIdentifier();
+					ti.setIdentificationSystemCode(LOGIN_ID);
+					ti.setStaff(t);
+					ti.setStaffId(generator.getUsername(district.get().getKv(), t, null));
+					ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
+					t.getStaffIdentifiers().add(ti);
+					staffDAO.update(t);
+				});
+				return userPasswordDAO.provisionStaffsBySchool(metaData, district.get().getKv(), staffs);
+			}
+		}
+		throw new ForbiddenException("The district associated to this school has not been configured for account provisioning");
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import org.apache.commons.text.RandomStringGenerator;
 import org.ricone.api.model.core.*;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Singleton;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.Set;
 import static org.apache.commons.text.CharacterPredicates.DIGITS;
 
 @Component
+@Singleton
 public class UserPasswordGenerator
 {
     private static UserPasswordGenerator instance = null;

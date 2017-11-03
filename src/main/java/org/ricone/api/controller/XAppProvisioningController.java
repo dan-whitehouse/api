@@ -34,8 +34,9 @@ public class XAppProvisioningController extends AbstractController
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value="Create User Accounts for xStaffs by xSchool refId ", tags = { "xAppProvisioning" })
     @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.POST, params = {"createUsers"})
-    public void provisionXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
+    public void provisionXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="createUsers") boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
     {
+        System.out.println("controller: provisionXStaffsBySchool");
         boolean isProvisioned = service.provisionStaffsBySchool(getMetaData(pageRequest), refId);
     }
 

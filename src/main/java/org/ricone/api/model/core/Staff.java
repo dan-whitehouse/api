@@ -189,7 +189,7 @@ public class Staff implements java.io.Serializable
     }
     public void setStaffCourseSections(Set<StaffCourseSection> staffcoursesections) { this.staffCourseSections = staffcoursesections; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff", cascade = CascadeType.ALL) @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
     public Set<StaffIdentifier> getStaffIdentifiers()
     {
         return this.staffIdentifiers;

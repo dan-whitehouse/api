@@ -15,7 +15,7 @@ import java.util.Date;
 public class UserPassword implements Serializable
 {
 	private static final long serialVersionUID = 8607824899883665976L;
-	
+
 	@Id
 	private String entityRefId;
     @Id private EntityType entityType;
@@ -27,35 +27,17 @@ public class UserPassword implements Serializable
 	private Date generationDate;
 
 	@Column(name = "entityRefId", nullable = false)
-	public String getEntityRefId()
-	{
-		return entityRefId;
-	}
-	public void setEntityRefId(String entityRefId)
-	{
-		this.entityRefId = entityRefId;
-	}
+	public String getEntityRefId() { return entityRefId; }
+	public void setEntityRefId(String entityRefId) { this.entityRefId = entityRefId; }
 
 	@Column(name = "entityType", nullable = false)
 	@Convert(converter = EntityTypeConverter.class)
-	public EntityType getEntityType()
-	{
-		return entityType;
-	}
-	public void setEntityType(EntityType entityType)
-	{
-		this.entityType = entityType;
-	}
+	public EntityType getEntityType() { return entityType; }
+	public void setEntityType(EntityType entityType) { this.entityType = entityType; }
 
 	@Column(name = "appId", nullable = false)
-	public String getAppId()
-	{
-		return appId;
-	}
-	public void setAppId(String appId)
-	{
-		this.appId = appId;
-	}
+	public String getAppId() { return appId; }
+	public void setAppId(String appId) { this.appId = appId; }
 
 	@Column(name = "tempPassword", nullable = false)
 	public String getTempPassword()
