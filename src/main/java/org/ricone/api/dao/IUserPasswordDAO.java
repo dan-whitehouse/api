@@ -17,13 +17,13 @@ public interface IUserPasswordDAO {
 
     boolean deleteStaffsBySchool(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findStaffsBySchool(MetaData metaData, String refId) throws Exception;
+    List<UserPassword> findStaffsBySchool(MetaData metaData, String refId) throws Exception;
 
-    boolean provisionStudentsBySchool(MetaData metaData, String refId)throws Exception;
+    boolean provisionStudentsBySchool(MetaData metaData, HashMap<String, String> kv, List<Student> students)throws Exception;
 
     boolean deleteStudentsBySchool(MetaData metaData, String refId) throws Exception;
 
-    List<Student> findStudentsBySchool(MetaData metaData, String refId) throws Exception;
+    List<UserPassword> findStudentsBySchool(MetaData metaData, String refId) throws Exception;
 
     void save(UserPassword instance);
 

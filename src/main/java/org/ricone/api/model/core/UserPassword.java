@@ -26,6 +26,35 @@ public class UserPassword implements Serializable
 	private Date lastRetrieved;
 	private Date generationDate;
 
+	//Transient
+	private Staff staff;
+	private Student student;
+
+	public UserPassword() {
+	}
+
+	public UserPassword(String entityRefId, EntityType entityType, String appId, String tempPassword, Date expiryDate, Date lastRetrieved, Date generationDate, Staff staff) {
+		this.entityRefId = entityRefId;
+		this.entityType = entityType;
+		this.appId = appId;
+		this.tempPassword = tempPassword;
+		this.expiryDate = expiryDate;
+		this.lastRetrieved = lastRetrieved;
+		this.generationDate = generationDate;
+		this.staff = staff;
+	}
+
+	public UserPassword(String entityRefId, EntityType entityType, String appId, String tempPassword, Date expiryDate, Date lastRetrieved, Date generationDate, Student student) {
+		this.entityRefId = entityRefId;
+		this.entityType = entityType;
+		this.appId = appId;
+		this.tempPassword = tempPassword;
+		this.expiryDate = expiryDate;
+		this.lastRetrieved = lastRetrieved;
+		this.generationDate = generationDate;
+		this.student = student;
+	}
+
 	@Column(name = "entityRefId", nullable = false)
 	public String getEntityRefId() { return entityRefId; }
 	public void setEntityRefId(String entityRefId) { this.entityRefId = entityRefId; }
@@ -78,6 +107,30 @@ public class UserPassword implements Serializable
 	{
 		this.generationDate = generationDate;
 	}
+
+	@Transient
+	public Staff getStaff() { return staff; }
+	public void setStaff(Staff staff) { this.staff = staff; }
+
+	@Transient
+	public Student getStudent() { return student; }
+	public void setStudent(Student student) { this.student = student; }
+
+
+	@Override
+	public String toString() {
+		return "UserPassword{" +
+				"entityRefId='" + entityRefId + '\'' +
+				", entityType=" + entityType +
+				", appId='" + appId + '\'' +
+				", tempPassword='" + tempPassword + '\'' +
+				", expiryDate=" + expiryDate +
+				", lastRetrieved=" + lastRetrieved +
+				", generationDate=" + generationDate +
+				", staff=" + staff +
+				", student=" + student +
+				'}';
+	}
 }
 
 class UserPasswordComposite implements Serializable
@@ -97,3 +150,4 @@ class UserPasswordComposite implements Serializable
 		this.appId = appId;
 	}
 }
+

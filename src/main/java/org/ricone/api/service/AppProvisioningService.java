@@ -8,18 +8,13 @@ import org.ricone.api.dao.StaffDAO;
 import org.ricone.api.dao.StudentDAO;
 import org.ricone.api.dao.UserPasswordDAO;
 import org.ricone.api.exception.ForbiddenException;
-import org.ricone.api.model.core.Lea;
-import org.ricone.api.model.core.Staff;
-import org.ricone.api.model.core.StaffIdentifier;
-import org.ricone.api.model.core.Student;
+import org.ricone.api.model.core.*;
 import org.ricone.api.util.UserPasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service("appProvisioning")
 @Transactional
@@ -71,13 +66,31 @@ public class AppProvisioningService implements IAppProvisioningService
 	}
 
 	@Override
-	public List<Staff> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
+	public List<UserPassword> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
 		return userPasswordDAO.findStaffsBySchool(metaData, refId);
 	}
 
 	@Override
 	public boolean provisionStudentsBySchool(MetaData metaData, String refId) throws Exception {
-		return userPasswordDAO.provisionStudentsBySchool(metaData, refId);
+		Lea l = leaDAO.findBySchoolRefId(metaData, refId);
+		Optional<District> district = metaData.getApp().getDistricts().stream().filter(d -> d.getId().equalsIgnoreCase(l.getLeaId())).findFirst();
+
+		if(district.isPresent()){
+			if(CollectionUtils.isNotEmpty(district.get().getKv().entrySet())) {
+				List<Student> students = studentDAO.findAllBySchoolRefId(metaData, refId);
+				students.forEach(s -> {
+					StudentIdentifier si = new StudentIdentifier();
+					si.setIdentificationSystemCode(LOGIN_ID);
+					si.setStudent(s);
+					si.setStudentId(generator.getUsername(district.get().getKv(), s, null));
+					si.setStudentIdentifierRefId(UUID.randomUUID().toString());
+					s.getStudentIdentifiers().add(si);
+					studentDAO.update(s);
+				});
+				return userPasswordDAO.provisionStudentsBySchool(metaData, district.get().getKv(), students);
+			}
+		}
+		throw new ForbiddenException("The district associated to this school has not been configured for account provisioning");
 	}
 
 	@Override
@@ -86,7 +99,21 @@ public class AppProvisioningService implements IAppProvisioningService
 	}
 
 	@Override
-	public List<Student> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
-		return userPasswordDAO.findStudentsBySchool(metaData, refId);
+	public List<UserPassword> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
+		Set<String> refIds = new HashSet<>();
+		List<UserPassword> userPasswords = userPasswordDAO.findStudentsBySchool(metaData, refId);
+		userPasswords.forEach(userPassword -> {
+			refIds.add(userPassword.getEntityRefId());
+		});
+
+		List<Student> students = studentDAO.findByRefIds(metaData, refIds);
+		userPasswords.forEach(userPassword -> {
+			students.forEach(student -> {
+				if(student.getStudentRefId().equalsIgnoreCase(userPassword.getEntityRefId())){
+					userPassword.setStudent(student);
+				}
+			});
+		});
+		return userPasswords;
 	}
 }
