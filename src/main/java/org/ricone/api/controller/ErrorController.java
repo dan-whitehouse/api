@@ -24,6 +24,14 @@ public class ErrorController
 	/**** 40X ****/
 
 	@ResponseBody
+	@ExceptionHandler(BadRequestException.class)
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	public Error badRequest(HttpServletRequest request, HttpServletResponse response, Exception ex)
+	{
+		return error(request.getRequestURL().toString(), 400, "Bad Request", ex.getMessage());
+	}
+
+	@ResponseBody
 	@ExceptionHandler(UnauthorizedException.class)
 	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 	public Error unauthorized(HttpServletRequest request, HttpServletResponse response, Exception ex)
@@ -46,12 +54,20 @@ public class ErrorController
     {
 		return error(request.getRequestURL().toString(), 404, "Not Found", ex.getMessage());
     }
+
+	@ResponseBody
+	@ExceptionHandler({ConflictException.class})
+	@ResponseStatus(value = HttpStatus.CONFLICT)
+	private Error conflict(HttpServletRequest request, HttpServletResponse response, Exception ex)
+	{
+		return error(request.getRequestURL().toString(), 409, "Conflict", ex.getMessage());
+	}
     
     /**** 50X ****/
 	@ResponseBody
 	@ExceptionHandler({Exception.class, MappingException.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) 
-    private Error badRequest(HttpServletRequest request, HttpServletResponse response, Exception ex)
+    private Error serverError(HttpServletRequest request, HttpServletResponse response, Exception ex)
     {
 		return error(request.getRequestURL().toString(), 500, "Internal Server Error", ex.getMessage());
     }

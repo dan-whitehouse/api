@@ -18,4 +18,8 @@ public interface IAppProvisioningService {
     void deleteStaffsBySchool(MetaData metaData, String refId) throws Exception;
 
     void deleteStudentsBySchool(MetaData metaData, String refId) throws Exception;
+
+    void deleteStaffsLoginIdBySchool(MetaData metaData, String refId) throws Exception;
+
+    void deleteStudentsLoginIdBySchool(MetaData metaData, String refId) throws Exception;
 }

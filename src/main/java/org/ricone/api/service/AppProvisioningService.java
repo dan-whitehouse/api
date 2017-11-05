@@ -1,12 +1,9 @@
 package org.ricone.api.service;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.ricone.api.component.config.model.District;
 import org.ricone.api.controller.extension.MetaData;
-import org.ricone.api.dao.LeaDAO;
-import org.ricone.api.dao.StaffDAO;
-import org.ricone.api.dao.StudentDAO;
-import org.ricone.api.dao.UserPasswordDAO;
+import org.ricone.api.dao.*;
+import org.ricone.api.exception.ConflictException;
 import org.ricone.api.exception.ForbiddenException;
 import org.ricone.api.model.core.*;
 import org.ricone.api.util.UserPasswordGenerator;
@@ -24,66 +21,85 @@ public class AppProvisioningService implements IAppProvisioningService
 {
 	private final String LOGIN_ID = "LoginId";
 	private final String FORBIDDEN_EXCEPTION_MESSAGE = "The district associated to this school has not been configured for account provisioning";
+	private final String CONFLICT_EXCEPTION_MESSAGE = "All user accounts have already been created. To create new accounts, you must first delete existing ones";
 
 	@Autowired
 	UserPasswordDAO userPasswordDAO;
 
 	@Autowired
-	LeaDAO leaDAO;
-
-	@Autowired
 	StaffDAO staffDAO;
 
 	@Autowired
+	StaffIdentifierDAO staffIdentifierDAO;
+
+	@Autowired
 	StudentDAO studentDAO;
+
+	@Autowired
+	StudentIdentifierDAO studentIdentifierDAO;
 
 	@Autowired
 	UserPasswordGenerator generator;
 
 	@Override
 	public void provisionStaffsBySchool(MetaData metaData, String refId) throws Exception{
-		Lea l = leaDAO.findBySchoolRefId(metaData, refId);
-		Optional<District> district = metaData.getApp().getDistricts().stream().filter(d -> d.getId().equalsIgnoreCase(l.getLeaId())).findFirst();
-
-		if(district.isPresent()){
-			if(CollectionUtils.isNotEmpty(district.get().getKv().entrySet())) {
+		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			if(CollectionUtils.isNotEmpty(metaData.getApp().getDistrictKVsBySchool(refId).entrySet())) {
 				List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
-				staffs.forEach(t -> {
-					StaffIdentifier ti = new StaffIdentifier();
-					ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
-					ti.setStaff(t);
-					ti.setStaffId(generator.getUsername(district.get().getKv(), t, null));
-					ti.setIdentificationSystemCode(LOGIN_ID);
-					t.getStaffIdentifiers().add(ti);
-					staffDAO.update(t);
-				});
-				userPasswordDAO.provisionStaffsBySchool(metaData, district.get().getKv(), staffs);
+				int identifiersCreated = 0;
+				for (Staff t : staffs) {
+					Optional<StaffIdentifier> identifier = t.getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase("LoginId")).findFirst();
+					if (!identifier.isPresent()) {
+						StaffIdentifier ti = new StaffIdentifier();
+						ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
+						ti.setStaff(t);
+						ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, null));
+						ti.setIdentificationSystemCode(LOGIN_ID);
+						t.getStaffIdentifiers().add(ti);
+						staffDAO.update(t);
+						identifiersCreated++;
+					}
+				}
+				if(staffs.size() > 0 && identifiersCreated > 0){
+					//If we created a student identifier, make sure we create/update all user passwords
+					userPasswordDAO.provisionStaffsBySchool(metaData, metaData.getApp().getDistrictKVsBySchool(refId), staffs);
+				}
+				else {
+					throw new ConflictException(CONFLICT_EXCEPTION_MESSAGE);
+				}
 			}
 		}
-		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
+		else throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
 	public void provisionStudentsBySchool(MetaData metaData, String refId) throws Exception {
-		Lea l = leaDAO.findBySchoolRefId(metaData, refId);
-		Optional<District> district = metaData.getApp().getDistricts().stream().filter(d -> d.getId().equalsIgnoreCase(l.getLeaId())).findFirst();
-
-		if(district.isPresent()){
-			if(CollectionUtils.isNotEmpty(district.get().getKv().entrySet())) {
+		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			if(CollectionUtils.isNotEmpty(metaData.getApp().getDistrictKVsBySchool(refId).entrySet())) {
 				List<Student> students = studentDAO.findAllBySchoolRefId(metaData, refId);
-				students.forEach(s -> {
-					StudentIdentifier si = new StudentIdentifier();
-					si.setIdentificationSystemCode(LOGIN_ID);
-					si.setStudent(s);
-					si.setStudentId(generator.getUsername(district.get().getKv(), s, null));
-					si.setStudentIdentifierRefId(UUID.randomUUID().toString());
-					s.getStudentIdentifiers().add(si);
-					studentDAO.update(s);
-				});
-				userPasswordDAO.provisionStudentsBySchool(metaData, district.get().getKv(), students);
+				int identifiersCreated = 0;
+				for (Student s : students) {
+					Optional<StudentIdentifier> identifier = s.getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase("LoginId")).findFirst();
+					if (!identifier.isPresent()) {
+						StudentIdentifier si = new StudentIdentifier();
+						si.setIdentificationSystemCode(LOGIN_ID);
+						si.setStudent(s);
+						si.setStudentId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), s, null));
+						si.setStudentIdentifierRefId(UUID.randomUUID().toString());
+						s.getStudentIdentifiers().add(si);
+						studentDAO.update(s);
+						identifiersCreated++;
+					}
+				}
+				if(students.size() > 0 && identifiersCreated > 0){
+					userPasswordDAO.provisionStudentsBySchool(metaData, metaData.getApp().getDistrictKVsBySchool(refId), students);
+				}
+				else {
+					throw new ConflictException(CONFLICT_EXCEPTION_MESSAGE);
+				}
 			}
 		}
-		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
+		else throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
@@ -108,13 +124,41 @@ public class AppProvisioningService implements IAppProvisioningService
 
 	@Override
 	public void deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
-		userPasswordDAO.deleteStaffsBySchool(metaData, refId);
-		//userPasswordDAO.deleteStaffsLoginIdBySchool(metaData, refId);
+		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			userPasswordDAO.deleteStaffsBySchool(metaData, refId);
+		}
+		else throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
 	public void deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
-		userPasswordDAO.deleteStudentsBySchool(metaData, refId);
-		//userPasswordDAO.deleteStudentsLoginIdBySchool(metaData, refId);
+		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			userPasswordDAO.deleteStudentsBySchool(metaData, refId);
+		}
+		else throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
+	}
+
+	@Override
+	public void deleteStaffsLoginIdBySchool(MetaData metaData, String refId) throws Exception {
+		List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
+		for (Staff staff : staffs) {
+			Optional<StaffIdentifier> identifier = staff.getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
+			if(identifier.isPresent()) {
+				staff.getStaffIdentifiers().remove(identifier.get());
+				staffIdentifierDAO.delete(identifier.get());
+			}
+		}
+	}
+
+	@Override
+	public void deleteStudentsLoginIdBySchool(MetaData metaData, String refId) throws Exception {
+		List<Student> students = studentDAO.findAllBySchoolRefId(metaData, refId);
+		for (Student student : students) {
+			Optional<StudentIdentifier> identifier = student.getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
+			if(identifier.isPresent()) {
+				student.getStudentIdentifiers().remove(identifier.get());
+				studentIdentifierDAO.delete(identifier.get());
+			}
+		}
 	}
 }
