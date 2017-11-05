@@ -41,7 +41,7 @@ public class AppProvisioningService implements IAppProvisioningService
 	UserPasswordGenerator generator;
 
 	@Override
-	public boolean provisionStaffsBySchool(MetaData metaData, String refId) throws Exception{
+	public void provisionStaffsBySchool(MetaData metaData, String refId) throws Exception{
 		Lea l = leaDAO.findBySchoolRefId(metaData, refId);
 		Optional<District> district = metaData.getApp().getDistricts().stream().filter(d -> d.getId().equalsIgnoreCase(l.getLeaId())).findFirst();
 
@@ -57,28 +57,14 @@ public class AppProvisioningService implements IAppProvisioningService
 					t.getStaffIdentifiers().add(ti);
 					staffDAO.update(t);
 				});
-				return userPasswordDAO.provisionStaffsBySchool(metaData, district.get().getKv(), staffs);
+				userPasswordDAO.provisionStaffsBySchool(metaData, district.get().getKv(), staffs);
 			}
 		}
 		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
-	public boolean deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
-		return userPasswordDAO.deleteStaffsBySchool(metaData, refId);
-	}
-
-	@Override
-	public List<UserPassword> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
-		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
-			List<UserPassword> userPasswords = userPasswordDAO.findStaffsBySchool(metaData, refId);
-			return userPasswords;
-		}
-		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
-	}
-
-	@Override
-	public boolean provisionStudentsBySchool(MetaData metaData, String refId) throws Exception {
+	public void provisionStudentsBySchool(MetaData metaData, String refId) throws Exception {
 		Lea l = leaDAO.findBySchoolRefId(metaData, refId);
 		Optional<District> district = metaData.getApp().getDistricts().stream().filter(d -> d.getId().equalsIgnoreCase(l.getLeaId())).findFirst();
 
@@ -94,23 +80,41 @@ public class AppProvisioningService implements IAppProvisioningService
 					s.getStudentIdentifiers().add(si);
 					studentDAO.update(s);
 				});
-				return userPasswordDAO.provisionStudentsBySchool(metaData, district.get().getKv(), students);
+				userPasswordDAO.provisionStudentsBySchool(metaData, district.get().getKv(), students);
 			}
 		}
 		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
-	public boolean deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
-		return userPasswordDAO.deleteStudentsBySchool(metaData, refId);
+	public List<UserPassword> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
+		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			userPasswordDAO.updateStaffsLastRetrievedBySchool(metaData, refId);
+			List<UserPassword> userPasswords = userPasswordDAO.findStaffsBySchool(metaData, refId);
+			return userPasswords;
+		}
+		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
 	public List<UserPassword> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
 		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			userPasswordDAO.updateStudentsLastRetrievedBySchool(metaData, refId);
 			List<UserPassword> userPasswords = userPasswordDAO.findStudentsBySchool(metaData, refId);
 			return userPasswords;
 		}
 		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
+	}
+
+	@Override
+	public void deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
+		userPasswordDAO.deleteStaffsBySchool(metaData, refId);
+		//userPasswordDAO.deleteStaffsLoginIdBySchool(metaData, refId);
+	}
+
+	@Override
+	public void deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
+		userPasswordDAO.deleteStudentsBySchool(metaData, refId);
+		//userPasswordDAO.deleteStudentsLoginIdBySchool(metaData, refId);
 	}
 }

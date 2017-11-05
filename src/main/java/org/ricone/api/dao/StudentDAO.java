@@ -458,8 +458,7 @@ public class StudentDAO extends AbstractDAO<Integer, Student> implements IStuden
 	}
 
 	@Override
-	public Student findByRefId(MetaData metaData, String refId) throws Exception
-	{
+	public Student findByRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Student> select = cb.createQuery(Student.class);
 		final Root<Student> from = select.from(Student.class);

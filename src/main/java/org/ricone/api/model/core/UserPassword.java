@@ -16,8 +16,7 @@ public class UserPassword implements Serializable
 {
 	private static final long serialVersionUID = 8607824899883665976L;
 
-	@Id
-	private String entityRefId;
+	@Id private String entityRefId;
     @Id private EntityType entityType;
     @Id private String appId;
 
@@ -27,8 +26,8 @@ public class UserPassword implements Serializable
 	private Date generationDate;
 
 	//Transient
-	private Staff staff;
-	private Student student;
+	@Transient private Staff staff;
+	@Transient private Student student;
 
 	public UserPassword() {
 	}

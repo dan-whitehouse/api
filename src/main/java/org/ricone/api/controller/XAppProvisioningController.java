@@ -28,24 +28,24 @@ public class XAppProvisioningController extends AbstractController
     /* Staffs */
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value="Create User Accounts for xStaffs by xSchool refId ", tags = { "xAppProvisioning" })
-    @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.POST, params = {"createUsers"})
-    public void provisionXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="createUsers") boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
+    @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.POST, params = {"userPasswords"})
+    public void provisionXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="userPasswords") boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isProvisioned = service.provisionStaffsBySchool(getMetaData(pageRequest), refId);
+        service.provisionStaffsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value="Return all provisioned xStaffs by xSchool refId", tags = { "xAppProvisioning" })
-    @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.GET, params = {"deleteUsers"})
-    public void deleteXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="deleteUsers") boolean isDelete, @PathVariable(value="refId") String refId) throws Exception
+    @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.DELETE, params = {"userPasswords"})
+    public void deleteXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="userPasswords") boolean isDelete, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isDeleted = service.deleteStaffsBySchool(getMetaData(pageRequest), refId);
+        service.deleteStaffsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseBody
     @ApiOperation(value="Return all provisioned xStaffs by xSchool refId", tags = { "xAppProvisioning" })
-    @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.GET, params = {"getUsers"})
-    public XAppProvisioningResponse getXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="getUsers") boolean isGet, @PathVariable(value="refId") String refId) throws Exception
+    @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.GET, params = {"userPasswords"})
+    public XAppProvisioningResponse getXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="userPasswords") boolean isGet, @PathVariable(value="refId") String refId) throws Exception
     {
         List<UserPassword> instance = service.findStaffsBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
@@ -55,24 +55,24 @@ public class XAppProvisioningController extends AbstractController
     /* Student */
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value="Create User Accounts for xStudents by xSchool refId ", tags = { "xAppProvisioning" })
-    @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.POST, params = {"createUsers"})
-    public void provisionXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="createUsers") boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
+    @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.POST, params = {"userPasswords"})
+    public void provisionXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="userPasswords") boolean isCreate, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isProvisioned = service.provisionStudentsBySchool(getMetaData(pageRequest), refId);
+        service.provisionStudentsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value="Return all provisioned xStudents by xSchool refId", tags = { "xAppProvisioning" })
-    @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.GET, params = {"deleteUsers"})
-    public void deleteXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="deleteUsers") boolean isDelete, @PathVariable(value="refId") String refId) throws Exception
+    @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.DELETE, params = {"userPasswords"})
+    public void deleteXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="userPasswords") boolean isDelete, @PathVariable(value="refId") String refId) throws Exception
     {
-        boolean isDeleted = service.deleteStudentsBySchool(getMetaData(pageRequest), refId);
+        service.deleteStudentsBySchool(getMetaData(pageRequest), refId);
     }
 
     @ResponseBody
     @ApiOperation(value="Return all provisioned xStudents by xSchool refId", tags = { "xAppProvisioning" })
-    @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.GET, params = {"getUsers"})
-    public XAppProvisioningResponse getXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="getUsers") boolean isGet, @PathVariable(value="refId") String refId) throws Exception
+    @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.GET, params = {"userPasswords"})
+    public XAppProvisioningResponse getXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="userPasswords") boolean isGet, @PathVariable(value="refId") String refId) throws Exception
     {
         List<UserPassword> instance = service.findStudentsBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);

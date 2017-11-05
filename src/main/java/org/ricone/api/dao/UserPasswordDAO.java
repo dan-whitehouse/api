@@ -22,17 +22,6 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implements IUserPasswordDAO {
 
-    private final String APP_ID = "appId";
-    private final String ENTITY_TYPE = "entityType";
-    private final String ENTITY_REF_ID = "entityRefId";
-    private final String TEMP_PASSWORD = "tempPassword";
-    private final String EXPIRY_DATE = "expiryDate";
-    private final String LAST_RETRIEVED = "lastRetrieved";
-    private final String GEN_DATE = "generationDate";
-
-    private final String STAFF_REF_ID = "staffRefId";
-    private final String STUDENT_REF_ID = "studentRefId";
-
     @Autowired
     private UserPasswordGenerator generator;
 
@@ -40,7 +29,7 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
     private AES security;
 
     @Override
-    public boolean provisionStaffsBySchool(MetaData metaData, HashMap<String, String> kv, List<Staff> staffs) throws Exception {
+    public void provisionStaffsBySchool(MetaData metaData, HashMap<String, String> kv, List<Staff> staffs) throws Exception {
         staffs.forEach(staff -> {
             Date now = new Date();
             long ttl = (long)(Double.parseDouble(kv.get("api.userpass.password.ttl")) * 86400000);
@@ -59,13 +48,115 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
             userPassword.setLastRetrieved(null);
             update(userPassword);
         });
-
-        return false;
     }
 
     @Override
-    public boolean deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
-        return false;
+    public void provisionStudentsBySchool(MetaData metaData, HashMap<String, String> kv, List<Student> students) throws Exception {
+        students.forEach(student -> {
+            Date now = new Date();
+            long ttl = (long)(Double.parseDouble(kv.get("api.userpass.password.ttl")) * 86400000);
+            String password = generator.getPassword(kv, student, metaData.getApp().getId());
+            String key = security.getRefToKey(student.getStudentRefId());
+
+            //TODO - EntityType doesn't insert correctly. Hibernate Bug: https://hibernate.atlassian.net/browse/HHH-10594
+            UserPassword userPassword = new UserPassword();
+            userPassword.setEntityRefId(student.getStudentRefId());
+            userPassword.setEntityType(EntityType.STUDENT);
+            userPassword.setAppId(metaData.getApp().getId());
+            userPassword.setTempPassword(security.encrypt(password, key));
+
+            userPassword.setGenerationDate(now);
+            userPassword.setExpiryDate(new Date(ttl + now.getTime()));
+            userPassword.setLastRetrieved(null);
+            update(userPassword);
+        });
+    }
+
+    @Override
+    public void updateStaffsLastRetrievedBySchool(MetaData metaData, String refId) throws Exception {
+        final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        final CriteriaUpdate<UserPassword> update = cb.createCriteriaUpdate(UserPassword.class);
+        final Root<UserPassword> from = update.from(UserPassword.class);
+
+        //Sub Query
+        Subquery<Staff> subquery = update.subquery(Staff.class);
+        final Root<Staff> staff = subquery.from(Staff.class);
+        final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) staff.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+        final Join<StaffAssignment, School> school = staffAssignments.join("school", JoinType.LEFT);
+        final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+        subquery.select(staff.get(STAFF_REF_ID));
+        subquery.where
+        (
+            cb.and
+            (
+                cb.equal(school.get(SCHOOL_REF_ID), refId),
+                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+            )
+        );
+
+        //Update
+        update.set(LAST_RETRIEVED, new Date());
+        update.where
+        (
+            cb.and
+            (
+                cb.in(from.get(ENTITY_REF_ID)).value(subquery),
+                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
+                cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
+                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())
+            )
+        );
+
+        Query<UserPassword> q = getSession().createQuery(update);
+        if (metaData.getPaging().isPaged()) {
+            q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+            q.setMaxResults(metaData.getPaging().getPageSize());
+        }
+        q.executeUpdate();
+    }
+
+    @Override
+    public void updateStudentsLastRetrievedBySchool(MetaData metaData, String refId) throws Exception {
+        final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        final CriteriaUpdate<UserPassword> update = cb.createCriteriaUpdate(UserPassword.class);
+        final Root<UserPassword> from = update.from(UserPassword.class);
+
+        //Sub Query
+        Subquery<Student> subquery = update.subquery(Student.class);
+        final Root<Student> student = subquery.from(Student.class);
+        final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>join("studentEnrollments", JoinType.LEFT);
+        final Join<StudentEnrollment, School> school = studentEnrollments.join("school", JoinType.LEFT);
+        final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+
+        subquery.select(student.get(STUDENT_REF_ID));
+        subquery.where
+        (
+            cb.and
+            (
+                cb.equal(school.get(SCHOOL_REF_ID), refId),
+                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+            )
+        );
+
+        //Update
+        update.set(LAST_RETRIEVED, new Date());
+        update.where
+        (
+            cb.and
+            (
+                cb.in(from.get(ENTITY_REF_ID)).value(subquery),
+                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
+                cb.equal(from.get(ENTITY_TYPE), EntityType.STUDENT),
+                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())
+            )
+        );
+
+        Query<UserPassword> q = getSession().createQuery(update);
+        if (metaData.getPaging().isPaged()) {
+            q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+            q.setMaxResults(metaData.getPaging().getPageSize());
+        }
+        q.executeUpdate();
     }
 
     @Override
@@ -107,6 +198,7 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
                 cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
                 cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()),
                 cb.equal(from.get(ENTITY_REF_ID), staff.get(STAFF_REF_ID)),
+                cb.equal(school.get(SCHOOL_REF_ID), refId),
                 lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
             )
         );
@@ -123,35 +215,6 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
 
         if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
         return instance;
-    }
-
-    @Override
-    public boolean provisionStudentsBySchool(MetaData metaData, HashMap<String, String> kv, List<Student> students) throws Exception {
-        students.forEach(student -> {
-            Date now = new Date();
-            long ttl = (long)(Double.parseDouble(kv.get("api.userpass.password.ttl")) * 86400000);
-            String password = generator.getPassword(kv, student, metaData.getApp().getId());
-            String key = security.getRefToKey(student.getStudentRefId());
-
-            //TODO - EntityType doesn't insert correctly. Hibernate Bug: https://hibernate.atlassian.net/browse/HHH-10594
-            UserPassword userPassword = new UserPassword();
-            userPassword.setEntityRefId(student.getStudentRefId());
-            userPassword.setEntityType(EntityType.STUDENT);
-            userPassword.setAppId(metaData.getApp().getId());
-            userPassword.setTempPassword(security.encrypt(password, key));
-
-            userPassword.setGenerationDate(now);
-            userPassword.setExpiryDate(new Date(ttl + now.getTime()));
-            userPassword.setLastRetrieved(null);
-            update(userPassword);
-        });
-
-        return false;
-    }
-
-    @Override
-    public boolean deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
-        return false;
     }
 
     @Override
@@ -190,6 +253,7 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
                 cb.equal(from.get(ENTITY_TYPE), EntityType.STUDENT),
                 cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()),
                 cb.equal(from.get(ENTITY_REF_ID), student.get(STUDENT_REF_ID)),
+                cb.equal(school.get("schoolRefId"), refId),
                 lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
             )
         );
@@ -209,6 +273,111 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
     }
 
     @Override
+    public void deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
+        final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        final CriteriaDelete<UserPassword> delete = cb.createCriteriaDelete(UserPassword.class);
+        final Root<UserPassword> from = delete.from(UserPassword.class);
+
+        //Sub Query
+        Subquery<Staff> subquery = delete.subquery(Staff.class);
+        final Root<Staff> staff = subquery.from(Staff.class);
+        final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) staff.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+        final Join<StaffAssignment, School> school = staffAssignments.join("school", JoinType.LEFT);
+        final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+        subquery.select(staff.get(STAFF_REF_ID));
+        subquery.where
+        (
+            cb.and
+            (
+                cb.equal(school.get(SCHOOL_REF_ID), refId),
+                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
+            )
+        );
+
+        //Update
+        delete.where
+        (
+            cb.and
+            (
+                cb.in(from.get(ENTITY_REF_ID)).value(subquery),
+                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
+                cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
+                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())
+            )
+        );
+
+        Query<UserPassword> q = getSession().createQuery(delete);
+        if (metaData.getPaging().isPaged()) {
+            q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+            q.setMaxResults(metaData.getPaging().getPageSize());
+        }
+        q.executeUpdate();
+    }
+
+    @Override
+    public void deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
+
+    }
+
+    @Override
+    public void deleteStaffsLoginIdBySchool(MetaData metaData, String refId) throws Exception {
+        //TODO - Not Working Properly
+        final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        final CriteriaDelete<StaffIdentifier> delete = cb.createCriteriaDelete(StaffIdentifier.class);
+        final Root<StaffIdentifier> from = delete.from(StaffIdentifier.class);
+
+        //Sub Query
+        Subquery<Staff> subquery = delete.subquery(Staff.class);
+        final Root<Staff> staff = subquery.from(Staff.class);
+        final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) staff.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+        final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) staff.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+        final Join<StaffAssignment, School> school = staffAssignments.join("school", JoinType.LEFT);
+        final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
+
+        final Root<UserPassword> userPassword = subquery.from(UserPassword.class);
+
+        subquery.select(staffIdentifiers.get("staffIdentifierRefId"));
+        subquery.where
+        (
+            cb.and
+            (
+                cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), LOGIN_ID),
+                cb.equal(school.get(SCHOOL_REF_ID), refId),
+                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()),
+
+                cb.equal(userPassword.get(ENTITY_TYPE), EntityType.STAFF),
+                cb.equal(userPassword.get(ENTITY_REF_ID), staff.get(STAFF_REF_ID)),
+                cb.equal(userPassword.get(APP_ID), metaData.getApp().getId())
+
+            )
+        );
+
+
+        //Update
+        delete.where
+        (
+            cb.and
+            (
+                cb.in(from.get("staffIdentifierRefId")).value(subquery),
+                cb.equal(from.get(IDENTIFICATION_SYSTEM_CODE), LOGIN_ID)
+            )
+        );
+
+        Query<StaffIdentifier> q = getSession().createQuery(delete);
+        if (metaData.getPaging().isPaged()) {
+            q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
+            q.setMaxResults(metaData.getPaging().getPageSize());
+        }
+        q.executeUpdate();
+    }
+
+    @Override
+    public void deleteStudentsLoginIdBySchool(MetaData metaData, String refId) throws Exception {
+
+    }
+
+
+    @Override
     public void save(UserPassword instance) {
         super.persist(instance);
     }
@@ -223,15 +392,6 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         super.delete(instance);
     }
 
-    @Override
-    public void updateLastRetrieved(List<UserPassword> userPasswords) {
-        Date now = new Date();
-        userPasswords.forEach(userPassword -> {
-            userPassword.setLastRetrieved(now);
-            update(userPassword);
-        });
-
-    }
 
     private Predicate isOTA(MetaData metaData, CriteriaBuilder cb, Root<UserPassword> from, String refId)
     {
@@ -239,9 +399,23 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         if(kv != null) {
             boolean isOTA = BooleanUtils.toBoolean(kv.get("api.userpass.ota"));
             if(isOTA) {
-                return cb.isNotNull(from.get(LAST_RETRIEVED));
+                return cb.isNull(from.get(LAST_RETRIEVED));
             }
         }
-        return cb.isNull(from.get(LAST_RETRIEVED));
+        return cb.isNotNull(from.get(LAST_RETRIEVED));
     }
+
+    private final String APP_ID = "appId";
+    private final String ENTITY_TYPE = "entityType";
+    private final String ENTITY_REF_ID = "entityRefId";
+    private final String TEMP_PASSWORD = "tempPassword";
+    private final String EXPIRY_DATE = "expiryDate";
+    private final String LAST_RETRIEVED = "lastRetrieved";
+    private final String GEN_DATE = "generationDate";
+    private final String SCHOOL_REF_ID = "schoolRefId";
+    private final String STAFF_REF_ID = "staffRefId";
+    private final String STUDENT_REF_ID = "studentRefId";
+    private final String IDENTIFICATION_SYSTEM_CODE = "identificationSystemCode";
+    private final String LOGIN_ID = "LoginId";
+
 }
