@@ -57,14 +57,18 @@ public class Config extends WebMvcConfigurerAdapter
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
     }
 
+	@Bean
+	public AuthHandler getAuthHandler() {
+		return new AuthHandler();
+	}
+
 	@Override
     public void addInterceptors(InterceptorRegistry registry) 
-    {   	
-    	HandlerInterceptor authHandler = new AuthHandler();
+    {
     	HandlerInterceptor headerHandler = new HeaderHandler();
     	HandlerInterceptor logHandler = new LogHandler();
     	
-		registry.addInterceptor(authHandler);
+		registry.addInterceptor(getAuthHandler());
 		registry.addInterceptor(headerHandler);
 		registry.addInterceptor(logHandler);
 	}

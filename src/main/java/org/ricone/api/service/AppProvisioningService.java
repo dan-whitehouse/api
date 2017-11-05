@@ -14,13 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service("appProvisioning")
 @Transactional
 public class AppProvisioningService implements IAppProvisioningService
 {
 	private final String LOGIN_ID = "LoginId";
+	private final String FORBIDDEN_EXCEPTION_MESSAGE = "The district associated to this school has not been configured for account provisioning";
 
 	@Autowired
 	UserPasswordDAO userPasswordDAO;
@@ -47,17 +50,17 @@ public class AppProvisioningService implements IAppProvisioningService
 				List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
 				staffs.forEach(t -> {
 					StaffIdentifier ti = new StaffIdentifier();
-					ti.setIdentificationSystemCode(LOGIN_ID);
+					ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
 					ti.setStaff(t);
 					ti.setStaffId(generator.getUsername(district.get().getKv(), t, null));
-					ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
+					ti.setIdentificationSystemCode(LOGIN_ID);
 					t.getStaffIdentifiers().add(ti);
 					staffDAO.update(t);
 				});
 				return userPasswordDAO.provisionStaffsBySchool(metaData, district.get().getKv(), staffs);
 			}
 		}
-		throw new ForbiddenException("The district associated to this school has not been configured for account provisioning");
+		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
@@ -67,7 +70,11 @@ public class AppProvisioningService implements IAppProvisioningService
 
 	@Override
 	public List<UserPassword> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
-		return userPasswordDAO.findStaffsBySchool(metaData, refId);
+		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			List<UserPassword> userPasswords = userPasswordDAO.findStaffsBySchool(metaData, refId);
+			return userPasswords;
+		}
+		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
@@ -90,7 +97,7 @@ public class AppProvisioningService implements IAppProvisioningService
 				return userPasswordDAO.provisionStudentsBySchool(metaData, district.get().getKv(), students);
 			}
 		}
-		throw new ForbiddenException("The district associated to this school has not been configured for account provisioning");
+		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 
 	@Override
@@ -100,20 +107,10 @@ public class AppProvisioningService implements IAppProvisioningService
 
 	@Override
 	public List<UserPassword> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
-		Set<String> refIds = new HashSet<>();
-		List<UserPassword> userPasswords = userPasswordDAO.findStudentsBySchool(metaData, refId);
-		userPasswords.forEach(userPassword -> {
-			refIds.add(userPassword.getEntityRefId());
-		});
-
-		List<Student> students = studentDAO.findByRefIds(metaData, refIds);
-		userPasswords.forEach(userPassword -> {
-			students.forEach(student -> {
-				if(student.getStudentRefId().equalsIgnoreCase(userPassword.getEntityRefId())){
-					userPassword.setStudent(student);
-				}
-			});
-		});
-		return userPasswords;
+		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
+			List<UserPassword> userPasswords = userPasswordDAO.findStudentsBySchool(metaData, refId);
+			return userPasswords;
+		}
+		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
 }

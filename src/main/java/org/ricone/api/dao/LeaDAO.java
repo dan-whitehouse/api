@@ -29,6 +29,7 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
 		final Root<Lea> from = select.from(Lea.class);
 		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
 
 		select.distinct(true);
 		select.select(from);

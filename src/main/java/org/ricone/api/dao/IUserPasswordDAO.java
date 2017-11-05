@@ -30,4 +30,6 @@ public interface IUserPasswordDAO {
     void update(UserPassword instance);
 
     void delete(UserPassword instance);
+
+    void updateLastRetrieved(List<UserPassword> userPasswords);
 }

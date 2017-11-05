@@ -1,6 +1,7 @@
 package org.ricone.api.dao;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.controller.extension.MetaData;
@@ -38,6 +39,7 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
     @Autowired
     private AES security;
 
+    @Override
     public boolean provisionStaffsBySchool(MetaData metaData, HashMap<String, String> kv, List<Staff> staffs) throws Exception {
         staffs.forEach(staff -> {
             Date now = new Date();
@@ -61,10 +63,12 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         return false;
     }
 
+    @Override
     public boolean deleteStaffsBySchool(MetaData metaData, String refId) throws Exception {
         return false;
     }
 
+    @Override
     public List<UserPassword> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
         //https://docs.jboss.org/hibernate/entitymanager/3.6/reference/en/html_single/#querycriteria-typedquery-construct
         //https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#criteria-typedquery-wrapper
@@ -98,8 +102,10 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         (
             cb.and
             (
+                isOTA(metaData, cb, from, refId),
                 cb.equal(from.get(APP_ID), metaData.getApp().getId()),
                 cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
+                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()),
                 cb.equal(from.get(ENTITY_REF_ID), staff.get(STAFF_REF_ID)),
                 lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
             )
@@ -119,6 +125,7 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         return instance;
     }
 
+    @Override
     public boolean provisionStudentsBySchool(MetaData metaData, HashMap<String, String> kv, List<Student> students) throws Exception {
         students.forEach(student -> {
             Date now = new Date();
@@ -142,10 +149,12 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         return false;
     }
 
+    @Override
     public boolean deleteStudentsBySchool(MetaData metaData, String refId) throws Exception {
         return false;
     }
 
+    @Override
     public List<UserPassword> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
         final CriteriaBuilder cb = getSession().getCriteriaBuilder();
         final CriteriaQuery<UserPassword> select = cb.createQuery(UserPassword.class);
@@ -176,8 +185,10 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         (
             cb.and
             (
+                isOTA(metaData, cb, from, refId),
                 cb.equal(from.get(APP_ID), metaData.getApp().getId()),
-                cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
+                cb.equal(from.get(ENTITY_TYPE), EntityType.STUDENT),
+                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()),
                 cb.equal(from.get(ENTITY_REF_ID), student.get(STUDENT_REF_ID)),
                 lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
             )
@@ -210,5 +221,27 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
     @Override
     public void delete(UserPassword instance) {
         super.delete(instance);
+    }
+
+    @Override
+    public void updateLastRetrieved(List<UserPassword> userPasswords) {
+        Date now = new Date();
+        userPasswords.forEach(userPassword -> {
+            userPassword.setLastRetrieved(now);
+            update(userPassword);
+        });
+
+    }
+
+    private Predicate isOTA(MetaData metaData, CriteriaBuilder cb, Root<UserPassword> from, String refId)
+    {
+        HashMap<String, String> kv = metaData.getApp().getDistrictKVsBySchool(refId);
+        if(kv != null) {
+            boolean isOTA = BooleanUtils.toBoolean(kv.get("api.userpass.ota"));
+            if(isOTA) {
+                return cb.isNotNull(from.get(LAST_RETRIEVED));
+            }
+        }
+        return cb.isNull(from.get(LAST_RETRIEVED));
     }
 }

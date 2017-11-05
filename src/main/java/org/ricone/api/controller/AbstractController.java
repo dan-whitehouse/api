@@ -6,14 +6,13 @@ import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.exception.ConfigException;
 import org.ricone.api.exception.ForbiddenException;
 import org.ricone.api.security.*;
+import org.ricone.api.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,11 +37,12 @@ public abstract class AbstractController
         Session session = SessionManager.getInstance().getSession(token.getApplication_id());
 
         Pageable pageable = getPaging(pageRequest);
-        Map<String, String> headers = getHeaders(request);
+        Map<String, String> headers = Util.getHeaders(request);
 
         MetaData metaData = new MetaData();
         metaData.setApp(session.getApp());
         metaData.setToken(session.getToken());
+        metaData.setHeaders(headers);
         metaData.setPaging(pageable);
 
         return metaData;
@@ -73,15 +73,4 @@ public abstract class AbstractController
         return new AuthRequest(request);
     }
 
-    private Map<String, String> getHeaders(HttpServletRequest request) {
-
-        Map<String, String> map = new HashMap<>();
-        Enumeration headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = request.getHeader(key);
-            map.put(key, value);
-        }
-        return map;
-    }
 }

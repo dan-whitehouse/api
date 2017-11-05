@@ -1,8 +1,12 @@
 package org.ricone.api.component.config.model;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.ricone.api.model.core.Lea;
+import org.ricone.api.model.core.School;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class App
@@ -59,11 +63,63 @@ public class App
 	public List<Lea> getLeas() { return leas; }
 	public void setLeas(List<Lea> leas) { this.leas = leas; }
 
-	public List<String> getDistrictLocalIds()
-	{
+	public List<String> getDistrictLocalIds() {
 		return districts.stream().map(District::getId).collect(Collectors.toList());
 	}
 
+	public Lea getLea(String refId) {
+		if(CollectionUtils.isNotEmpty(leas)) {
+			Optional<Lea> instance = leas.stream().filter(lea -> lea.getLeaRefId().equalsIgnoreCase(refId)).findFirst();
+			if (instance.isPresent()) {
+				return instance.get();
+			}
+		}
+		return null;
+	}
+
+	public School getSchool(String refId) {
+		if(CollectionUtils.isNotEmpty(leas)) {
+			for (Lea lea : leas) {
+				if(CollectionUtils.isNotEmpty(lea.getSchools())) {
+					Optional<School> instance = lea.getSchools().stream().filter(school -> school.getSchoolRefId().equalsIgnoreCase(refId)).findFirst();
+					if (instance.isPresent()) {
+						return instance.get();
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+
+	public HashMap<String, String> getDistrictKVsByLea(String refId) {
+		for (District district : districts) {
+			if(CollectionUtils.isNotEmpty(leas)) {
+				Optional<Lea> oLea = leas.stream().filter(lea -> lea.getLeaId().equalsIgnoreCase(district.getId())).findFirst();
+				if (oLea.isPresent()) {
+					return district.getKv();
+				}
+			}
+		}
+		return null;
+	}
+
+	public HashMap<String, String> getDistrictKVsBySchool(String refId) {
+		for (District district : districts) {
+			if(CollectionUtils.isNotEmpty(leas)) {
+				Optional<Lea> oLea = leas.stream().filter(lea -> lea.getLeaId().equalsIgnoreCase(district.getId())).findFirst();
+				if (oLea.isPresent()) {
+					if(CollectionUtils.isNotEmpty(oLea.get().getSchools())) {
+						Optional<School> oSchool = oLea.get().getSchools().stream().filter(school -> school.getSchoolRefId().equalsIgnoreCase(refId)).findFirst();
+						if (oSchool.isPresent()) {
+							return district.getKv();
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 
 	@Override

@@ -34,8 +34,8 @@ public class AppCache
 	           .expireAfterWrite(EXPIRE, TimeUnit.HOURS)
 	           .build( new CacheLoader<String, App>() {
 	                 @Override
-	                 public App load( String productId ) throws Exception {
-	                     return loadCache(productId);
+	                 public App load( String appId ) throws Exception {
+	                     return loadCache(appId);
 	                 }
 	           }
 	     );
