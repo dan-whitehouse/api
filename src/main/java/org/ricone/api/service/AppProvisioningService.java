@@ -48,12 +48,20 @@ public class AppProvisioningService implements IAppProvisioningService
 				List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
 				int identifiersCreated = 0;
 				for (Staff t : staffs) {
-					Optional<StaffIdentifier> identifier = t.getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase("LoginId")).findFirst();
+					Optional<StaffIdentifier> identifier = t.getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
 					if (!identifier.isPresent()) {
 						StaffIdentifier ti = new StaffIdentifier();
 						ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
 						ti.setStaff(t);
 						ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, null));
+
+						// Counts how many LoginIds with the same name exist in database. If it's a new LoginId then the count will be 0.
+						// If multiple LoginId's start with the same name, we count them and subtract 0.
+						int increment = staffIdentifierDAO.countLoginIdsBySchoolRefId(refId, t.getStaffRefId(), ti.getStaffId());
+						if(increment > 0){
+							ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, increment-1));
+						}
+
 						ti.setIdentificationSystemCode(LOGIN_ID);
 						t.getStaffIdentifiers().add(ti);
 						staffDAO.update(t);
@@ -79,7 +87,7 @@ public class AppProvisioningService implements IAppProvisioningService
 				List<Student> students = studentDAO.findAllBySchoolRefId(metaData, refId);
 				int identifiersCreated = 0;
 				for (Student s : students) {
-					Optional<StudentIdentifier> identifier = s.getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase("LoginId")).findFirst();
+					Optional<StudentIdentifier> identifier = s.getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
 					if (!identifier.isPresent()) {
 						StudentIdentifier si = new StudentIdentifier();
 						si.setIdentificationSystemCode(LOGIN_ID);

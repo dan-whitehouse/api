@@ -7,6 +7,14 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unchecked")
 public class StudentIdentifierDAO extends AbstractDAO<Integer, StudentIdentifier> implements IStudentIdentifierDAO
 {
+	private final String IDENTIFICATION_SYSTEM_CODE = "identificationSystemCode";
+	private final String LOGIN_ID = "LoginId";
+
+	@Override
+	public int countLoginIdsBySchoolRefId(String refId, String staffRefId, String logInId) throws Exception {
+		return 0;
+	}
+
 	@Override
 	public void save(StudentIdentifier instance) {
 		super.persist(instance);
