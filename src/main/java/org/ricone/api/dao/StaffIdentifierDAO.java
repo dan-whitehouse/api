@@ -17,19 +17,18 @@ public class StaffIdentifierDAO extends AbstractDAO<Integer, StaffIdentifier> im
 	private final String LOGIN_ID = "LoginId";
 	@Override
 	public int countLoginIdsBySchoolRefId(String refId, String staffRefId,  String logInId) throws Exception {
+		//https://stackoverflow.com/questions/24995881/use-regular-expressions-in-jpa-criteriabuilder/24996378#24996378
+		//https://stackoverflow.com/questions/32304308/mysql-where-string-ends-with-numbers
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<StaffIdentifier> from = select.from(StaffIdentifier.class);
-		final Join<StaffIdentifier, Staff> staff = (Join<StaffIdentifier, Staff>) from.<StaffIdentifier, Staff>join("staff", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) staff.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<StaffIdentifier, Staff> staff = (Join<StaffIdentifier, Staff>) from.<StaffIdentifier, Staff>join("staff", JoinType.INNER);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) staff.<Staff, StaffAssignment>join("staffAssignments", JoinType.INNER);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.INNER);
 
 		Pattern pattern = Pattern.compile("[[:digit:]]$");
 		Expression<String> expression = cb.literal(pattern.pattern());
 
-		//TODO - Query isn't right.
-		//https://stackoverflow.com/questions/24995881/use-regular-expressions-in-jpa-criteriabuilder/24996378#24996378
-		//https://stackoverflow.com/questions/32304308/mysql-where-string-ends-with-numbers
 		select.select(cb.countDistinct(from));
 		select.where
 		(
@@ -40,8 +39,10 @@ public class StaffIdentifierDAO extends AbstractDAO<Integer, StaffIdentifier> im
 				cb.and //ie: dan1, dan2
 				(
 					cb.like(from.get("staffId"), logInId+"%"),
-					cb.function("regexp", Integer.class, from.get("staffId"), expression).isNotNull(),
-					cb.or(cb.equal(from.get("staffId"), logInId))
+					cb.or(
+						cb.equal(from.get("staffId"), logInId),
+						cb.function("regexp", Integer.class, from.get("staffId"), expression).isNotNull()
+					)
 				)
 			)
 		);

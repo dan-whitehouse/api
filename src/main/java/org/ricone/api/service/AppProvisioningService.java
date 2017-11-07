@@ -6,11 +6,14 @@ import org.ricone.api.dao.*;
 import org.ricone.api.exception.ConflictException;
 import org.ricone.api.exception.ForbiddenException;
 import org.ricone.api.model.core.*;
+import org.ricone.api.model.core.extension.userpassword.EntityType;
+import org.ricone.api.util.APUtil;
 import org.ricone.api.util.UserPasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,6 +49,7 @@ public class AppProvisioningService implements IAppProvisioningService
 		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
 			if(CollectionUtils.isNotEmpty(metaData.getApp().getDistrictKVsBySchool(refId).entrySet())) {
 				List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
+				List<Staff> staffsWithIdentifiersCreated = new ArrayList<>();
 				int identifiersCreated = 0;
 				for (Staff t : staffs) {
 					Optional<StaffIdentifier> identifier = t.getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
@@ -53,24 +57,29 @@ public class AppProvisioningService implements IAppProvisioningService
 						StaffIdentifier ti = new StaffIdentifier();
 						ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
 						ti.setStaff(t);
-						ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, null));
+
+						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, null);
+						ti.setStaffId(username);
 
 						// Counts how many LoginIds with the same name exist in database. If it's a new LoginId then the count will be 0.
-						// If multiple LoginId's start with the same name, we count them and subtract 0.
-						int increment = staffIdentifierDAO.countLoginIdsBySchoolRefId(refId, t.getStaffRefId(), ti.getStaffId());
-						if(increment > 0){
-							ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, increment-1));
+						// If multiple LoginId's start with the same name and/or ends in a number, we count them and subtract 0.
+						if(APUtil.doesUsernameRequireIncrement(EntityType.STAFF, metaData.getApp().getDistrictKVsBySchool(refId))) {
+							int increment = staffIdentifierDAO.countLoginIdsBySchoolRefId(refId, t.getStaffRefId(), ti.getStaffId());
+							if(increment > 0){
+								ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, increment-1));
+							}
 						}
 
 						ti.setIdentificationSystemCode(LOGIN_ID);
 						t.getStaffIdentifiers().add(ti);
 						staffDAO.update(t);
 						identifiersCreated++;
+						staffsWithIdentifiersCreated.add(t);
 					}
 				}
 				if(staffs.size() > 0 && identifiersCreated > 0){
-					//If we created a student identifier, make sure we create/update all user passwords
-					userPasswordDAO.provisionStaffsBySchool(metaData, metaData.getApp().getDistrictKVsBySchool(refId), staffs);
+					//For every staff an identifier was created for, create a user password
+					userPasswordDAO.provisionStaffsBySchool(metaData, metaData.getApp().getDistrictKVsBySchool(refId), staffsWithIdentifiersCreated);
 				}
 				else {
 					throw new ConflictException(CONFLICT_EXCEPTION_MESSAGE);
@@ -85,22 +94,37 @@ public class AppProvisioningService implements IAppProvisioningService
 		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
 			if(CollectionUtils.isNotEmpty(metaData.getApp().getDistrictKVsBySchool(refId).entrySet())) {
 				List<Student> students = studentDAO.findAllBySchoolRefId(metaData, refId);
+				List<Student> studentsWithIdentifiersCreated = new ArrayList<>();
 				int identifiersCreated = 0;
 				for (Student s : students) {
 					Optional<StudentIdentifier> identifier = s.getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
 					if (!identifier.isPresent()) {
-						StudentIdentifier si = new StudentIdentifier();
-						si.setIdentificationSystemCode(LOGIN_ID);
-						si.setStudent(s);
-						si.setStudentId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), s, null));
-						si.setStudentIdentifierRefId(UUID.randomUUID().toString());
-						s.getStudentIdentifiers().add(si);
+						StudentIdentifier ti = new StudentIdentifier();
+						ti.setStudentIdentifierRefId(UUID.randomUUID().toString());
+						ti.setStudent(s);
+
+						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), s, null);
+						ti.setStudentId(username);
+
+						// Counts how many LoginIds with the same name exist in database. If it's a new LoginId then the count will be 0.
+						// If multiple LoginId's start with the same name, we count them and subtract 0.
+						if(APUtil.doesUsernameRequireIncrement(EntityType.STUDENT, metaData.getApp().getDistrictKVsBySchool(refId))) {
+							int increment = studentIdentifierDAO.countLoginIdsBySchoolRefId(refId, s.getStudentRefId(), ti.getStudentId());
+							if(increment > 0){
+								ti.setStudentId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), s, increment-1));
+							}
+						}
+
+						ti.setIdentificationSystemCode(LOGIN_ID);
+						s.getStudentIdentifiers().add(ti);
 						studentDAO.update(s);
 						identifiersCreated++;
+						studentsWithIdentifiersCreated.add(s);
 					}
 				}
 				if(students.size() > 0 && identifiersCreated > 0){
-					userPasswordDAO.provisionStudentsBySchool(metaData, metaData.getApp().getDistrictKVsBySchool(refId), students);
+					//For every student an identifier was created for, create a user password
+					userPasswordDAO.provisionStudentsBySchool(metaData, metaData.getApp().getDistrictKVsBySchool(refId), studentsWithIdentifiersCreated);
 				}
 				else {
 					throw new ConflictException(CONFLICT_EXCEPTION_MESSAGE);

@@ -91,6 +91,28 @@ public class App
 		return null;
 	}
 
+	public District getDistrictByLea(String refId) {
+		if(CollectionUtils.isNotEmpty(leas)) {
+			Optional<Lea> lea = leas.stream().filter(l -> l.getLeaRefId().equalsIgnoreCase(refId)).findFirst();
+			if(lea.isPresent()) {
+				return districts.stream().filter(d -> d.getId().equalsIgnoreCase(lea.get().getLeaId())).findFirst().get();
+			}
+		}
+		return null;
+	}
+
+	public District getDistrictBySchool(String refId) {
+		if(CollectionUtils.isNotEmpty(leas)) {
+			Optional<Lea> lea = leas.stream().filter(l -> l.getLeaRefId().equalsIgnoreCase(refId)).findFirst();
+			if(lea.isPresent() && CollectionUtils.isNotEmpty(lea.get().getSchools())) {
+				Optional<School> school = lea.get().getSchools().stream().filter(s -> s.getSchoolRefId().equalsIgnoreCase(refId)).findFirst();
+				if(school.isPresent()) {
+					return districts.stream().filter(d -> d.getId().equalsIgnoreCase(lea.get().getLeaId())).findFirst().get();
+				}
+			}
+		}
+		return null;
+	}
 
 	public HashMap<String, String> getDistrictKVsByLea(String refId) {
 		for (District district : districts) {
@@ -120,8 +142,6 @@ public class App
 		}
 		return null;
 	}
-
-
 	@Override
 	public String toString() {
 		return "App{" +

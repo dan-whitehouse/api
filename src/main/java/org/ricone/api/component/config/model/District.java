@@ -25,6 +25,7 @@ public class District {
     @JsonIgnore
     private HashMap<String, String> kv;
 
+
     public District() {
     }
 
