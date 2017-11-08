@@ -1,8 +1,8 @@
 package org.ricone.api.config;
 
 import org.ricone.api.component.logging.LogHandler;
-import org.ricone.api.controller.HeaderHandler;
 import org.ricone.api.security.AuthHandler;
+import org.ricone.api.security.HeaderHandler;
 import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.EndpointWebMvcAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.HealthIndicatorAutoConfiguration;

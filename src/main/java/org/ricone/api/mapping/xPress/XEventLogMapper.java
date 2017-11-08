@@ -14,28 +14,28 @@ import java.util.List;
 public class XEventLogMapper {
 
     @Autowired
-    XLeaMapper xLeaMapper;
+    private XLeaMapper xLeaMapper;
 
     @Autowired
-    XSchoolMapper xSchoolMapper;
+    private XSchoolMapper xSchoolMapper;
 
     @Autowired
-    XCalendarMapper xCalendarMapper;
+    private XCalendarMapper xCalendarMapper;
 
     @Autowired
-    XCourseMapper xCourseMapper;
+    private XCourseMapper xCourseMapper;
 
     @Autowired
-    XRosterMapper xRosterMapper;
+    private XRosterMapper xRosterMapper;
 
     @Autowired
-    XStaffMapper xStaffMapper;
+    private XStaffMapper xStaffMapper;
 
     @Autowired
-    XStudentMapper xStudentMapper;
+    private XStudentMapper xStudentMapper;
 
     @Autowired
-    XContactMapper xContactMapper;
+    private XContactMapper xContactMapper;
 
     public XChangesSinceResponse convert(List<EventLog> instance) {
         List<XChangeSince> list = new ArrayList<>();

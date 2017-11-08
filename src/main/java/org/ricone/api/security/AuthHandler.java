@@ -5,7 +5,7 @@ import org.ricone.api.cache.AppCache;
 import org.ricone.api.component.config.model.App;
 import org.ricone.api.controller.extension.MetaData;
 import org.ricone.api.exception.UnauthorizedException;
-import org.ricone.api.service.ILeaService;
+import org.ricone.api.service.xPress.ILeaService;
 import org.ricone.api.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
