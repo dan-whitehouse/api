@@ -26,7 +26,7 @@ public class Util
         return map;
     }
 
-    static boolean isGradeGreater(String grade, String grade2) {
+    public static boolean isGradeGreater(String grade, String grade2) {
         return getGradeAsInt(grade) > getGradeAsInt(grade2);
     }
 
@@ -102,7 +102,7 @@ public class Util
         return true;
     }
 
-    static String get2DigitYear(Date d) {
+    public static String get2DigitYear(Date d) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.format(d).substring(2, 4);
     }

@@ -1,8 +1,9 @@
 package org.ricone.api.util;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import org.ricone.api.config.ConfigProperties;
-import org.ricone.api.exception.ConfigException;
+
+import org.ricone.exception.ConfigException;
+import org.ricone.init.ConfigProperties;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -48,12 +49,12 @@ public class AES
         Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
         cipher.init(Cipher.ENCRYPT_MODE, aesKey);
         byte[] encryptedByte = cipher.doFinal(plainTextByte);
-        return new String(Base64.encode(encryptedByte));
+        return Base64.encode(encryptedByte).toString();
     }
     public String decrypt(String encryptedText) throws Exception 
     {
         cipher = Cipher.getInstance("AES");
-        byte[] encryptedTextByte = Base64.decode(encryptedText);
+        byte[] encryptedTextByte = Base64.decode(encryptedText.getBytes());
         Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
         cipher.init(Cipher.DECRYPT_MODE, aesKey);
         byte[] decryptedByte = cipher.doFinal(encryptedTextByte);
@@ -78,7 +79,7 @@ public class AES
     	try
     	{
 	        cipher = Cipher.getInstance("AES");
-	        byte[] encryptedTextByte = Base64.decode(encryptedText);
+	        byte[] encryptedTextByte = Base64.decode(encryptedText.getBytes());
 	        Key aesKey = new SecretKeySpec(secretKey.getBytes(), "AES");
 	        cipher.init(Cipher.DECRYPT_MODE, aesKey);
 	        byte[] decryptedByte = cipher.doFinal(encryptedTextByte);
