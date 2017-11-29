@@ -1,4 +1,4 @@
-package org.ricone.api.error;
+package org.ricone.error;
 
 public class Error 
 {	 

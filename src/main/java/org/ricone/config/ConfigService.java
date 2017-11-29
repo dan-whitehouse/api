@@ -1,9 +1,9 @@
 package org.ricone.config;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.api.core.info.model.Config;
+import org.ricone.api.core.request.info.model.Config;
 import org.ricone.config.model.*;
-import org.ricone.exception.ConfigException;
+import org.ricone.error.exception.ConfigException;
 import org.ricone.init.ConfigProperties;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;

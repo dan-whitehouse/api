@@ -3,10 +3,9 @@ package org.ricone.api.xPress.request.xCourse;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.cache.CacheContainer;
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NoContentException;
+import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -17,7 +16,6 @@ import java.util.Set;
 public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDAO
 {
 	private final String PRIMARY_KEY = "courseRefId";
-	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
 	public List<Course> findAll(MetaData metaData) throws Exception {

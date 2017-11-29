@@ -1,8 +1,8 @@
 package org.ricone.api.xPress.request.changesSince;
 
-import org.ricone.api.core.dao.EventLog;
-import org.ricone.api.core.dao.EventObject;
-import org.ricone.api.core.dao.EventType;
+import org.ricone.api.core.model.EventLog;
+import org.ricone.api.core.model.EventObject;
+import org.ricone.api.core.model.EventType;
 import org.ricone.api.xPress.model.*;
 import org.ricone.api.xPress.request.xCalendar.XCalendarMapper;
 import org.ricone.api.xPress.request.xContact.XContactMapper;

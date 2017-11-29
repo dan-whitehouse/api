@@ -2,10 +2,10 @@ package org.ricone.api.xPress.request.xStaff;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.MappingException;
-import org.ricone.api.core.dao.Staff;
-import org.ricone.api.core.dao.StaffAssignment;
-import org.ricone.api.core.dao.StaffEmail;
-import org.ricone.api.core.dao.StaffIdentifier;
+import org.ricone.api.core.model.Staff;
+import org.ricone.api.core.model.StaffAssignment;
+import org.ricone.api.core.model.StaffEmail;
+import org.ricone.api.core.model.StaffIdentifier;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 

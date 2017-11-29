@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.xStaff;
 
-import org.ricone.api.core.dao.Staff;
+import org.ricone.api.core.model.Staff;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;

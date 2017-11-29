@@ -3,10 +3,9 @@ package org.ricone.api.xPress.request.xLea;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.cache.CacheContainer;
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NoContentException;
+import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -21,8 +20,6 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 
 	private final String PRIMARY_KEY = "leaRefId";
 	private final String LOCAL_ID_KEY = "leaId";
-
-	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
 	public List<Lea> findAll(MetaData metaData) throws Exception {

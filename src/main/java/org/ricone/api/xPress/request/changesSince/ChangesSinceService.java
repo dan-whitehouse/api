@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.changesSince;
 
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.api.xPress.request.xCalendar.ICalendarDAO;
 import org.ricone.api.xPress.request.xContact.IContactDAO;
 import org.ricone.api.xPress.request.xCourse.ICourseDAO;

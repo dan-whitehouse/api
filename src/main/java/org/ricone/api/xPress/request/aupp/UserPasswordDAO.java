@@ -5,10 +5,10 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.api.util.AES;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NoContentException;
+import org.ricone.error.exception.NoContentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

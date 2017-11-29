@@ -1,4 +1,4 @@
-package org.ricone.swagger;
+package org.ricone.api.xPress.swagger;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

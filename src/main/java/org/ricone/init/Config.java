@@ -2,6 +2,7 @@ package org.ricone.init;
 
 import org.ricone.authentication.AuthHandler;
 import org.ricone.authentication.HeaderHandler;
+import org.ricone.authentication.PermissionHandler;
 import org.ricone.logging.LogHandler;
 import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.EndpointWebMvcAutoConfiguration;
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -28,7 +29,7 @@ import java.util.List;
 @ComponentScan(basePackages = "org.ricone")
 @Import({
 		EndpointWebMvcAutoConfiguration.class,
-		ManagementServerPropertiesAutoConfiguration.class, 
+		ManagementServerPropertiesAutoConfiguration.class,
 		EndpointAutoConfiguration.class, 
 		HealthIndicatorAutoConfiguration.class
 		})
@@ -36,7 +37,7 @@ import java.util.List;
 @EnableWebMvc
 @EnableScheduling
 @EnableSpringDataWebSupport
-public class Config extends WebMvcConfigurerAdapter
+public class Config implements WebMvcConfigurer
 {
 	@Bean(name="viewProject")
 	public ViewResolver viewResolver()
@@ -65,10 +66,12 @@ public class Config extends WebMvcConfigurerAdapter
 	@Override
     public void addInterceptors(InterceptorRegistry registry) 
     {
+		HandlerInterceptor permissionHandler = new PermissionHandler();
     	HandlerInterceptor headerHandler = new HeaderHandler();
     	HandlerInterceptor logHandler = new LogHandler();
-    	
+
 		registry.addInterceptor(getAuthHandler());
+		registry.addInterceptor(permissionHandler);
 		registry.addInterceptor(headerHandler);
 		registry.addInterceptor(logHandler);
 	}
@@ -80,6 +83,5 @@ public class Config extends WebMvcConfigurerAdapter
 		resolver.setOneIndexedParameters(true);
 		resolver.setFallbackPageable(Pageable.unpaged());
 		argumentResolvers.add(resolver);
-		super.addArgumentResolvers(argumentResolvers);
 	}
 }

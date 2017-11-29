@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xStaff;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.dao.Staff;
+import org.ricone.api.core.model.Staff;
 import org.ricone.api.xPress.model.XStaffResponse;
 import org.ricone.api.xPress.model.XStaffsResponse;
 import org.springframework.beans.factory.annotation.Autowired;

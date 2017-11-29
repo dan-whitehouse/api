@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.xStudent;
 
-import org.ricone.api.core.dao.Student;
+import org.ricone.api.core.model.Student;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;

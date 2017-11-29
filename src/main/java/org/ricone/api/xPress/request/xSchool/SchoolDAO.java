@@ -3,10 +3,9 @@ package org.ricone.api.xPress.request.xSchool;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.cache.CacheContainer;
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NoContentException;
+import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -20,8 +19,6 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 	private final String PRIMARY_KEY = "schoolRefId";
 	private final String LOCAL_ID_KEY = "schoolId";
 	private final String IDENTIFICATION_SYSTEM_CODE = "identificationSystemCode";
-
-	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
 	public List<School> findAll(MetaData metaData) throws Exception {
@@ -51,7 +48,7 @@ public class SchoolDAO extends AbstractDAO<Integer, School> implements ISchoolDA
 
 	@Override
 	public List<School> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
-		System.out.println("dao");
+		System.out.println("model");
 
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
 		final CriteriaQuery<School> select = cb.createQuery(School.class);

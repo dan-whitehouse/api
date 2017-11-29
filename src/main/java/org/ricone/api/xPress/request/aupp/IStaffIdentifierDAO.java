@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.aupp;
 
-import org.ricone.api.core.dao.StaffIdentifier;
+import org.ricone.api.core.model.StaffIdentifier;
 
 public interface IStaffIdentifierDAO
 {

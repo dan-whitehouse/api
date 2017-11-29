@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xLea;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.dao.Lea;
+import org.ricone.api.core.model.Lea;
 import org.ricone.api.xPress.model.XLeaResponse;
 import org.ricone.api.xPress.model.XLeasResponse;
 import org.springframework.beans.factory.annotation.Autowired;

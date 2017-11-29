@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xCalendar;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.dao.SchoolCalendar;
+import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.xPress.model.XCalendarResponse;
 import org.ricone.api.xPress.model.XCalendarsResponse;
 import org.springframework.beans.factory.annotation.Autowired;

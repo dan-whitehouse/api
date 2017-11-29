@@ -1,8 +1,8 @@
 package org.ricone.api.xPress.request.aupp;
 
-import org.ricone.api.core.dao.StaffIdentifier;
-import org.ricone.api.core.dao.StudentIdentifier;
-import org.ricone.api.core.dao.UserPassword;
+import org.ricone.api.core.model.StaffIdentifier;
+import org.ricone.api.core.model.StudentIdentifier;
+import org.ricone.api.core.model.UserPassword;
 import org.ricone.api.util.AES;
 import org.ricone.api.xPress.model.XAppProvisioning;
 import org.ricone.api.xPress.model.XAppProvisioningInfo;

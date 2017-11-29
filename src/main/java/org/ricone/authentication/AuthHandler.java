@@ -5,9 +5,10 @@ import org.ricone.api.util.Util;
 import org.ricone.api.xPress.request.xLea.ILeaService;
 import org.ricone.authentication.session.Session;
 import org.ricone.authentication.session.SessionManager;
-import org.ricone.config.AppCache;
+import org.ricone.config.cache.AppCache;
 import org.ricone.config.model.App;
-import org.ricone.exception.UnauthorizedException;
+import org.ricone.config.model.PathPermission;
+import org.ricone.error.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ public class AuthHandler extends HandlerInterceptorAdapter
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
 	{
+		System.out.println("AuthHandler - preHandle ");
 		AuthRequest authRequest = new AuthRequest(request);
 		if(isPathException(request.getServletPath()))
 		{
@@ -46,6 +48,13 @@ public class AuthHandler extends HandlerInterceptorAdapter
 					//If app existing in cache already, use cache, otherwise pull from config service
 					App app = AppCache.getInstance().get(decodedToken.getApplication_id());
 
+					//TODO - Connect this to config, and remove this static test
+					PathPermission pathPermission = new PathPermission();
+					pathPermission.setPath("/requests/xLeas/**");
+					pathPermission.setGet(true);
+					app.getPermissions().add(pathPermission);
+
+
 					/*
 					*  Use App, Token, and Request to create MetaData needed to make a request to collect the Lea's.
 					*  I wanted to handle this in the AppCache, but due to limited request information I need to do it on the first authorization of the User
@@ -65,6 +74,8 @@ public class AuthHandler extends HandlerInterceptorAdapter
 					session.setApp(app);
 					SessionManager.getInstance().addSession(decodedToken.getApplication_id(), session);
 				}
+				//Set HttpResponse Header so we can use it in the PermissionHandler
+				response.setHeader("AppId", decodedToken.getApplication_id());
 				return super.preHandle(request, response, handler);
 			}
 			else

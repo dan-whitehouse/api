@@ -1,7 +1,7 @@
 package org.ricone.api.util;
 
 
-import org.ricone.exception.ConfigException;
+import org.ricone.error.exception.ConfigException;
 import org.ricone.init.ConfigProperties;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Component;

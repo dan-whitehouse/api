@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.xContact;
 
-import org.ricone.api.core.dao.StudentContact;
+import org.ricone.api.core.model.StudentContact;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;

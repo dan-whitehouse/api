@@ -1,9 +1,10 @@
 package org.ricone.config.model;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.ricone.api.core.dao.Lea;
-import org.ricone.api.core.dao.School;
+import org.ricone.api.core.model.Lea;
+import org.ricone.api.core.model.School;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +19,9 @@ public class App
 
 	private List<District> districts;
 	private List<Lea> leas;
+	private List<PathPermission> permissions = new ArrayList<>();
 
-	public App()
-	{
+	public App() {
 		super();
 	}
 
@@ -63,6 +64,10 @@ public class App
 	public List<Lea> getLeas() { return leas; }
 	public void setLeas(List<Lea> leas) { this.leas = leas; }
 
+	public List<PathPermission> getPermissions() { return permissions; }
+	public void setPermissions(List<PathPermission> permissions) { this.permissions = permissions; }
+
+	/* Custom Methods */
 	public List<String> getDistrictLocalIds() {
 		return districts.stream().map(District::getId).collect(Collectors.toList());
 	}
@@ -142,6 +147,7 @@ public class App
 		}
 		return null;
 	}
+
 	@Override
 	public String toString() {
 		return "App{" +

@@ -2,7 +2,7 @@ package org.ricone.authentication;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.exception.ConfigException;
+import org.ricone.error.exception.ConfigException;
 import org.ricone.init.ConfigProperties;
 
 import javax.servlet.http.HttpServletRequest;

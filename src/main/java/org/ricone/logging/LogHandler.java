@@ -13,7 +13,8 @@ public class LogHandler extends HandlerInterceptorAdapter
 	 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
-	{	
+	{
+		System.out.println("LogHandler - preHandle ");
 		log(request, response);
 		return super.preHandle(request, response, handler);
 	}

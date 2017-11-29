@@ -1,12 +1,12 @@
 package org.ricone.api.xPress.request.aupp;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.api.xPress.request.xStaff.IStaffDAO;
 import org.ricone.api.xPress.request.xStudent.IStudentDAO;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.ConflictException;
-import org.ricone.exception.ForbiddenException;
+import org.ricone.error.exception.ConflictException;
+import org.ricone.error.exception.ForbiddenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +59,7 @@ public class AppProvisioningService implements IAppProvisioningService
 						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, null);
 						ti.setStaffId(username);
 
-						// Counts how many LoginIds with the same name exist in dao. If it's a new LoginId then the count will be 0.
+						// Counts how many LoginIds with the same name exist in model. If it's a new LoginId then the count will be 0.
 						// If multiple LoginId's start with the same name and/or ends in a number, we count them and subtract 0.
 						if(AppProvisioningUtil.doesUsernameRequireIncrement(EntityType.STAFF, metaData.getApp().getDistrictKVsBySchool(refId))) {
 							int increment = staffIdentifierDAO.countLoginIdsBySchoolRefId(refId, t.getStaffRefId(), ti.getStaffId());
@@ -104,7 +104,7 @@ public class AppProvisioningService implements IAppProvisioningService
 						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), s, null);
 						ti.setStudentId(username);
 
-						// Counts how many LoginIds with the same name exist in dao. If it's a new LoginId then the count will be 0.
+						// Counts how many LoginIds with the same name exist in model. If it's a new LoginId then the count will be 0.
 						// If multiple LoginId's start with the same name, we count them and subtract 0.
 						if(AppProvisioningUtil.doesUsernameRequireIncrement(EntityType.STUDENT, metaData.getApp().getDistrictKVsBySchool(refId))) {
 							int increment = studentIdentifierDAO.countLoginIdsBySchoolRefId(refId, s.getStudentRefId(), ti.getStudentId());

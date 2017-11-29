@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.changesSince;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.dao.EventLog;
+import org.ricone.api.core.model.EventLog;
 import org.ricone.api.xPress.model.XChangesSinceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

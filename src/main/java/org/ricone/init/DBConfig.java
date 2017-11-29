@@ -1,6 +1,6 @@
 package org.ricone.init;
 
-import org.ricone.exception.ConfigException;
+import org.ricone.error.exception.ConfigException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -76,8 +76,7 @@ public class DBConfig {
 	}
 	
 	@Bean
-	public LocalSessionFactoryBean sessionFactory() throws ConfigException 
-	{
+	public LocalSessionFactoryBean sessionFactory() throws ConfigException {
 		LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
 		sessionFactoryBean.setDataSource(dataSource());
 		sessionFactoryBean.setPackagesToScan(env.getRequiredProperty(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN));

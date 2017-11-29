@@ -1,10 +1,10 @@
 package org.ricone.api.xPress.request.xStudent;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.api.core.dao.Student;
+import org.ricone.api.core.model.Student;
 import org.ricone.api.util.Util;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NotFoundException;
+import org.ricone.error.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

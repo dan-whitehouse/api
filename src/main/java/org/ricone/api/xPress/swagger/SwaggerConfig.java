@@ -1,4 +1,4 @@
-package org.ricone.swagger;
+package org.ricone.api.xPress.swagger;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 //@Configuration
 //@EnableSwagger2
-@PropertySource("classpath:dao.properties")
+@PropertySource("classpath:model.properties")
 
 //http://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
 
@@ -48,7 +48,7 @@ public class SwaggerConfig
     @Bean
     public Docket api() {
         Docket d =  new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("org.ricone.api.controller"))
+                .apis(RequestHandlerSelectors.basePackage("org.ricone.api.xPress"))
                 .paths(PathSelectors.ant("/requests/**"))
                 .build()
                 .apiInfo(apiInfo())

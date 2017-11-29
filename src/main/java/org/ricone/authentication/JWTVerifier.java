@@ -1,8 +1,8 @@
 package org.ricone.authentication;
 
 import io.jsonwebtoken.Jwts;
-import org.ricone.config.AppCache;
-import org.ricone.exception.ConfigException;
+import org.ricone.config.cache.AppCache;
+import org.ricone.error.exception.ConfigException;
 
 public class JWTVerifier 
 {

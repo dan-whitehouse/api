@@ -9,8 +9,8 @@ import org.ricone.authentication.MetaData;
 import org.ricone.authentication.TokenDecoder;
 import org.ricone.authentication.session.Session;
 import org.ricone.authentication.session.SessionManager;
-import org.ricone.exception.ConfigException;
-import org.ricone.exception.ForbiddenException;
+import org.ricone.error.exception.ConfigException;
+import org.ricone.error.exception.ForbiddenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +48,7 @@ public abstract class AbstractController
         return metaData;
     }
 
-    public Pageable getPaging(Pageable pageRequest) throws Exception
+    private Pageable getPaging(Pageable pageRequest) throws Exception
     {
         boolean hasPage = StringUtils.isNotBlank(request.getHeader("page"));
         boolean hasSize = StringUtils.isNotBlank(request.getHeader("size"));

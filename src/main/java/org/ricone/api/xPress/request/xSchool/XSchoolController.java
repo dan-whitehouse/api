@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xSchool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.dao.School;
+import org.ricone.api.core.model.School;
 import org.ricone.api.xPress.model.XSchoolResponse;
 import org.ricone.api.xPress.model.XSchoolsResponse;
 import org.springframework.beans.factory.annotation.Autowired;

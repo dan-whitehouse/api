@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.aupp;
 
-import org.ricone.api.core.dao.StudentIdentifier;
+import org.ricone.api.core.model.StudentIdentifier;
 
 public interface IStudentIdentifierDAO
 {

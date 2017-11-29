@@ -2,7 +2,7 @@ package org.ricone.api.xPress.request.xContact;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 

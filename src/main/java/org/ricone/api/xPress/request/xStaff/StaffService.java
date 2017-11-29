@@ -1,10 +1,10 @@
 package org.ricone.api.xPress.request.xStaff;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.api.core.dao.Staff;
+import org.ricone.api.core.model.Staff;
 import org.ricone.api.util.Util;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NotFoundException;
+import org.ricone.error.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

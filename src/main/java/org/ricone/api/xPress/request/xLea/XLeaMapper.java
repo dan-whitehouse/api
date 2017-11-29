@@ -2,8 +2,8 @@ package org.ricone.api.xPress.request.xLea;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.ricone.api.core.dao.Lea;
-import org.ricone.api.core.dao.LeaTelephone;
+import org.ricone.api.core.model.Lea;
+import org.ricone.api.core.model.LeaTelephone;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 

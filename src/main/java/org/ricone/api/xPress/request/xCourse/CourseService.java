@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.xCourse;
 
-import org.ricone.api.core.dao.Course;
+import org.ricone.api.core.model.Course;
 import org.ricone.authentication.MetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

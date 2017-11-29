@@ -1,10 +1,10 @@
 package org.ricone.init;
 
-import org.ricone.config.AppCache;
 import org.ricone.config.ConfigService;
+import org.ricone.config.cache.AppCache;
 import org.ricone.config.model.App;
 import org.ricone.config.model.District;
-import org.ricone.exception.ConfigException;
+import org.ricone.error.exception.ConfigException;
 
 import java.util.Date;
 import java.util.HashMap;

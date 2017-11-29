@@ -2,7 +2,7 @@ package org.ricone.api.xPress.request.aupp;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.api.core.dao.EntityType;
+import org.ricone.api.core.model.EntityType;
 
 import java.util.HashMap;
 

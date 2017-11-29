@@ -3,12 +3,11 @@ package org.ricone.api.xPress.request.changesSince;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.cache.CacheContainer;
-import org.ricone.api.core.dao.EventLog;
-import org.ricone.api.core.dao.EventObject;
-import org.ricone.api.core.dao.Lea;
+import org.ricone.api.core.model.EventLog;
+import org.ricone.api.core.model.EventObject;
+import org.ricone.api.core.model.Lea;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NoContentException;
+import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -21,8 +20,6 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 {
 	private final String OBJECT = "object";
 	private final String EVENT_TIME_STAMP = "eventTimestamp";
-
-	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
 	public List<EventLog> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception {

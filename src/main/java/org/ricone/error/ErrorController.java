@@ -1,6 +1,6 @@
-package org.ricone.api.error;
+package org.ricone.error;
 
-import org.ricone.exception.*;
+import org.ricone.error.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

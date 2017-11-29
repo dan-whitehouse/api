@@ -1,4 +1,4 @@
-package org.ricone.exception;
+package org.ricone.error.exception;
 
 public class ConfigException extends Exception
 {

@@ -1,10 +1,10 @@
 package org.ricone.api.xPress.request.aupp;
 
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.core.dao.School;
-import org.ricone.api.core.dao.Student;
-import org.ricone.api.core.dao.StudentEnrollment;
-import org.ricone.api.core.dao.StudentIdentifier;
+import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.Student;
+import org.ricone.api.core.model.StudentEnrollment;
+import org.ricone.api.core.model.StudentIdentifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;

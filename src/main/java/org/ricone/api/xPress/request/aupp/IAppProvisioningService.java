@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.aupp;
 
-import org.ricone.api.core.dao.UserPassword;
+import org.ricone.api.core.model.UserPassword;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;

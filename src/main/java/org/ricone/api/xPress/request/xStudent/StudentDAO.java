@@ -4,11 +4,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.cache.CacheContainer;
-import org.ricone.api.core.dao.*;
+import org.ricone.api.core.model.*;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NoContentException;
-import org.ricone.exception.NotFoundException;
+import org.ricone.error.exception.NoContentException;
+import org.ricone.error.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -22,7 +21,6 @@ public class StudentDAO extends AbstractDAO<Integer, Student> implements IStuden
 	private final String PRIMARY_KEY = "studentRefId";
 	private final String ID_KEY = "studentId";
 	private final String IDENTIFICATION_SYSTEM_CODE = "identificationSystemCode";
-	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
 	public List<Student> findAll(MetaData metaData) throws Exception {

@@ -3,14 +3,13 @@ package org.ricone.api.xPress.request.xCalendar;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
-import org.ricone.api.cache.CacheContainer;
-import org.ricone.api.core.dao.Lea;
-import org.ricone.api.core.dao.School;
-import org.ricone.api.core.dao.SchoolCalendar;
-import org.ricone.api.core.dao.SchoolCalendarSession;
+import org.ricone.api.core.model.Lea;
+import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.SchoolCalendar;
+import org.ricone.api.core.model.SchoolCalendarSession;
 import org.ricone.authentication.MetaData;
-import org.ricone.exception.NoContentException;
-import org.ricone.exception.NotFoundException;
+import org.ricone.error.exception.NoContentException;
+import org.ricone.error.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -22,7 +21,6 @@ import java.util.Set;
 public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements ICalendarDAO
 {
 	private final String PRIMARY_KEY = "schoolCalendarRefId";
-	private final CacheContainer cacheContainer = new CacheContainer();
 
 	@Override
 	public List<SchoolCalendar> findAll(MetaData metaData) throws Exception {

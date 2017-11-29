@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xRoster;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.dao.CourseSection;
+import org.ricone.api.core.model.CourseSection;
 import org.ricone.api.xPress.model.XRosterResponse;
 import org.ricone.api.xPress.model.XRostersResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,10 @@
-package org.ricone.api.cache;
+package org.ricone.config.cache;
 
-import org.ricone.config.AppCache;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CacheTask 
+public class AppCacheTask
 {
 
     @Scheduled(fixedRate = 15 * (60 * 1000))

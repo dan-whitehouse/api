@@ -1,9 +1,9 @@
 package org.ricone.api.xPress.request.xCourse;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.ricone.api.core.dao.Course;
-import org.ricone.api.core.dao.CourseGrade;
-import org.ricone.api.core.dao.CourseIdentifier;
+import org.ricone.api.core.model.Course;
+import org.ricone.api.core.model.CourseGrade;
+import org.ricone.api.core.model.CourseIdentifier;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 

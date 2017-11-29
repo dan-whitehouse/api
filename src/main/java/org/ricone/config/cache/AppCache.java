@@ -1,8 +1,9 @@
-package org.ricone.config;
+package org.ricone.config.cache;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.ricone.config.ConfigService;
 import org.ricone.config.model.App;
 import org.ricone.config.model.District;
 

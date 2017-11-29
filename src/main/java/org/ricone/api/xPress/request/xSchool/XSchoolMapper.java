@@ -2,10 +2,10 @@ package org.ricone.api.xPress.request.xSchool;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.ricone.api.core.dao.School;
-import org.ricone.api.core.dao.SchoolGrade;
-import org.ricone.api.core.dao.SchoolIdentifier;
-import org.ricone.api.core.dao.SchoolTelephone;
+import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.SchoolGrade;
+import org.ricone.api.core.model.SchoolIdentifier;
+import org.ricone.api.core.model.SchoolTelephone;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 

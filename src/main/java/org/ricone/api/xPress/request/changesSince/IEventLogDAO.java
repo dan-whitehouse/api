@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.changesSince;
 
-import org.ricone.api.core.dao.EventLog;
+import org.ricone.api.core.model.EventLog;
 import org.ricone.authentication.MetaData;
 
 import java.time.LocalDateTime;

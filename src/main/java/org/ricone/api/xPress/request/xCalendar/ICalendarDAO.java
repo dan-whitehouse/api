@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.xCalendar;
 
-import org.ricone.api.core.dao.SchoolCalendar;
+import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;

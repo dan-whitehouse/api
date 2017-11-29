@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.xLea;
 
-import org.ricone.api.core.dao.Lea;
+import org.ricone.api.core.model.Lea;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;

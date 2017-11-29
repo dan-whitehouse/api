@@ -1,8 +1,8 @@
 package org.ricone.api.xPress.request.aupp;
 
-import org.ricone.api.core.dao.Staff;
-import org.ricone.api.core.dao.Student;
-import org.ricone.api.core.dao.UserPassword;
+import org.ricone.api.core.model.Staff;
+import org.ricone.api.core.model.Student;
+import org.ricone.api.core.model.UserPassword;
 import org.ricone.authentication.MetaData;
 
 import java.util.HashMap;

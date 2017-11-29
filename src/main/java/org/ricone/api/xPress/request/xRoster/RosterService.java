@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.xRoster;
 
-import org.ricone.api.core.dao.CourseSection;
+import org.ricone.api.core.model.CourseSection;
 import org.ricone.authentication.MetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
