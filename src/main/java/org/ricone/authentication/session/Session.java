@@ -7,8 +7,13 @@ public class Session
 {
 	private DecodedToken token;
 	private App app;
-	
-	public DecodedToken getToken() 
+
+	public Session(DecodedToken token, App app) {
+		this.token = token;
+		this.app = app;
+	}
+
+	public DecodedToken getToken()
 	{
 		return token;
 	}

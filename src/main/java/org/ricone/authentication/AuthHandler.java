@@ -16,7 +16,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class AuthHandler extends HandlerInterceptorAdapter 
@@ -29,31 +31,21 @@ public class AuthHandler extends HandlerInterceptorAdapter
 	{
 		System.out.println("AuthHandler - preHandle ");
 		AuthRequest authRequest = new AuthRequest(request);
-		if(isPathException(request.getServletPath()))
+		if(isPathException(request.getServletPath())) //is request path an exception to our authentication rules
 		{
 			return super.preHandle(request, response, handler);
 		}
-		else if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter()))
+		else if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter())) //is request on the header, or is it a parameter(but only if we allow it)
 		{
 			DecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken());
-			if(JWTVerifier.verify(decodedToken))
-			{
+			if(JWTVerifier.verify(decodedToken)) {
 				Session session = SessionManager.getInstance().getSessions().get(decodedToken.getApplication_id());
-				if(session != null)
-				{
+				if(session != null) {
 					checkAgainstExisting(decodedToken, session);
 				}
-				else
-				{
-					//If app existing in cache already, use cache, otherwise pull from config service
+				else {
 					App app = AppCache.getInstance().get(decodedToken.getApplication_id());
-
-					//TODO - Connect this to config, and remove this static test
-					PathPermission pathPermission = new PathPermission();
-					pathPermission.setPath("/requests/xLeas/**");
-					pathPermission.setGet(true);
-					app.getPermissions().add(pathPermission);
-
+					app.getPermissions().addAll(pathPermissions()); //TODO - Connect this to config, and remove this static test
 
 					/*
 					*  Use App, Token, and Request to create MetaData needed to make a request to collect the Lea's.
@@ -69,36 +61,45 @@ public class AuthHandler extends HandlerInterceptorAdapter
 
 					app.setLeas(leaService.findAll(metaData));
 
-					session = new Session();
-					session.setToken(decodedToken);
-					session.setApp(app);
-					SessionManager.getInstance().addSession(decodedToken.getApplication_id(), session);
+					//If no session exists, create a new one
+					SessionManager.getInstance().addSession(decodedToken.getApplication_id(), new Session(decodedToken, app));
 				}
 				//Set HttpResponse Header so we can use it in the PermissionHandler
 				response.setHeader("AppId", decodedToken.getApplication_id());
 				return super.preHandle(request, response, handler);
 			}
-			else
-			{
+			else {
 				Date now = new Date();
-				if(decodedToken.getExp().before(now))
-				{
+				if(decodedToken.getExp().before(now)) {
 					throw new UnauthorizedException("Token Expired");
 				}
-				else
-				{
+				else {
 					throw new UnauthorizedException("Invalid Token");
 				}
 			}
 		}
-		else if(authRequest.isParameter() && !authRequest.isAllowTokenParameter())
-		{
+		else if(authRequest.isParameter() && !authRequest.isAllowTokenParameter()) {
 			throw new UnauthorizedException("Token Parameter Not Allowed");
 		}
-		else
-		{
+		else {
 			throw new UnauthorizedException("No Token Provided");
 		}
+	}
+
+	private List<PathPermission> pathPermissions() {
+		PathPermission pathPermission1 = new PathPermission();
+		pathPermission1.setPath("/requests/xLeas");
+		pathPermission1.setGet(true);
+
+		PathPermission pathPermission2 = new PathPermission();
+		pathPermission2.setPath("/requests/xLeas/{}");
+		pathPermission2.setGet(true);
+
+		List<PathPermission> pathPermissions = new ArrayList<>();
+		pathPermissions.add(pathPermission1);
+		pathPermissions.add(pathPermission2);
+
+		return pathPermissions;
 	}
 
 	//This method checks to see if the servletPath being requested is an exception to the rule of needing a token
@@ -122,15 +123,17 @@ public class AuthHandler extends HandlerInterceptorAdapter
 		}
 	}
 
-	private void checkAgainstExisting(DecodedToken decodedToken, Session session) throws UnauthorizedException 
-	{
-		if(!StringUtils.equalsIgnoreCase(decodedToken.getTokenString(), session.getToken().getTokenString()))
-		{	
+	private void checkAgainstExisting(DecodedToken decodedToken, Session session) throws UnauthorizedException {
+		/* The token has already been verified for this app. If the incoming request token doesn't match our session token and is newer, update our session token.
+		   Tokens with an older expiration date are still valid, but we could change this by uncommenting the exception below.
+		   Though this would limit applications from running multiple clients simultaneously where they would each generate a new token, expiring the ones generated before.
+		 */
+		if(!StringUtils.equalsIgnoreCase(decodedToken.getTokenString(), session.getToken().getTokenString())) {
 			boolean isNewer = decodedToken.getExp().after(session.getToken().getExp());		
-			if(isNewer)
-			{
+			if(isNewer) {
 				session.setToken(decodedToken);
 			}
 		}
+		//throw new UnauthorizedException("Token Provided Is Valid, But A Newer Token Has Been Generated");
 	}
 }
