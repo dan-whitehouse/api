@@ -2,6 +2,7 @@ package org.ricone.error;
 
 import org.ricone.error.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,14 @@ public class ErrorController
     {
 		return error(request.getRequestURL().toString(), 404, "Not Found", ex.getMessage());
     }
+
+	@ResponseBody
+	@ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
+	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+	private Error notAcceptable(HttpServletRequest request, HttpServletResponse response, Exception ex)
+	{
+		return error(request.getRequestURL().toString(), 406, "Not Acceptable", ex.getMessage());
+	}
 
 	@ResponseBody
 	@ExceptionHandler({ConflictException.class})

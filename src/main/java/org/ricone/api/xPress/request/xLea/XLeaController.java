@@ -8,7 +8,6 @@ import org.ricone.api.xPress.model.XLeaResponse;
 import org.ricone.api.xPress.model.XLeasResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +34,7 @@ public class XLeaController extends AbstractController
 
     @ResponseBody
     @ApiOperation(value="Return all xLeas", tags = { "xLeas" })
-    @RequestMapping(value = "/requests/xLeas", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(value = "/requests/xLeas", method = RequestMethod.GET)
     public XLeasResponse getXLeas(HttpServletResponse response, Pageable pageRequest) throws Exception {
 
         List<Lea> instance = service.findAll(getMetaData(pageRequest));

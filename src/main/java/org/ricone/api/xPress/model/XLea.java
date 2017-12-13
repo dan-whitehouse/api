@@ -12,6 +12,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonPropertyOrder({
@@ -24,23 +29,33 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "phoneNumber",
         "otherPhoneNumbers"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XLea {
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
+    @XmlElement(name = "refId")
     private String refId;
     @JsonProperty("localId")
+    @XmlElement(name = "localId")
     private String localId;
     @JsonProperty("stateProvinceId")
+    @XmlElement(name = "stateProvinceId")
     private String stateProvinceId;
     @JsonProperty("ncesId")
+    @XmlElement(name = "ncesId")
     private String ncesId;
     @JsonProperty("leaName")
+    @XmlElement(name = "leaName")
     private String leaName;
     @JsonProperty("address")
+    @XmlElement(name = "address")
     private Address address;
     @JsonProperty("phoneNumber")
+    @XmlElement(name = "phoneNumber")
     private PhoneNumber phoneNumber;
     @JsonProperty("otherPhoneNumbers")
+    @XmlElement(name = "otherPhoneNumbers")
     private OtherPhoneNumbers otherPhoneNumbers;
 
     public XLea() {
@@ -61,8 +76,6 @@ public class XLea {
         this.phoneNumber = phoneNumber;
         this.otherPhoneNumbers = otherPhoneNumbers;
     }
-
-
 
     @JsonProperty("@refId")
     public String getRefId() {

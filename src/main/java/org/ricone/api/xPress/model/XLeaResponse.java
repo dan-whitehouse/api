@@ -12,14 +12,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "xLea"
 })
+@XmlRootElement
 public class XLeaResponse {
 
     @JsonProperty("xLea")
+    @XmlElement(name = "xLea")
     private XLea xLea;
 
     public XLeaResponse() {

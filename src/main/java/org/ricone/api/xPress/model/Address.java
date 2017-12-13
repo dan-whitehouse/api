@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -23,21 +27,30 @@ import java.util.stream.Stream;
         "countryCode",
         "postalCode"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
 
     @JsonProperty("addressType")
+    @XmlElement(name = "addressType")
     private String addressType;
     @JsonProperty("line1")
+    @XmlElement(name = "line1")
     private String line1;
     @JsonProperty("line2")
+    @XmlElement(name = "line2")
     private String line2;
     @JsonProperty("city")
+    @XmlElement(name = "city")
     private String city;
     @JsonProperty("stateProvince")
+    @XmlElement(name = "stateProvince")
     private String stateProvince;
     @JsonProperty("countryCode")
+    @XmlElement(name = "countryCode")
     private String countryCode;
     @JsonProperty("postalCode")
+    @XmlElement(name = "postalCode")
     private String postalCode;
 
     public Address() {

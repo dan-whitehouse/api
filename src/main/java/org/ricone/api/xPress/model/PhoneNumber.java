@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -19,13 +23,18 @@ import java.util.stream.Stream;
         "number",
         "primaryIndicator"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PhoneNumber {
 
     @JsonProperty("phoneNumberType")
+    @XmlElement(name = "phoneNumberType")
     private String phoneNumberType;
     @JsonProperty("number")
+    @XmlElement(name = "number")
     private String number;
     @JsonProperty("primaryIndicator")
+    @XmlElement(name = "primaryIndicator")
     private String primaryIndicator;
 
     public PhoneNumber() {
