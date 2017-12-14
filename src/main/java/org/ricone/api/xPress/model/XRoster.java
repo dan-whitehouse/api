@@ -12,10 +12,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "@refId",
+        "refId",
         "courseRefId",
         "courseTitle",
         "sectionRefId",
@@ -30,35 +35,51 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "primaryStaff",
         "otherStaffs"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XRoster extends XWrapper {
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
+    @XmlElement(name = "refId")
     private String refId;
     @JsonProperty("courseRefId")
+    @XmlElement(name = "courseRefId")
     private String courseRefId;
     @JsonProperty("courseTitle")
+    @XmlElement(name = "courseTitle")
     private String courseTitle;
     @JsonProperty("sectionRefId")
+    @XmlElement(name = "sectionRefId")
     private String sectionRefId;
     @JsonProperty("subject")
+    @XmlElement(name = "subject")
     private String subject;
     @JsonProperty("schoolRefId")
+    @XmlElement(name = "schoolRefId")
     private String schoolRefId;
     @JsonProperty("schoolSectionId")
+    @XmlElement(name = "schoolSectionId")
     private String schoolSectionId;
     @JsonProperty("schoolYear")
+    @XmlElement(name = "schoolYear")
     private String schoolYear;
     @JsonProperty("sessionCode")
+    @XmlElement(name = "sessionCode")
     private String sessionCode;
     @JsonProperty("schoolCalendarRefId")
+    @XmlElement(name = "schoolCalendarRefId")
     private String schoolCalendarRefId;
     @JsonProperty("meetingTimes")
+    @XmlElement(name = "meetingTimes")
     private MeetingTimes meetingTimes;
     @JsonProperty("students")
+    @XmlElement(name = "students")
     private Students students;
     @JsonProperty("primaryStaff")
+    @XmlElement(name = "primaryStaff")
     private PrimaryStaff primaryStaff;
     @JsonProperty("otherStaffs")
+    @XmlElement(name = "otherStaffs")
     private OtherStaffs otherStaffs;
 
     public XRoster() {
@@ -86,12 +107,12 @@ public class XRoster extends XWrapper {
         this.otherStaffs = otherStaffs;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public void setRefId(String refId) {
         this.refId = refId;
     }

@@ -10,6 +10,10 @@ package org.ricone.api.xPress.model;
 import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,13 +25,17 @@ import java.util.stream.Stream;
         "code",
         "otherCode"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class EntryType {
 
     @JsonProperty("code")
+    @XmlElement(name = "code")
     private String code;
 
     @JsonProperty("otherCode")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @XmlElement(name = "otherCode")
     private List<OtherCode> otherCode;
 
     public EntryType() {

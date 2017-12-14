@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -22,19 +26,27 @@ import java.util.stream.Stream;
         "middleName",
         "suffix"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Name {
 
     @JsonProperty("type")
+    @XmlElement(name = "type")
     private String type;
     @JsonProperty("prefix")
+    @XmlElement(name = "prefix")
     private String prefix;
     @JsonProperty("familyName")
+    @XmlElement(name = "familyName")
     private String familyName;
     @JsonProperty("givenName")
+    @XmlElement(name = "givenName")
     private String givenName;
     @JsonProperty("middleName")
+    @XmlElement(name = "middleName")
     private String middleName;
     @JsonProperty("suffix")
+    @XmlElement(name = "suffix")
     private String suffix;
 
     public Name() {

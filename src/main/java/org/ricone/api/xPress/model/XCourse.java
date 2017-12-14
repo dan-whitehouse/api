@@ -12,10 +12,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "@refId",
+        "refId",
         "schoolRefId",
         "schoolCourseId",
         "leaCourseId",
@@ -28,31 +33,45 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "scedCourseLevelCode",
         "scedCourseSubjectAreaCode"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XCourse extends XWrapper {
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
+    @XmlElement(name = "refId")
     private String refId;
     @JsonProperty("schoolRefId")
+    @XmlElement(name = "schoolRefId")
     private String schoolRefId;
     @JsonProperty("schoolCourseId")
+    @XmlElement(name = "schoolCourseId")
     private String schoolCourseId;
     @JsonProperty("leaCourseId")
+    @XmlElement(name = "leaCourseId")
     private String leaCourseId;
     @JsonProperty("otherIds")
+    @XmlElement(name = "otherIds")
     private OtherIds otherIds;
     @JsonProperty("courseTitle")
+    @XmlElement(name = "courseTitle")
     private String courseTitle;
     @JsonProperty("description")
+    @XmlElement(name = "description")
     private String description;
     @JsonProperty("subject")
+    @XmlElement(name = "subject")
     private String subject;
     @JsonProperty("applicableEducationLevels")
+    @XmlElement(name = "applicableEducationLevels")
     private ApplicableEducationLevels applicableEducationLevels;
     @JsonProperty("scedCourseCode")
+    @XmlElement(name = "scedCourseCode")
     private String scedCourseCode;
     @JsonProperty("scedCourseLevelCode")
+    @XmlElement(name = "scedCourseLevelCode")
     private String scedCourseLevelCode;
     @JsonProperty("scedCourseSubjectAreaCode")
+    @XmlElement(name = "scedCourseSubjectAreaCode")
     private String scedCourseSubjectAreaCode;
 
 
@@ -78,12 +97,12 @@ public class XCourse extends XWrapper {
 
 
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public void setRefId(String refId) {
         this.refId = refId;
     }

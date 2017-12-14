@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +21,13 @@ import java.util.List;
 @JsonPropertyOrder({
         "race"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Races {
 
     @JsonProperty("race")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @XmlElement(name = "race")
     private List<Race> race;
 
     public Races() {

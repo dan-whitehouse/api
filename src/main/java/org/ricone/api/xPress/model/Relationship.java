@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -26,27 +30,39 @@ import java.util.stream.Stream;
         "communicationsIndicator",
         "contactSequence"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Relationship {
 
     @JsonProperty("studentRefId")
+    @XmlElement(name = "studentRefId")
     private String studentRefId;
     @JsonProperty("relationshipCode")
+    @XmlElement(name = "relationshipCode")
     private String relationshipCode;
     @JsonProperty("restrictions")
+    @XmlElement(name = "restrictions")
     private String restrictions;
     @JsonProperty("livesWith")
+    @XmlElement(name = "livesWith")
     private String livesWith;
     @JsonProperty("primaryContactIndicator")
+    @XmlElement(name = "primaryContactIndicator")
     private String primaryContactIndicator;
     @JsonProperty("emergencyContactIndicator")
+    @XmlElement(name = "emergencyContactIndicator")
     private String emergencyContactIndicator;
     @JsonProperty("financialResponsibilityIndicator")
+    @XmlElement(name = "financialResponsibilityIndicator")
     private String financialResponsibilityIndicator;
     @JsonProperty("custodialIndicator")
+    @XmlElement(name = "custodialIndicator")
     private String custodialIndicator;
     @JsonProperty("communicationsIndicator")
+    @XmlElement(name = "communicationsIndicator")
     private String communicationsIndicator;
     @JsonProperty("contactSequence")
+    @XmlElement(name = "contactSequence")
     private String contactSequence;
 
     public Relationship() {

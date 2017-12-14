@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -22,19 +26,27 @@ import java.util.stream.Stream;
         "countryOfBirth",
         "usCitizenshipStatus"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Demographics {
 
     @JsonProperty("races")
+    @XmlElement(name = "races")
     private Races races;
     @JsonProperty("hispanicLatinoEthnicity")
+    @XmlElement(name = "hispanicLatinoEthnicity")
     private String hispanicLatinoEthnicity;
     @JsonProperty("sex")
+    @XmlElement(name = "sex")
     private String sex;
     @JsonProperty("birthDate")
+    @XmlElement(name = "birthDate")
     private String birthDate;
     @JsonProperty("countryOfBirth")
+    @XmlElement(name = "countryOfBirth")
     private String countryOfBirth;
     @JsonProperty("usCitizenshipStatus")
+    @XmlElement(name = "usCitizenshipStatus")
     private String usCitizenshipStatus;
 
     public Demographics() {

@@ -12,10 +12,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "@refId",
+        "refId",
         "name",
         "localId",
         "stateProvinceId",
@@ -25,25 +30,36 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "primaryAssignment",
         "otherAssignments"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XStaff extends XWrapper {
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
+    @XmlElement(name = "refId")
     private String refId;
     @JsonProperty("name")
+    @XmlElement(name = "name")
     private Name name;
     @JsonProperty("localId")
+    @XmlElement(name = "localId")
     private String localId;
     @JsonProperty("stateProvinceId")
+    @XmlElement(name = "stateProvinceId")
     private String stateProvinceId;
     @JsonProperty("otherIds")
+    @XmlElement(name = "otherIds")
     private OtherIds otherIds;
     @JsonProperty("sex")
+    @XmlElement(name = "sex")
     private String sex;
     @JsonProperty("email")
+    @XmlElement(name = "email")
     private Email email;
     @JsonProperty("primaryAssignment")
+    @XmlElement(name = "primaryAssignment")
     private PrimaryAssignment primaryAssignment;
     @JsonProperty("otherAssignments")
+    @XmlElement(name = "otherAssignments")
     private OtherAssignments otherAssignments;
 
     public XStaff() {
@@ -66,12 +82,12 @@ public class XStaff extends XWrapper {
         this.otherAssignments = otherAssignments;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public void setRefId(String refId) {
         this.refId = refId;
     }

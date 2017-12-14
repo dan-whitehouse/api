@@ -2,6 +2,7 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,19 +15,28 @@ import java.util.Map;
         "tempPassword",
         "tempPasswordExpiryDate"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XAppProvisioningInfo implements Serializable {
 
     @JsonProperty("@refId")
+    @XmlElement(name = "@refId")
     private String refId;
     @JsonProperty("type")
+    @XmlElement(name = "type")
     private String type;
     @JsonProperty("loginId")
+    @XmlElement(name = "loginId")
     private String loginId;
     @JsonProperty("tempPassword")
+    @XmlElement(name = "tempPassword")
     private String tempPassword;
     @JsonProperty("tempPasswordExpiryDate")
+    @XmlElement(name = "tempPasswordExpiryDate")
     private String tempPasswordExpiryDate;
+
     @JsonIgnore
+    @XmlTransient
     private Map<String, Object> additionalProperties = new HashMap<>();
     private final static long serialVersionUID = 3341712217734119376L;
 

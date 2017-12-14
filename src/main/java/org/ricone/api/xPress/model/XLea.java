@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "@refId",
+        "refId",
         "localId",
         "stateProvinceId",
         "ncesId",

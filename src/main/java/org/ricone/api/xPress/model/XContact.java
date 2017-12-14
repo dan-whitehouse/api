@@ -12,10 +12,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "@refId",
+        "refId",
         "name",
         "otherNames",
         "localId",
@@ -29,33 +34,48 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "employerType",
         "relationships"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XContact extends XWrapper {
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
+    @XmlElement(name = "refId")
     private String refId;
     @JsonProperty("name")
+    @XmlElement(name = "name")
     private Name name;
     @JsonProperty("otherNames")
+    @XmlElement(name = "otherNames")
     private OtherNames otherNames;
     @JsonProperty("localId")
+    @XmlElement(name = "localId")
     private String localId;
     @JsonProperty("otherIds")
+    @XmlElement(name = "otherIds")
     private OtherIds otherIds;
     @JsonProperty("address")
+    @XmlElement(name = "address")
     private Address address;
     @JsonProperty("phoneNumber")
+    @XmlElement(name = "phoneNumber")
     private PhoneNumber phoneNumber;
     @JsonProperty("otherPhoneNumbers")
+    @XmlElement(name = "otherPhoneNumbers")
     private OtherPhoneNumbers otherPhoneNumbers;
     @JsonProperty("email")
+    @XmlElement(name = "email")
     private Email email;
     @JsonProperty("otherEmails")
+    @XmlElement(name = "otherEmails")
     private OtherEmails otherEmails;
     @JsonProperty("sex")
+    @XmlElement(name = "sex")
     private String sex;
     @JsonProperty("employerType")
+    @XmlElement(name = "employerType")
     private String employerType;
     @JsonProperty("relationships")
+    @XmlElement(name = "relationships")
     private Relationships relationships;
 
     public XContact() {
@@ -82,12 +102,12 @@ public class XContact extends XWrapper {
         this.relationships = relationships;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public void setRefId(String refId) {
         this.refId = refId;
     }

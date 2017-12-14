@@ -2,6 +2,7 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +13,16 @@ import java.util.Map;
 @JsonPropertyOrder({
         "xAppProvisioningInfo"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XAppProvisioning implements Serializable {
 
     @JsonProperty("xAppProvisioningInfo")
+    @XmlElement(name = "xAppProvisioningInfo")
     private List<XAppProvisioningInfo> xAppProvisioningInfo = new ArrayList<>();
+
     @JsonIgnore
+    @XmlTransient
     private Map<String, Object> additionalProperties = new HashMap<>();
     private final static long serialVersionUID = 1602976204588614880L;
 

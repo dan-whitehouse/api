@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -24,23 +28,33 @@ import java.util.stream.Stream;
         "sessionCode",
         "schoolCalendarRefId"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MeetingTime {
 
     @JsonProperty("timeTableDay")
+    @XmlElement(name = "timeTableDay")
     private String timeTableDay;
     @JsonProperty("classMeetingDays")
+    @XmlElement(name = "classMeetingDays")
     private ClassMeetingDays classMeetingDays;
     @JsonProperty("timeTablePeriod")
+    @XmlElement(name = "timeTablePeriod")
     private String timeTablePeriod;
     @JsonProperty("roomNumber")
+    @XmlElement(name = "roomNumber")
     private String roomNumber;
     @JsonProperty("classBeginningTime")
+    @XmlElement(name = "classBeginningTime")
     private String classBeginningTime;
     @JsonProperty("classEndingTime")
+    @XmlElement(name = "classEndingTime")
     private String classEndingTime;
     @JsonProperty("sessionCode")
+    @XmlElement(name = "sessionCode")
     private String sessionCode;
     @JsonProperty("schoolCalendarRefId")
+    @XmlElement(name = "schoolCalendarRefId")
     private String schoolCalendarRefId;
 
     public MeetingTime() {

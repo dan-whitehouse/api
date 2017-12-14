@@ -101,9 +101,48 @@ public class AuthHandler extends HandlerInterceptorAdapter
 		pathPermission2.setPath("/requests/xLeas/{}");
 		pathPermission2.setGet(true);
 
+		PathPermission pathPermission21 = new PathPermission();
+		pathPermission21.setPath("/requests/xLeas?changesSinceMarker");
+		pathPermission21.setGet(true);
+
+		PathPermission pathPermission3 = new PathPermission();
+		pathPermission3.setPath("/requests/xSchools");
+		pathPermission3.setGet(true);
+
+		PathPermission pathPermission4 = new PathPermission();
+		pathPermission4.setPath("/requests/xCalendars");
+		pathPermission4.setGet(true);
+
+		PathPermission pathPermission5 = new PathPermission();
+		pathPermission5.setPath("/requests/xCourses");
+		pathPermission5.setGet(true);
+
+		PathPermission pathPermission6 = new PathPermission();
+		pathPermission6.setPath("/requests/xRosters");
+		pathPermission6.setGet(true);
+
+		PathPermission pathPermission7 = new PathPermission();
+		pathPermission7.setPath("/requests/xStaffs");
+		pathPermission7.setGet(true);
+
+		PathPermission pathPermission8 = new PathPermission();
+		pathPermission8.setPath("/requests/xStudents");
+		pathPermission8.setGet(true);
+
+		PathPermission pathPermission9 = new PathPermission();
+		pathPermission9.setPath("/requests/xContacts");
+		pathPermission9.setGet(true);
+
 		List<PathPermission> pathPermissions = new ArrayList<>();
 		pathPermissions.add(pathPermission1);
 		pathPermissions.add(pathPermission2);
+		pathPermissions.add(pathPermission3);
+		pathPermissions.add(pathPermission4);
+		pathPermissions.add(pathPermission5);
+		pathPermissions.add(pathPermission6);
+		pathPermissions.add(pathPermission7);
+		pathPermissions.add(pathPermission8);
+		pathPermissions.add(pathPermission9);
 
 		return pathPermissions;
 	}

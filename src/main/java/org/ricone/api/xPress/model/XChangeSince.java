@@ -14,6 +14,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.ricone.api.core.model.EventObject;
 import org.ricone.api.core.model.EventType;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonPropertyOrder({
@@ -30,31 +35,45 @@ import org.ricone.api.core.model.EventType;
         "xStudent",
         "xContact"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XChangeSince {
 
     @JsonProperty("@refId")
+    @XmlElement(name = "@refId")
     private String refId;
     @JsonProperty("eventObject")
+    @XmlElement(name = "eventObject")
     private EventObject eventObject;
     @JsonProperty("eventType")
+    @XmlElement(name = "eventType")
     private EventType eventType;
     @JsonProperty("eventDate")
+    @XmlElement(name = "eventDate")
     private String eventDate;
     @JsonProperty("xLea")
+    @XmlElement(name = "xLea")
     private XLea xLea;
     @JsonProperty("xSchool")
+    @XmlElement(name = "xSchool")
     private XSchool xSchool;
     @JsonProperty("xCalendar")
+    @XmlElement(name = "xCalendar")
     private XCalendar xCalendar;
     @JsonProperty("xCourse")
+    @XmlElement(name = "xCourse")
     private XCourse xCourse;
     @JsonProperty("xRoster")
+    @XmlElement(name = "xRoster")
     private XRoster xRoster;
     @JsonProperty("xStaff")
+    @XmlElement(name = "xStaff")
     private XStaff xStaff;
     @JsonProperty("xStudent")
+    @XmlElement(name = "xStudent")
     private XStudent xStudent;
     @JsonProperty("xContact")
+    @XmlElement(name = "xContact")
     private XContact xContact;
 
     public XChangeSince() {

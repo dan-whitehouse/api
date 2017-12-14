@@ -12,10 +12,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "@refId",
+        "refId",
         "name",
         "otherNames",
         "localId",
@@ -33,41 +38,60 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "studentContacts",
         "languages"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XStudent extends XWrapper {
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
+    @XmlElement(name = "refId")
     private String refId;
     @JsonProperty("name")
+    @XmlElement(name = "name")
     private Name name;
     @JsonProperty("otherNames")
+    @XmlElement(name = "otherNames")
     private OtherNames otherNames;
     @JsonProperty("localId")
+    @XmlElement(name = "localId")
     private String localId;
     @JsonProperty("stateProvinceId")
+    @XmlElement(name = "stateProvinceId")
     private String stateProvinceId;
     @JsonProperty("otherIds")
+    @XmlElement(name = "otherIds")
     private OtherIds otherIds;
     @JsonProperty("address")
+    @XmlElement(name = "address")
     private Address address;
     @JsonProperty("phoneNumber")
+    @XmlElement(name = "phoneNumber")
     private PhoneNumber phoneNumber;
     @JsonProperty("otherPhoneNumbers")
+    @XmlElement(name = "otherPhoneNumbers")
     private OtherPhoneNumbers otherPhoneNumbers;
     @JsonProperty("email")
+    @XmlElement(name = "email")
     private Email email;
     @JsonProperty("otherEmails")
+    @XmlElement(name = "otherEmails")
     private OtherEmails otherEmails;
     @JsonProperty("demographics")
+    @XmlElement(name = "demographics")
     private Demographics demographics;
     @JsonProperty("enrollment")
+    @XmlElement(name = "enrollment")
     private Enrollment enrollment;
     @JsonProperty("otherEnrollments")
+    @XmlElement(name = "otherEnrollments")
     private OtherEnrollments otherEnrollments;
     @JsonProperty("academicSummary")
+    @XmlElement(name = "academicSummary")
     private AcademicSummary academicSummary;
     @JsonProperty("studentContacts")
+    @XmlElement(name = "studentContacts")
     private StudentContacts studentContacts;
     @JsonProperty("languages")
+    @XmlElement(name = "languages")
     private Languages languages;
 
     public XStudent() {
@@ -98,12 +122,12 @@ public class XStudent extends XWrapper {
         this.languages = languages;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public void setRefId(String refId) {
         this.refId = refId;
     }

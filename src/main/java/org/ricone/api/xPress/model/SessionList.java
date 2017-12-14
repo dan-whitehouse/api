@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -24,23 +28,33 @@ import java.util.stream.Stream;
         "startDate",
         "endDate"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SessionList {
 
     @JsonProperty("sessionType")
+    @XmlElement(name = "sessionType")
     private String sessionType;
     @JsonProperty("sessionCode")
+    @XmlElement(name = "sessionCode")
     private String sessionCode;
     @JsonProperty("description")
+    @XmlElement(name = "description")
     private String description;
     @JsonProperty("markingTerm")
+    @XmlElement(name = "markingTerm")
     private String markingTerm;
     @JsonProperty("schedulingTerm")
+    @XmlElement(name = "schedulingTerm")
     private String schedulingTerm;
     @JsonProperty("linkedSessionCode")
+    @XmlElement(name = "linkedSessionCode")
     private String linkedSessionCode;
     @JsonProperty("startDate")
+    @XmlElement(name = "startDate")
     private String startDate;
     @JsonProperty("endDate")
+    @XmlElement(name = "endDate")
     private String endDate;
 
     public SessionList() {

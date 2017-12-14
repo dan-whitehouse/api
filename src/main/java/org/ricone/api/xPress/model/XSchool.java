@@ -12,10 +12,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "@refId",
+        "refId",
         "leaRefId",
         "localId",
         "stateProvinceId",
@@ -26,29 +31,40 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "phoneNumber",
         "otherPhoneNumbers"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XSchool extends XWrapper {
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
+    @XmlElement(name = "refId")
     private String refId;
     @JsonProperty("leaRefId")
+    @XmlElement(name = "leaRefId")
     private String leaRefId;
     @JsonProperty("localId")
+    @XmlElement(name = "localId")
     private String localId;
     @JsonProperty("stateProvinceId")
+    @XmlElement(name = "stateProvinceId")
     private String stateProvinceId;
     @JsonProperty("otherIds")
+    @XmlElement(name = "otherIds")
     private OtherIds otherIds;
     @JsonProperty("schoolName")
+    @XmlElement(name = "schoolName")
     private String schoolName;
     @JsonProperty("gradeLevels")
+    @XmlElement(name = "gradeLevels")
     private GradeLevels gradeLevels;
     @JsonProperty("address")
+    @XmlElement(name = "address")
     private Address address;
     @JsonProperty("phoneNumber")
+    @XmlElement(name = "phoneNumber")
     private PhoneNumber phoneNumber;
     @JsonProperty("otherPhoneNumbers")
+    @XmlElement(name = "otherPhoneNumbers")
     private OtherPhoneNumbers otherPhoneNumbers;
-
 
     public XSchool() {
     }
@@ -71,12 +87,12 @@ public class XSchool extends XWrapper {
         this.otherPhoneNumbers = otherPhoneNumbers;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public void setRefId(String refId) {
         this.refId = refId;
     }

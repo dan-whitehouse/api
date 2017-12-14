@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -19,13 +23,18 @@ import java.util.stream.Stream;
         "termWeightedGpa",
         "classRank"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AcademicSummary {
 
     @JsonProperty("cumulativeWeightedGpa")
+    @XmlElement(name = "__________")
     private String cumulativeWeightedGpa;
     @JsonProperty("termWeightedGpa")
+    @XmlElement(name = "termWeightedGpa")
     private String termWeightedGpa;
     @JsonProperty("classRank")
+    @XmlElement(name = "classRank")
     private String classRank;
 
     public AcademicSummary() {

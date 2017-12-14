@@ -27,7 +27,7 @@ public class XChangesSinceController extends AbstractController
     @ResponseBody
     @ApiOperation(value="Return all xLeas which have change extension", tags = { "xChangesSince" })
     @RequestMapping(value= "/requests/xLeas", method = RequestMethod.GET , params = {"changesSinceMarker"})
-    //http://localhost:8080/api/requests/xLeas?changesSinceMarker=2000-01-31T00:00:00.000-00:00
+    //GET http://localhost:8080/api/requests/xLeas?changesSinceMarker=2000-01-31T00:00:00.000-00:00
     public XChangesSinceResponse getXChangesSinceByLea(HttpServletResponse response, Pageable pageRequest, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime changesSinceMarker) throws Exception
     {
         List<EventLog> instance = service.findAllByLea(getMetaData(pageRequest), changesSinceMarker);

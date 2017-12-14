@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -18,11 +22,15 @@ import java.util.stream.Stream;
         "type",
         "code"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Language {
 
     @JsonProperty("type")
+    @XmlElement(name = "type")
     private String type;
     @JsonProperty("code")
+    @XmlElement(name = "code")
     private String code;
 
     public Language() {

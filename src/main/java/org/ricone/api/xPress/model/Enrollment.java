@@ -9,6 +9,10 @@ package org.ricone.api.xPress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -30,35 +34,51 @@ import java.util.stream.Stream;
         "projectedGraduationYear",
         "counselor"
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Enrollment {
 
     @JsonProperty("leaRefId")
+    @XmlElement(name = "leaRefId")
     private String leaRefId;
     @JsonProperty("schoolRefId")
+    @XmlElement(name = "schoolRefId")
     private String schoolRefId;
     @JsonProperty("studentSchoolAssociationRefId")
+    @XmlElement(name = "studentSchoolAssociationRefId")
     private String studentSchoolAssociationRefId;
     @JsonProperty("responsibleSchoolType")
+    @XmlElement(name = "responsibleSchoolType")
     private String responsibleSchoolType;
     @JsonProperty("membershipType")
+    @XmlElement(name = "membershipType")
     private String membershipType;
     @JsonProperty("entryDate")
+    @XmlElement(name = "entryDate")
     private String entryDate;
     @JsonProperty("entryType")
+    @XmlElement(name = "entryType")
     private EntryType entryType;
     @JsonProperty("exitDate")
+    @XmlElement(name = "exitDate")
     private String exitDate;
     @JsonProperty("exitType")
+    @XmlElement(name = "exitType")
     private ExitType exitType;
     @JsonProperty("homeRoomNumber")
+    @XmlElement(name = "homeRoomNumber")
     private String homeRoomNumber;
     @JsonProperty("homeRoomTeacher")
+    @XmlElement(name = "homeRoomTeacher")
     private HomeRoomTeacher homeRoomTeacher;
     @JsonProperty("gradeLevel")
+    @XmlElement(name = "gradeLevel")
     private String gradeLevel;
     @JsonProperty("projectedGraduationYear")
+    @XmlElement(name = "projectedGraduationYear")
     private String projectedGraduationYear;
     @JsonProperty("counselor")
+    @XmlElement(name = "counselor")
     private Counselor counselor;
 
     public Enrollment() {

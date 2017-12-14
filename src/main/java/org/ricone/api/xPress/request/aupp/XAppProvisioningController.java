@@ -27,10 +27,13 @@ public class XAppProvisioningController extends AbstractController
 
     private final String BAD_REQUEST_EXCEPTION = "The request could not be understood by the server due to malformed syntax";
 
+
+
     /* Staffs */
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value="Create User Accounts for xStaffs by xSchool refId ", tags = { "xAppProvisioning" })
     @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.POST, params = {"userPasswords"})
+    //POST http://localhost:8080/api/requests/xSchools/{refId}/xStaffs?userPasswords=true
     public void provisionXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @RequestParam(value="userPasswords") boolean userPasswords, @PathVariable(value="refId") String refId) throws Exception
     {
         if(userPasswords) {

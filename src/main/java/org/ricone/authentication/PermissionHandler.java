@@ -1,5 +1,6 @@
 package org.ricone.authentication;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.config.cache.AppCache;
 import org.ricone.config.model.App;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -19,7 +21,7 @@ import java.util.function.Predicate;
 public class PermissionHandler extends HandlerInterceptorAdapter
 {
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
 	{
 		System.out.println("PermissionHandler - preHandle");
 
@@ -27,23 +29,29 @@ public class PermissionHandler extends HandlerInterceptorAdapter
 		String appId = response.getHeader("AppId");
 
 		//Does App have permission to access this page
-		Optional<PathPermission> permission = getPathPermission(appId, request.getServletPath()); //getPathPermission -> doesPathMatch -> isMatch -> removeLastSlash
+		Optional<PathPermission> permission = getPathPermission(appId, request.getServletPath(), request.getParameterMap()); //getPathPermission -> doesPathMatch -> isMatch -> removeLastSlash
 		if(permission.isPresent() && hasAccess(permission.get(), request.getMethod())) {
 			return super.preHandle(request, response, handler);
 		}
 		throw new ForbiddenException("Insufficient permissions");
 	}
 
-	private Optional<PathPermission> getPathPermission(String appId, String servletPath) {
+	private Optional<PathPermission> getPathPermission(String appId, String servletPath, Map<String, String[]> parameterMap) {
 		App app = AppCache.getInstance().get(appId);
-		return app.getPermissions().stream().filter(doesPathMatch(servletPath)).findFirst();
+		try {
+			return app.getPermissions().stream().filter(doesPathMatch(servletPath, parameterMap)).findFirst();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
 	}
 
-	private Predicate<PathPermission> doesPathMatch(String servletPath) {
-		return p -> isMatch(p.getPath(), servletPath);
+	private Predicate<PathPermission> doesPathMatch(String servletPath, Map<String, String[]> parameterMap) {
+		return p -> isMatch(p.getPath(), servletPath, parameterMap);
 	}
 
-	private boolean isMatch(String path, String servletPath) {
+	private boolean isMatch(String path, String servletPath, Map<String, String[]> parameterMap) {
 		//Clean
 		path = removeLastSlash(path);
 		servletPath = removeLastSlash(servletPath);
@@ -52,10 +60,12 @@ public class PermissionHandler extends HandlerInterceptorAdapter
 		String[] pathArray = StringUtils.split(path, "/");
 		String[] servletPathArray = StringUtils.split(servletPath, "/");
 
+		System.err.println(pathArray.length + " | " + servletPathArray.length);
+
 		//Build
 		List<String> list = new ArrayList<>();
-		for(int i = 0; i < pathArray.length; i++) {
-			if(pathArray[i] != null && servletPathArray[i] != null) {
+		if(pathArray.length <= servletPathArray.length) {
+			for(int i = 0; i < pathArray.length; i++) {
 				if("{}".equals(pathArray[i])) {
 					list.add(servletPathArray[i]);
 				}
@@ -66,8 +76,19 @@ public class PermissionHandler extends HandlerInterceptorAdapter
 		}
 		String result = "/" + StringUtils.join(list, "/");
 
+		//System.err.println(result + " | " + servletPath);
+
+		if(CollectionUtils.isNotEmpty(parameterMap.keySet())) {
+			Optional<String> feature = parameterMap.keySet().stream().filter(entry -> isFeature(entry)).findFirst();
+			if(feature.isPresent()) {
+				servletPath = servletPath + "?" + feature.get();
+			}
+		}
+		//System.err.println(result + " | " + servletPath);
+
+
 		//Compare
-		return result.equalsIgnoreCase(servletPath);
+		return servletPath.equalsIgnoreCase(result);
 	}
 
 	private String removeLastSlash(String url) {
@@ -87,5 +108,11 @@ public class PermissionHandler extends HandlerInterceptorAdapter
 			case "HEAD": return permission.getHead();
 			default: return false;
 		}
+	}
+
+	private boolean isFeature(String key) {
+		if(key.equalsIgnoreCase("changesSinceMarker")) return true;
+		else if(key.equalsIgnoreCase("userPasswords")) return true;
+		else return false;
 	}
 }
