@@ -1,5 +1,6 @@
 package org.ricone.init;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -116,6 +117,8 @@ public class Config implements WebMvcConfigurer
 		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
 		mapper.disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 		mapper.registerModule(simpleModule);
 
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();

@@ -1,9 +1,11 @@
 package org.ricone.api.xPress.request.xLea;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
@@ -22,39 +24,43 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 	private final String LOCAL_ID_KEY = "leaId";
 
 	@Override
-	public List<Lea> findAll(MetaData metaData) throws Exception {
+	public List<LeaWrapper> findAll(MetaData metaData) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where(from.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -65,28 +71,33 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findAllByCalendarRefId(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByCalendarRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
-		final SetJoin<School, SchoolCalendar> schoolCalendars = (SetJoin<School, SchoolCalendar>) schools.<School, SchoolCalendar>fetch("schoolCalendars", JoinType.LEFT);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.LEFT);
+		final SetJoin<School, SchoolCalendar> schoolCalendars = (SetJoin<School, SchoolCalendar>) schools.<School, SchoolCalendar>join("schoolCalendars", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -97,28 +108,33 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findAllByCourseRefId(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByCourseRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.INNER);
-		final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>fetch("courses", JoinType.INNER);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.INNER);
+		final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join("courses", JoinType.INNER);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -129,30 +145,33 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.INNER);
-		final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>fetch("courses", JoinType.INNER);
-		final SetJoin<Course, CourseSection> courseSections = (SetJoin<Course, CourseSection>) courses.<Course, CourseSection>fetch("courseSections", JoinType.INNER);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.INNER);
+		final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join("courses", JoinType.INNER);
+		final SetJoin<Course, CourseSection> courseSections = (SetJoin<Course, CourseSection>) courses.<Course, CourseSection>join("courseSections", JoinType.INNER);
 
 		select.distinct(true);
-		select.select(from);
-		select.where();
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -163,29 +182,34 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findAllByStaffRefId(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByStaffRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.INNER);
-		final SetJoin<School, StaffAssignment> staffAssignments = (SetJoin<School, StaffAssignment>) schools.<School, StaffAssignment>fetch("staffAssignments", JoinType.INNER);
-		final Join<StaffAssignment, Staff> staff = (Join<StaffAssignment, Staff>) staffAssignments.<StaffAssignment, Staff>fetch("staff", JoinType.INNER);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.INNER);
+		final SetJoin<School, StaffAssignment> staffAssignments = (SetJoin<School, StaffAssignment>) schools.<School, StaffAssignment>join("staffAssignments", JoinType.INNER);
+		final Join<StaffAssignment, Staff> staff = (Join<StaffAssignment, Staff>) staffAssignments.<StaffAssignment, Staff>join("staff", JoinType.INNER);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -196,29 +220,34 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+		
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.INNER);
-		final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>fetch("studentEnrollments", JoinType.INNER);
-		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>) studentEnrollments.<StudentEnrollment, Student>fetch("student", JoinType.INNER);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.INNER);
+		final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join("studentEnrollments", JoinType.INNER);
+		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>) studentEnrollments.<StudentEnrollment, Student>join("student", JoinType.INNER);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -229,31 +258,36 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+		
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findAllByContactRefId(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByContactRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.INNER);
-		final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>fetch("studentEnrollments", JoinType.INNER);
-		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>) studentEnrollments.<StudentEnrollment, Student>fetch("student", JoinType.INNER);
-		final SetJoin<Student, StudentContactRelationship> studentContactRelationships = (SetJoin<Student, StudentContactRelationship>) student.<Student, StudentContactRelationship>fetch("studentContactRelationships", JoinType.INNER);
-		final Join<StudentContactRelationship, StudentContact> contact = (Join<StudentContactRelationship, StudentContact>) studentContactRelationships.<StudentContactRelationship, StudentContact>fetch("studentContact", JoinType.INNER);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.INNER);
+		final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join("studentEnrollments", JoinType.INNER);
+		final Join<StudentEnrollment, Student> student = (Join<StudentEnrollment, Student>) studentEnrollments.<StudentEnrollment, Student>join("student", JoinType.INNER);
+		final SetJoin<Student, StudentContactRelationship> studentContactRelationships = (SetJoin<Student, StudentContactRelationship>) student.<Student, StudentContactRelationship>join("studentContactRelationships", JoinType.INNER);
+		final Join<StudentContactRelationship, StudentContact> contact = (Join<StudentContactRelationship, StudentContact>) studentContactRelationships.<StudentContactRelationship, StudentContact>join("studentContact", JoinType.INNER);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -264,27 +298,32 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
+		Query<LeaWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Lea> instance = q.getResultList();
+		
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Lea> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
+	public List<LeaWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -294,22 +333,26 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 			)
 		);
 
-		Query<Lea> q = getSession().createQuery(select);
-		List<Lea> instance = q.getResultList();
+		Query<LeaWrapper> q = getSession().createQuery(select);
+		List<LeaWrapper> instance = q.getResultList();
+		instance.forEach(leaWrapper -> {
+			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public Lea findByRefId(MetaData metaData, String refId) throws Exception {
+	public LeaWrapper findByRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -319,19 +362,22 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 			)
 		);
 
-		Query<Lea> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<LeaWrapper> q = getSession().createQuery(select);
+		LeaWrapper instance = q.getSingleResult();
+		instance.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+		instance.getLea().getSchools().forEach(Hibernate::initialize);
+		return instance;
 	}
 
 	@Override
-	public Lea findByLocalId(MetaData metaData, String localId) throws Exception {
+	public LeaWrapper findByLocalId(MetaData metaData, String localId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -341,20 +387,23 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 			)
 		);
 
-		Query<Lea> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<LeaWrapper> q = getSession().createQuery(select);
+		LeaWrapper instance = q.getSingleResult();
+		instance.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+		instance.getLea().getSchools().forEach(Hibernate::initialize);
+		return instance;
 	}
 
 	@Override
-	public Lea findBySchoolRefId(MetaData metaData, String refId) throws Exception {
+	public LeaWrapper findBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Lea> select = cb.createQuery(Lea.class);
+		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>fetch("leaTelephones", JoinType.LEFT);
-		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>fetch("schools", JoinType.LEFT);
+		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join("leaTelephones", JoinType.LEFT);
+		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join("schools", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(LeaWrapper.class, from.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -365,8 +414,11 @@ public class LeaDAO extends AbstractDAO<Integer, Lea> implements ILeaDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Lea> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<LeaWrapper> q = getSession().createQuery(select);
+		LeaWrapper instance = q.getSingleResult();
+		instance.getLea().getLeaTelephones().forEach(Hibernate::initialize);
+		instance.getLea().getSchools().forEach(Hibernate::initialize);
+		return instance;
 	}
 
 	@Override

@@ -6,7 +6,9 @@ import org.ricone.api.xPress.model.XSchool;
 import org.ricone.api.xPress.model.XSchools;
 import org.ricone.authentication.MetaData;
 import org.ricone.config.model.XSchoolFilter;
+import org.springframework.stereotype.Component;
 
+@Component("XSchoolFilterer")
 public class XSchoolFilterer
 {
     public XSchoolFilterer() {

@@ -101,7 +101,7 @@ public class XEventLogMapper {
     private void mapXLea(XChangeSince xChangeSince, EventLog eventLog) {
         XLea xLea;
         if(eventLog.getLea() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xLea = xLeaMapper.map(eventLog.getLea());
+            xLea = xLeaMapper.map(eventLog.getLea(), null);
         }
         else {
             xLea = new XLea(eventLog.getObjectRefId());

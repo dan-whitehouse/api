@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "employerType",
         "relationships"
 })
-public class XContact {
+public class XContact extends XWrapper {
 
     @JsonProperty("@refId")
     private String refId;

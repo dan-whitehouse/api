@@ -3,7 +3,9 @@ package org.ricone.api.xPress.request.xContact;
 import org.ricone.api.xPress.model.*;
 import org.ricone.authentication.MetaData;
 import org.ricone.config.model.XContactFilter;
+import org.springframework.stereotype.Component;
 
+@Component("XContactFilterer")
 public class XContactFilterer
 {
     public XContactFilterer() {

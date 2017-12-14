@@ -1,8 +1,8 @@
 package org.ricone.api.core.request.validation;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.core.request.validation.model.*;
 import org.ricone.api.xPress.request.xLea.ILeaService;
 import org.ricone.api.xPress.request.xSchool.ISchoolService;
@@ -31,24 +31,24 @@ public class ValidationService implements IValidationService
 
 	@Override
 	public ValidationResponse findAll(MetaData metaData) throws Exception {
-		List<Lea> leas = leaService.findAll(metaData);
+		List<LeaWrapper> leas = leaService.findAll(metaData);
 
 		Districts districts = new Districts();
 		leas.forEach(lea -> {
 
 			//Set Student & Staff Data
-			Students students = getStudents(lea.getLeaRefId());
-			Staff staff = getStaffs(lea.getLeaRefId());
+			Students students = getStudents(lea.getLea().getLeaRefId());
+			Staff staff = getStaffs(lea.getLea().getLeaRefId());
 
 			//Set District
 			District district = new District();
-			district.setRefId(lea.getLeaRefId());
-			district.setName(lea.getLeaName());
+			district.setRefId(lea.getLea().getLeaRefId());
+			district.setName(lea.getLea().getLeaName());
 			district.setStudents(students);
 			district.setStaff(staff);
 
 			try {
-				List<School> schools = schoolService.findAllByLea(metaData, lea.getLeaRefId());
+				List<School> schools = schoolService.findAllByLea(metaData, lea.getLea().getLeaRefId());
 				if(CollectionUtils.isNotEmpty(schools)) {
 					Schools v_schools = new Schools();
 					schools.forEach(school -> {
@@ -76,19 +76,19 @@ public class ValidationService implements IValidationService
 
 	@Override
 	public ValidationResponse findAllByLea(MetaData metaData, String refId) throws Exception {
-		Lea lea = leaService.findById(metaData, refId);
+		LeaWrapper lea = leaService.findById(metaData, refId);
 		List<School> schools = schoolService.findAllByLea(metaData, refId);
 
 		//Set Student & Staff Data
-		Students students = getStudents(lea.getLeaRefId());
-		Staff staff = getStaffs(lea.getLeaRefId());
+		Students students = getStudents(lea.getLea().getLeaRefId());
+		Staff staff = getStaffs(lea.getLea().getLeaRefId());
 
 		//Set Validation Response
 		ValidationResponse validation = new ValidationResponse();
 		Districts districts = new Districts();
 		District district = new District();
-		district.setRefId(lea.getLeaRefId());
-		district.setName(lea.getLeaName());
+		district.setRefId(lea.getLea().getLeaRefId());
+		district.setName(lea.getLea().getLeaName());
 		district.setStudents(students);
 		district.setStaff(staff);
 

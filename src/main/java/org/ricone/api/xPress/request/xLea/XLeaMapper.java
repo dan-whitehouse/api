@@ -4,6 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.LeaTelephone;
+import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +17,12 @@ public class XLeaMapper {
     public XLeaMapper() {
     }
 
-    public XLeasResponse convert(List<Lea> instance)
+    public XLeasResponse convert(List<LeaWrapper> instance)
     {
         List<XLea> list = new ArrayList<>();
-        for(Lea lea : instance)
+        for(LeaWrapper wrapper : instance)
         {
-            XLea xLea = map(lea);
+            XLea xLea = map(wrapper.getLea(), wrapper.getDistrictId());
             if (xLea != null) {
                 list.add(xLea);
             }
@@ -35,21 +36,23 @@ public class XLeaMapper {
         return response;
     }
 
-    public XLeaResponse convert(Lea instance)
+    public XLeaResponse convert(LeaWrapper wrapper)
     {
         XLeaResponse response = new XLeaResponse();
-        response.setXLea(map(instance));
+        response.setXLea(map(wrapper.getLea(), wrapper.getDistrictId()));
         return response;
     }
 
-    public XLea map(Lea instance)
+    public XLea map(Lea instance, String districtId)
     {
         XLea xLea = new XLea();
+        xLea.setDistrictId(districtId); //Required by Filtering
         xLea.setRefId(instance.getLeaRefId());
         xLea.setLeaName(instance.getLeaName());
         xLea.setLocalId(instance.getLeaId());
         xLea.setStateProvinceId(instance.getLeaSeaId());
         xLea.setNcesId(instance.getLeaNcesId());
+
 
         //Address
         Address address = mapAddress(instance);

@@ -5,7 +5,9 @@ import org.ricone.api.xPress.model.XCourse;
 import org.ricone.api.xPress.model.XCourses;
 import org.ricone.authentication.MetaData;
 import org.ricone.config.model.XCourseFilter;
+import org.springframework.stereotype.Component;
 
+@Component("XCourseFilterer")
 public class XCourseFilterer
 {
     public XCourseFilterer() {

@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "studentContacts",
         "languages"
 })
-public class XStudent {
+public class XStudent extends XWrapper {
 
     @JsonProperty("@refId")
     private String refId;

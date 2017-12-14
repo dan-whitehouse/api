@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "schoolYear",
         "sessions"
 })
-public class XCalendar {
+public class XCalendar extends XWrapper {
 
     @JsonProperty("@refId")
     private String refId;

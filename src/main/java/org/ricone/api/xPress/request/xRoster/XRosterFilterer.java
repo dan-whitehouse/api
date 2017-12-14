@@ -3,7 +3,9 @@ package org.ricone.api.xPress.request.xRoster;
 import org.ricone.api.xPress.model.*;
 import org.ricone.authentication.MetaData;
 import org.ricone.config.model.XRosterFilter;
+import org.springframework.stereotype.Component;
 
+@Component("XRosterFilterer")
 public class XRosterFilterer
 {
     public XRosterFilterer() {

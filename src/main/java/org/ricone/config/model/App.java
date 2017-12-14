@@ -17,8 +17,8 @@ public class App
 	private String providerSecret;
 	private String profile_id;
 
-	private List<District> districts;
-	private List<Lea> leas;
+	private List<District> districts = new ArrayList<>();
+	private List<Lea> leas = new ArrayList<>();
 	private List<PathPermission> permissions = new ArrayList<>();
 
 	public App() {
@@ -62,7 +62,9 @@ public class App
 	public void setDistricts(List<District> districts) { this.districts = districts; }
 
 	public List<Lea> getLeas() { return leas; }
-	public void setLeas(List<Lea> leas) { this.leas = leas; }
+	public void setLeas(List<Lea> leas) {
+		this.leas = leas;
+	}
 
 	public List<PathPermission> getPermissions() { return permissions; }
 	public void setPermissions(List<PathPermission> permissions) { this.permissions = permissions; }

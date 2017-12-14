@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "scedCourseLevelCode",
         "scedCourseSubjectAreaCode"
 })
-public class XCourse {
+public class XCourse extends XWrapper {
 
     @JsonProperty("@refId")
     private String refId;

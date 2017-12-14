@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "addressType",
         "line1",

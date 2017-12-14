@@ -5,7 +5,9 @@ import org.ricone.api.xPress.model.XCalendar;
 import org.ricone.api.xPress.model.XCalendars;
 import org.ricone.authentication.MetaData;
 import org.ricone.config.model.XCalendarFilter;
+import org.springframework.stereotype.Component;
 
+@Component("XCalendarFilterer")
 public class XCalendarFilterer
 {
     public XCalendarFilterer() {

@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.changesSince;
 
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xPress.request.xCalendar.ICalendarDAO;
 import org.ricone.api.xPress.request.xContact.IContactDAO;
 import org.ricone.api.xPress.request.xCourse.ICourseDAO;
@@ -60,11 +61,11 @@ public class ChangesSinceService implements IChangesSinceService
 			}
 		});
 
-		List<Lea> leas = lea.findByRefIds(metaData, refIds);
+		List<LeaWrapper> leas = lea.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
 			leas.forEach(lea -> {
-				if(lea.getLeaRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setLea(lea);
+				if(lea.getLea().getLeaRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setLea(lea.getLea());
 				}
 			});
 		});

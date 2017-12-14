@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "primaryStaff",
         "otherStaffs"
 })
-public class XRoster {
+public class XRoster extends XWrapper {
 
     @JsonProperty("@refId")
     private String refId;

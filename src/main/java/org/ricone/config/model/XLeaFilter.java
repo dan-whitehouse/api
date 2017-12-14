@@ -10,45 +10,44 @@ import java.io.Serializable;
 @JsonPropertyOrder({ "refId", "localId", "leaRefId", "stateProvinceId", "ncesId", "leaName", "addressaddressType", "addressline1", "addressline2", "addresscity", "addressstateProvince", "addresscountryCode", "addresspostalCode", "phoneNumberphoneNumberType", "phoneNumbernumber", "phoneNumberprimaryIndicator", "otherPhoneNumbersphoneNumberphoneNumberType", "otherPhoneNumbersphoneNumbernumber", "otherPhoneNumbersphoneNumberprimaryIndicator", "id" })
 public class XLeaFilter implements IFilter<XLeaFilter>, Serializable
 {
-
 	@JsonProperty("refId")
-	private Boolean refId;
+	private Boolean refId = false;
 	@JsonProperty("localId")
-	private Boolean localId;
+	private Boolean localId = false;
 	@JsonProperty("leaRefId")
-	private Boolean leaRefId;
+	private Boolean leaRefId = false;
 	@JsonProperty("stateProvinceId")
-	private Boolean stateProvinceId;
+	private Boolean stateProvinceId = false;
 	@JsonProperty("ncesId")
-	private Boolean ncesId;
+	private Boolean ncesId = false;
 	@JsonProperty("leaName")
-	private Boolean leaName;
+	private Boolean leaName = false;
 	@JsonProperty("addressaddressType")
-	private Boolean addressaddressType;
+	private Boolean addressaddressType = false;
 	@JsonProperty("addressline1")
-	private Boolean addressline1;
+	private Boolean addressline1 = false;
 	@JsonProperty("addressline2")
-	private Boolean addressline2;
+	private Boolean addressline2 = false;
 	@JsonProperty("addresscity")
-	private Boolean addresscity;
+	private Boolean addresscity = false;
 	@JsonProperty("addressstateProvince")
-	private Boolean addressstateProvince;
+	private Boolean addressstateProvince = false;
 	@JsonProperty("addresscountryCode")
-	private Boolean addresscountryCode;
+	private Boolean addresscountryCode = false;
 	@JsonProperty("addresspostalCode")
-	private Boolean addresspostalCode;
+	private Boolean addresspostalCode = false;
 	@JsonProperty("phoneNumberphoneNumberType")
-	private Boolean phoneNumberphoneNumberType;
+	private Boolean phoneNumberphoneNumberType = false;
 	@JsonProperty("phoneNumbernumber")
-	private Boolean phoneNumbernumber;
+	private Boolean phoneNumbernumber = false;
 	@JsonProperty("phoneNumberprimaryIndicator")
-	private Boolean phoneNumberprimaryIndicator;
+	private Boolean phoneNumberprimaryIndicator = false;
 	@JsonProperty("otherPhoneNumbersphoneNumberphoneNumberType")
-	private Boolean otherPhoneNumbersphoneNumberphoneNumberType;
+	private Boolean otherPhoneNumbersphoneNumberphoneNumberType = false;
 	@JsonProperty("otherPhoneNumbersphoneNumbernumber")
-	private Boolean otherPhoneNumbersphoneNumbernumber;
+	private Boolean otherPhoneNumbersphoneNumbernumber = false;
 	@JsonProperty("otherPhoneNumbersphoneNumberprimaryIndicator")
-	private Boolean otherPhoneNumbersphoneNumberprimaryIndicator;
+	private Boolean otherPhoneNumbersphoneNumberprimaryIndicator = false;
 	@JsonProperty("id")
 	private Integer id;
 	private final static long serialVersionUID = 8600227280515324823L;

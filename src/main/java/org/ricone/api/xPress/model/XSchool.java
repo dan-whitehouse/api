@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "phoneNumber",
         "otherPhoneNumbers"
 })
-public class XSchool {
+public class XSchool extends XWrapper {
 
     @JsonProperty("@refId")
     private String refId;

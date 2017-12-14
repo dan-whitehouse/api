@@ -6,7 +6,9 @@ import org.ricone.api.xPress.model.XStaff;
 import org.ricone.api.xPress.model.XStaffs;
 import org.ricone.authentication.MetaData;
 import org.ricone.config.model.XStaffFilter;
+import org.springframework.stereotype.Component;
 
+@Component("XStaffFilterer")
 public class XStaffFilterer
 {
     public XStaffFilterer() {

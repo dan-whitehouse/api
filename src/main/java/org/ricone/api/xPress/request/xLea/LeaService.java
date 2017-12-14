@@ -2,6 +2,7 @@ package org.ricone.api.xPress.request.xLea;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.core.model.Lea;
+import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.util.Util;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NotFoundException;
@@ -18,48 +19,51 @@ public class LeaService implements ILeaService
 	@Autowired
 	private ILeaDAO dao;
 
+	@Autowired
+	private XLeaFilterer filterer;
+
 	@Override
-	public List<Lea> findAll(MetaData metaData) throws Exception {
+	public List<LeaWrapper> findAll(MetaData metaData) throws Exception {
 		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<Lea> findAllBySchool(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception {
 		return dao.findAllBySchoolRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Lea> findAllByCalendar(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByCalendar(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByCalendarRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Lea> findAllByCourse(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByCourse(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByCourseRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Lea> findAllByRoster(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByRoster(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByRosterRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Lea> findAllByStaff(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByStaff(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByStaffRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Lea> findAllByStudent(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByStudent(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByStudentRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Lea> findAllByContact(MetaData metaData, String refId) throws Exception {
+	public List<LeaWrapper> findAllByContact(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByContactRefId(metaData, refId);
 	}
 
 	@Override
-	public Lea findById(MetaData metaData, String id) throws Exception
+	public LeaWrapper findById(MetaData metaData, String id) throws Exception
 	{
 		if (Util.isRefId(id)) {
 			return dao.findByRefId(metaData, id);

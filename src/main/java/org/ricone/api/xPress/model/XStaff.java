@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "primaryAssignment",
         "otherAssignments"
 })
-public class XStaff {
+public class XStaff extends XWrapper {
 
     @JsonProperty("@refId")
     private String refId;

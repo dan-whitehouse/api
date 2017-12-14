@@ -3,7 +3,9 @@ package org.ricone.api.xPress.request.xStudent;
 import org.ricone.api.xPress.model.*;
 import org.ricone.authentication.MetaData;
 import org.ricone.config.model.XStudentFilter;
+import org.springframework.stereotype.Component;
 
+@Component("XStudentFilterer")
 public class XStudentFilterer
 {
     public XStudentFilterer() {

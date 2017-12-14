@@ -1,6 +1,7 @@
 package org.ricone.authentication;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.util.Util;
 import org.ricone.api.xPress.request.xLea.ILeaService;
 import org.ricone.authentication.session.Session;
@@ -59,7 +60,12 @@ public class AuthHandler extends HandlerInterceptorAdapter
 					metaData.setHeaders(Util.getHeaders(request));
 					metaData.setToken(decodedToken);
 
-					app.setLeas(leaService.findAll(metaData));
+					//Add Lea objects to App
+					for(LeaWrapper leaWrapper : leaService.findAll(metaData)) {
+						app.getLeas().add(leaWrapper.getLea());
+					}
+
+
 
 					//If no session exists, create a new one
 					SessionManager.getInstance().addSession(decodedToken.getApplication_id(), new Session(decodedToken, app));

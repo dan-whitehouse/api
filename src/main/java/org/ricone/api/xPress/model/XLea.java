@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "@refId",
         "localId",
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XLea {
+public class XLea extends XWrapper{
 
     @JsonProperty("refId")
     @XmlElement(name = "refId")
@@ -77,12 +77,12 @@ public class XLea {
         this.otherPhoneNumbers = otherPhoneNumbers;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("@refId")
+    @JsonProperty("refId")
     public void setRefId(String refId) {
         this.refId = refId;
     }

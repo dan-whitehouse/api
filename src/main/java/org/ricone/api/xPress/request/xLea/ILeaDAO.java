@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.xLea;
 
 import org.ricone.api.core.model.Lea;
+import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;
@@ -8,29 +9,29 @@ import java.util.Set;
 
 public interface ILeaDAO
 {
-    List<Lea> findAll(MetaData metaData) throws Exception;
+    List<LeaWrapper> findAll(MetaData metaData) throws Exception;
 
-    List<Lea> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
+    List<LeaWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findAllByCalendarRefId(MetaData metaData, String refId) throws Exception;
+    List<LeaWrapper> findAllByCalendarRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findAllByCourseRefId(MetaData metaData, String refId) throws Exception;
+    List<LeaWrapper> findAllByCourseRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
+    List<LeaWrapper> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findAllByStaffRefId(MetaData metaData, String refId) throws Exception;
+    List<LeaWrapper> findAllByStaffRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findAllByStudentRefId(MetaData metaData, String refId) throws Exception;
+    List<LeaWrapper> findAllByStudentRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findAllByContactRefId(MetaData metaData, String refId) throws Exception;
+    List<LeaWrapper> findAllByContactRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Lea> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
+    List<LeaWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
 
-    Lea findByRefId(MetaData metaData, String refId) throws Exception;
+    LeaWrapper findByRefId(MetaData metaData, String refId) throws Exception;
 
-    Lea findByLocalId(MetaData metaData, String localId) throws Exception;
+    LeaWrapper findByLocalId(MetaData metaData, String localId) throws Exception;
 
-    Lea findBySchoolRefId(MetaData metaData, String refId) throws Exception;
+    LeaWrapper findBySchoolRefId(MetaData metaData, String refId) throws Exception;
 
     void save(Lea instance);
 
