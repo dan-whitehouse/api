@@ -112,7 +112,7 @@ public class XEventLogMapper {
     private void mapXSchool(XChangeSince xChangeSince, EventLog eventLog) {
         XSchool xSchool;
         if(eventLog.getSchool() != null & !eventLog.getEventType().equals(EventType.DELETE)) {
-            xSchool = xSchoolMapper.map(eventLog.getSchool());
+            xSchool = xSchoolMapper.map(eventLog.getSchool(), null);
         }
         else {
             xSchool = new XSchool(eventLog.getObjectRefId());
@@ -123,7 +123,7 @@ public class XEventLogMapper {
     private void mapXCalendar(XChangeSince xChangeSince, EventLog eventLog) {
         XCalendar xCalendar;
         if(eventLog.getCalendar() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xCalendar = xCalendarMapper.map(eventLog.getCalendar());
+            xCalendar = xCalendarMapper.map(eventLog.getCalendar(), null);
         }
         else {
             xCalendar = new XCalendar(eventLog.getObjectRefId());
@@ -134,7 +134,7 @@ public class XEventLogMapper {
     private void mapXCourse(XChangeSince xChangeSince, EventLog eventLog) {
         XCourse xCourse;
         if(eventLog.getCourse() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xCourse = xCourseMapper.map(eventLog.getCourse());
+            xCourse = xCourseMapper.map(eventLog.getCourse(), null);
         }
         else {
             xCourse = new XCourse(eventLog.getObjectRefId());
@@ -145,7 +145,7 @@ public class XEventLogMapper {
     private void mapXRoster(XChangeSince xChangeSince, EventLog eventLog) {
         XRoster xRoster;
         if(eventLog.getRoster() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xRoster = xRosterMapper.map(eventLog.getRoster());
+            xRoster = xRosterMapper.map(eventLog.getRoster(), null);
         }
         else {
             xRoster = new XRoster(eventLog.getObjectRefId());

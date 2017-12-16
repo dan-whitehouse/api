@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.xSchool;
 
 import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;
@@ -12,29 +13,29 @@ import java.util.Set;
  */
 public interface ISchoolDAO
 {
-    List<School> findAll(MetaData metaData) throws Exception;
+    List<SchoolWrapper> findAll(MetaData metaData) throws Exception;
 
-    List<School> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
+    List<SchoolWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
 
-    List<School> findAllByCalendarRefId(MetaData metaData, String refId) throws Exception;
+    List<SchoolWrapper> findAllByCalendarRefId(MetaData metaData, String refId) throws Exception;
 
-    List<School> findAllByCourseRefId(MetaData metaData, String refId) throws Exception;
+    List<SchoolWrapper> findAllByCourseRefId(MetaData metaData, String refId) throws Exception;
 
-    List<School> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
+    List<SchoolWrapper> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
 
-    List<School> findAllByStaffRefId(MetaData metaData, String refId) throws Exception;
+    List<SchoolWrapper> findAllByStaffRefId(MetaData metaData, String refId) throws Exception;
 
-    List<School> findAllByStudentRefId(MetaData metaData, String refId) throws Exception;
+    List<SchoolWrapper> findAllByStudentRefId(MetaData metaData, String refId) throws Exception;
 
-    List<School> findAllByContactRefId(MetaData metaData, String refId) throws Exception;
+    List<SchoolWrapper> findAllByContactRefId(MetaData metaData, String refId) throws Exception;
 
-    List<School> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
+    List<SchoolWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
 
-    School findByRefId(MetaData metaData, String refId) throws Exception;
+    SchoolWrapper findByRefId(MetaData metaData, String refId) throws Exception;
 
-    School findByLocalId(MetaData metaData, String localId) throws Exception;
+    SchoolWrapper findByLocalId(MetaData metaData, String localId) throws Exception;
 
-    School findByBEDSId(MetaData metaData, String localId) throws Exception;
+    SchoolWrapper findByBEDSId(MetaData metaData, String localId) throws Exception;
 
     void save(School lea);
 

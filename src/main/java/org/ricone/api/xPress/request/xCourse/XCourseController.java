@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xCourse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.model.Course;
+import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.xPress.model.XCourseResponse;
 import org.ricone.api.xPress.model.XCoursesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class XCourseController extends AbstractController
     @RequestMapping(value= "/requests/xCourses/{refId}", method = RequestMethod.GET)
     public XCourseResponse getXCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        Course instance = service.findByRefId(getMetaData(pageRequest), refId);
+        CourseWrapper instance = service.findByRefId(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -37,7 +37,7 @@ public class XCourseController extends AbstractController
     @RequestMapping(value = "/requests/xCourses", method = RequestMethod.GET)
     public XCoursesResponse getXCourses(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<Course> instance = service.findAll(getMetaData(pageRequest));
+        List<CourseWrapper> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -47,7 +47,7 @@ public class XCourseController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xCourses", method = RequestMethod.GET)
     public XCoursesResponse getXCoursesByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Course> instance = service.findAllByLea(getMetaData(pageRequest), refId);
+        List<CourseWrapper> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -56,7 +56,7 @@ public class XCourseController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xCourses", method = RequestMethod.GET)
     public XCoursesResponse getXCoursesBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Course> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
+        List<CourseWrapper> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -65,7 +65,7 @@ public class XCourseController extends AbstractController
     @RequestMapping(value= "/requests/xRosters/{refId}/xCourses", method = RequestMethod.GET)
     public XCoursesResponse getXCoursesByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Course> instance = service.findAllByRoster(getMetaData(pageRequest), refId);
+        List<CourseWrapper> instance = service.findAllByRoster(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

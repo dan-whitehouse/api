@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.xCourse;
 
 import org.ricone.api.core.model.Course;
+import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.authentication.MetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,27 +17,27 @@ public class CourseService implements ICourseService
 	private ICourseDAO dao;
 
 	@Override
-	public List<Course> findAll(MetaData metaData) throws Exception {
+	public List<CourseWrapper> findAll(MetaData metaData) throws Exception {
 		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<Course> findAllByLea(MetaData metaData, String refId) throws Exception {
+	public List<CourseWrapper> findAllByLea(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByLeaRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Course> findAllBySchool(MetaData metaData, String refId) throws Exception {
+	public List<CourseWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception {
 		return dao.findAllBySchoolRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Course> findAllByRoster(MetaData metaData, String refId) throws Exception {
+	public List<CourseWrapper> findAllByRoster(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByRosterRefId(metaData, refId);
 	}
 
 	@Override
-	public Course findByRefId(MetaData metaData, String refId) throws Exception {
+	public CourseWrapper findByRefId(MetaData metaData, String refId) throws Exception {
 		return dao.findByRefId(metaData, refId);
 	}
 

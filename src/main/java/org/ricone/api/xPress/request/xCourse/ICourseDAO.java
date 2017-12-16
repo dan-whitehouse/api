@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.xCourse;
 
 import org.ricone.api.core.model.Course;
+import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;
@@ -12,17 +13,17 @@ import java.util.Set;
  */
 public interface ICourseDAO
 {
-    List<Course> findAll(MetaData metaData) throws Exception;
+    List<CourseWrapper> findAll(MetaData metaData) throws Exception;
 
-    List<Course> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
+    List<CourseWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Course> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
+    List<CourseWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Course> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
+    List<CourseWrapper> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Course> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
+    List<CourseWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
 
-    Course findByRefId(MetaData metaData, String refId) throws Exception;
+    CourseWrapper findByRefId(MetaData metaData, String refId) throws Exception;
 
     void save(Course instance);
 

@@ -1,9 +1,11 @@
 package org.ricone.api.xPress.request.xCourse;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
@@ -18,43 +20,48 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 	private final String PRIMARY_KEY = "courseRefId";
 
 	@Override
-	public List<Course> findAll(MetaData metaData) throws Exception {
+	public List<CourseWrapper> findAll(MetaData metaData) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final CriteriaQuery<CourseWrapper> select = cb.createQuery(CourseWrapper.class);
 		final Root<Course> from = select.from(Course.class);
 		final Join<Course, School> school = from.join("school", JoinType.LEFT);
 		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
-		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
-		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>join("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>join("courseGrades", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(CourseWrapper.class, lea.get("leaId"), from));
 		select.where(lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Course> q = getSession().createQuery(select);
+		Query<CourseWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Course> instance = q.getResultList();
+
+		List<CourseWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getCourse().getCourseIdentifiers());
+			Hibernate.initialize(wrapper.getCourse().getCourseGrades());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Course> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
+	public List<CourseWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final CriteriaQuery<CourseWrapper> select = cb.createQuery(CourseWrapper.class);
 		final Root<Course> from = select.from(Course.class);
 		final Join<Course, School> school = from.join("school", JoinType.LEFT);
 		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
-		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
-		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>join("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>join("courseGrades", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(CourseWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -65,29 +72,34 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Course> q = getSession().createQuery(select);
+		Query<CourseWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Course> instance = q.getResultList();
+
+		List<CourseWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getCourse().getCourseIdentifiers());
+			Hibernate.initialize(wrapper.getCourse().getCourseGrades());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Course> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
+	public List<CourseWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final CriteriaQuery<CourseWrapper> select = cb.createQuery(CourseWrapper.class);
 		final Root<Course> from = select.from(Course.class);
 		final Join<Course, School> school = from.join("school", JoinType.LEFT);
 		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
-		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
-		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>join("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>join("courseGrades", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(CourseWrapper.class, lea.get("leaId"), from));
 		select.where(cb.equal(school.get("schoolRefId"), refId));
 		select.where
 		(
@@ -99,30 +111,35 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Course> q = getSession().createQuery(select);
+		Query<CourseWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Course> instance = q.getResultList();
+
+		List<CourseWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getCourse().getCourseIdentifiers());
+			Hibernate.initialize(wrapper.getCourse().getCourseGrades());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Course> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
+	public List<CourseWrapper> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final CriteriaQuery<CourseWrapper> select = cb.createQuery(CourseWrapper.class);
 		final Root<Course> from = select.from(Course.class);
 		final Join<Course, School> school = from.join("school", JoinType.LEFT);
 		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
-		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
-		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>join("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>join("courseGrades", JoinType.LEFT);
 		final SetJoin<Course, CourseSection> courseSections = (SetJoin<Course, CourseSection>) from.<Course, CourseSection>join("courseSections", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(CourseWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -133,29 +150,34 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Course> q = getSession().createQuery(select);
+		Query<CourseWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Course> instance = q.getResultList();
+
+		List<CourseWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getCourse().getCourseIdentifiers());
+			Hibernate.initialize(wrapper.getCourse().getCourseGrades());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Course> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
+	public List<CourseWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final CriteriaQuery<CourseWrapper> select = cb.createQuery(CourseWrapper.class);
 		final Root<Course> from = select.from(Course.class);
 		final Join<Course, School> school = from.join("school", JoinType.LEFT);
 		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
-		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
-		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>join("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>join("courseGrades", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(CourseWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -165,26 +187,30 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 			)
 		);
 
-		Query<Course> q = getSession().createQuery(select);
-		List<Course> instance = q.getResultList();
+		Query<CourseWrapper> q = getSession().createQuery(select);
+		List<CourseWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getCourse().getCourseIdentifiers());
+			Hibernate.initialize(wrapper.getCourse().getCourseGrades());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public Course findByRefId(MetaData metaData, String refId) throws Exception
+	public CourseWrapper findByRefId(MetaData metaData, String refId) throws Exception
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Course> select = cb.createQuery(Course.class);
+		final CriteriaQuery<CourseWrapper> select = cb.createQuery(CourseWrapper.class);
 		final Root<Course> from = select.from(Course.class);
 		final Join<Course, School> school = from.join("school", JoinType.LEFT);
 		final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
-		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>fetch("courseIdentifiers", JoinType.LEFT);
-		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>fetch("courseGrades", JoinType.LEFT);
+		final SetJoin<Course, CourseIdentifier> courseIdentifiers = (SetJoin<Course, CourseIdentifier>) from.<Course, CourseIdentifier>join("courseIdentifiers", JoinType.LEFT);
+		final SetJoin<Course, CourseGrade> courseGrades = (SetJoin<Course, CourseGrade>) from.<Course, CourseGrade>join("courseGrades", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(CourseWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -195,8 +221,11 @@ public class CourseDAO extends AbstractDAO<Integer, Course> implements ICourseDA
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Course> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<CourseWrapper> q = getSession().createQuery(select);
+		CourseWrapper instance = q.getSingleResult();
+		Hibernate.initialize(instance.getCourse().getCourseIdentifiers());
+		Hibernate.initialize(instance.getCourse().getCourseGrades());
+		return instance;
 	}
 
 

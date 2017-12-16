@@ -1,8 +1,8 @@
 package org.ricone.api.core.request.validation;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
+import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.api.core.request.validation.model.*;
 import org.ricone.api.xPress.request.xLea.ILeaService;
 import org.ricone.api.xPress.request.xSchool.ISchoolService;
@@ -48,16 +48,16 @@ public class ValidationService implements IValidationService
 			district.setStaff(staff);
 
 			try {
-				List<School> schools = schoolService.findAllByLea(metaData, lea.getLea().getLeaRefId());
+				List<SchoolWrapper> schools = schoolService.findAllByLea(metaData, lea.getLea().getLeaRefId());
 				if(CollectionUtils.isNotEmpty(schools)) {
 					Schools v_schools = new Schools();
 					schools.forEach(school -> {
-						final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(school.getSchoolRefId());
-						final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(school.getSchoolRefId());
-						final int courseCount = dao.countCoursesBySchoolRefId(school.getSchoolRefId());
-						final int rosterCount = dao.countRostersBySchoolRefId(school.getSchoolRefId());
+						final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(school.getSchool().getSchoolRefId());
+						final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(school.getSchool().getSchoolRefId());
+						final int courseCount = dao.countCoursesBySchoolRefId(school.getSchool().getSchoolRefId());
+						final int rosterCount = dao.countRostersBySchoolRefId(school.getSchool().getSchoolRefId());
 
-						org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(school, studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
+						org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(school.getSchool(), studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
 
 						//Add School to School List
 						v_schools.getSchool().add(v_school);
@@ -77,7 +77,7 @@ public class ValidationService implements IValidationService
 	@Override
 	public ValidationResponse findAllByLea(MetaData metaData, String refId) throws Exception {
 		LeaWrapper lea = leaService.findById(metaData, refId);
-		List<School> schools = schoolService.findAllByLea(metaData, refId);
+		List<SchoolWrapper> schools = schoolService.findAllByLea(metaData, refId);
 
 		//Set Student & Staff Data
 		Students students = getStudents(lea.getLea().getLeaRefId());
@@ -94,14 +94,14 @@ public class ValidationService implements IValidationService
 
 		if(CollectionUtils.isNotEmpty(schools)) {
 			Schools v_schools = new Schools();
-			for(School sch : schools)
+			for(SchoolWrapper sch : schools)
 			{
-				final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(sch.getSchoolRefId());
-				final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(sch.getSchoolRefId());
-				final int courseCount = dao.countCoursesBySchoolRefId(sch.getSchoolRefId());
-				final int rosterCount = dao.countRostersBySchoolRefId(sch.getSchoolRefId());
+				final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(sch.getSchool().getSchoolRefId());
+				final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(sch.getSchool().getSchoolRefId());
+				final int courseCount = dao.countCoursesBySchoolRefId(sch.getSchool().getSchoolRefId());
+				final int rosterCount = dao.countRostersBySchoolRefId(sch.getSchool().getSchoolRefId());
 
-				org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(sch, studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
+				org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(sch.getSchool(), studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
 
 				//Add School to School List
 				v_schools.getSchool().add(v_school);

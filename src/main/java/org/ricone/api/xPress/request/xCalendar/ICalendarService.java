@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.xCalendar;
 
 import org.ricone.api.core.model.SchoolCalendar;
+import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;
@@ -11,13 +12,13 @@ import java.util.List;
  */
 public interface ICalendarService
 {
-    List<SchoolCalendar> findAll(MetaData metaData) throws Exception;
+    List<SchoolCalendarWrapper> findAll(MetaData metaData) throws Exception;
 
-    List<SchoolCalendar> findAllByLea(MetaData metaData, String refId) throws Exception;
+    List<SchoolCalendarWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;
 
-    List<SchoolCalendar> findAllBySchool(MetaData metaData, String refId) throws Exception;
+    List<SchoolCalendarWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception;
 
-    SchoolCalendar findByRefId(MetaData metaData, String refId) throws Exception;
+    SchoolCalendarWrapper findByRefId(MetaData metaData, String refId) throws Exception;
 
     void save(SchoolCalendar instance);
 

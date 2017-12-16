@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.xRoster;
 
 import org.ricone.api.core.model.CourseSection;
+import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;
@@ -11,19 +12,19 @@ import java.util.List;
  */
 public interface IRosterService
 {
-    List<CourseSection> findAll(MetaData metaData) throws Exception;
+    List<CourseSectionWrapper> findAll(MetaData metaData) throws Exception;
 
-    List<CourseSection> findAllByLea(MetaData metaData, String refId) throws Exception;
+    List<CourseSectionWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllBySchool(MetaData metaData, String refId) throws Exception;
+    List<CourseSectionWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllByCourse(MetaData metaData, String refId) throws Exception;
+    List<CourseSectionWrapper> findAllByCourse(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllByStaff(MetaData metaData, String refId) throws Exception;
+    List<CourseSectionWrapper> findAllByStaff(MetaData metaData, String refId) throws Exception;
 
-    List<CourseSection> findAllByStudent(MetaData metaData, String refId) throws Exception;
+    List<CourseSectionWrapper> findAllByStudent(MetaData metaData, String refId) throws Exception;
 
-    CourseSection findByRefId(MetaData metaData, String refId) throws Exception;
+    CourseSectionWrapper findByRefId(MetaData metaData, String refId) throws Exception;
 
     void save(CourseSection instance);
 

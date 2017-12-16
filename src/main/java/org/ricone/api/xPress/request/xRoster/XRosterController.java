@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xRoster;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.model.CourseSection;
+import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.api.xPress.model.XRosterResponse;
 import org.ricone.api.xPress.model.XRostersResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xRosters/{refId}", method = RequestMethod.GET)
     public XRosterResponse getXRoster(HttpServletResponse response,  Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        CourseSection instance = service.findByRefId(getMetaData(pageRequest), refId);
+        CourseSectionWrapper instance = service.findByRefId(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -37,7 +37,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value = "/requests/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRosters(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<CourseSection> instance = service.findAll(getMetaData(pageRequest));
+        List<CourseSectionWrapper> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -46,7 +46,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByLea(getMetaData(pageRequest), refId);
+        List<CourseSectionWrapper> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -55,7 +55,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
+        List<CourseSectionWrapper> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -64,7 +64,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xCourses/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByCourse(getMetaData(pageRequest), refId);
+        List<CourseSectionWrapper> instance = service.findAllByCourse(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -73,7 +73,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xStaffs/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByStaff(getMetaData(pageRequest), refId);
+        List<CourseSectionWrapper> instance = service.findAllByStaff(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -82,7 +82,7 @@ public class XRosterController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}/xRosters", method = RequestMethod.GET)
     public XRostersResponse getXRostersByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<CourseSection> instance = service.findAllByStudent(getMetaData(pageRequest), refId);
+        List<CourseSectionWrapper> instance = service.findAllByStudent(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

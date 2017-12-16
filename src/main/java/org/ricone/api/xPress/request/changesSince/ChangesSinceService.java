@@ -1,7 +1,7 @@
 package org.ricone.api.xPress.request.changesSince;
 
 import org.ricone.api.core.model.*;
-import org.ricone.api.core.model.wrapper.LeaWrapper;
+import org.ricone.api.core.model.wrapper.*;
 import org.ricone.api.xPress.request.xCalendar.ICalendarDAO;
 import org.ricone.api.xPress.request.xContact.IContactDAO;
 import org.ricone.api.xPress.request.xCourse.ICourseDAO;
@@ -63,9 +63,9 @@ public class ChangesSinceService implements IChangesSinceService
 
 		List<LeaWrapper> leas = lea.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			leas.forEach(lea -> {
-				if(lea.getLea().getLeaRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setLea(lea.getLea());
+			leas.forEach(wrapper -> {
+				if(wrapper.getLea().getLeaRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setLea(wrapper.getLea());
 				}
 			});
 		});
@@ -83,11 +83,11 @@ public class ChangesSinceService implements IChangesSinceService
 			}
 		});
 
-		List<School> schools = school.findByRefIds(metaData, refIds);
+		List<SchoolWrapper> schools = school.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			schools.forEach(school -> {
-				if(school.getSchoolRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setSchool(school);
+			schools.forEach(wrapper -> {
+				if(wrapper.getSchool().getSchoolRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setSchool(wrapper.getSchool());
 				}
 			});
 		});
@@ -105,11 +105,11 @@ public class ChangesSinceService implements IChangesSinceService
 			}
 		});
 
-		List<SchoolCalendar> calendars = calendar.findByRefIds(metaData, refIds);
+		List<SchoolCalendarWrapper> calendars = calendar.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			calendars.forEach(calendar -> {
-				if(calendar.getSchoolCalendarRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setCalendar(calendar);
+			calendars.forEach(wrapper -> {
+				if(wrapper.getSchoolCalendar().getSchoolCalendarRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setCalendar(wrapper.getSchoolCalendar());
 				}
 			});
 		});
@@ -127,11 +127,11 @@ public class ChangesSinceService implements IChangesSinceService
 			}
 		});
 
-		List<Course> courses = course.findByRefIds(metaData, refIds);
+		List<CourseWrapper> courses = course.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			courses.forEach(course -> {
-				if(course.getCourseRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setCourse(course);
+			courses.forEach(wrapper -> {
+				if(wrapper.getCourse().getCourseRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setCourse(wrapper.getCourse());
 				}
 			});
 		});
@@ -149,11 +149,11 @@ public class ChangesSinceService implements IChangesSinceService
 			}
 		});
 
-		List<CourseSection> courseSections = roster.findByRefIds(metaData, refIds);
+		List<CourseSectionWrapper> courseSections = roster.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			courseSections.forEach(courseSection -> {
-				if(courseSection.getCourseSectionRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setRoster(courseSection);
+			courseSections.forEach(wrapper -> {
+				if(wrapper.getCourseSection().getCourseSectionRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setRoster(wrapper.getCourseSection());
 				}
 			});
 		});
@@ -173,9 +173,9 @@ public class ChangesSinceService implements IChangesSinceService
 
 		List<Staff> staffs = staff.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			staffs.forEach(staff -> {
-				if(staff.getStaffRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setStaff(staff);
+			staffs.forEach(wrapper -> {
+				if(wrapper.getStaffRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setStaff(wrapper);
 				}
 			});
 		});
@@ -195,9 +195,9 @@ public class ChangesSinceService implements IChangesSinceService
 
 		List<Student> students = student.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			students.forEach(student -> {
-				if(student.getStudentRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setStudent(student);
+			students.forEach(wrapper -> {
+				if(wrapper.getStudentRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setStudent(wrapper);
 				}
 			});
 		});
@@ -217,9 +217,9 @@ public class ChangesSinceService implements IChangesSinceService
 
 		List<StudentContact> contacts = contact.findByRefIds(metaData, refIds);
 		eventLogs.forEach(eventLog -> {
-			contacts.forEach(contact -> {
-				if(contact.getStudentContactRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setContact(contact);
+			contacts.forEach(wrapper -> {
+				if(wrapper.getStudentContactRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
+					eventLog.setContact(wrapper);
 				}
 			});
 		});

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.MappingException;
 import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.core.model.SchoolCalendarSession;
+import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +19,12 @@ public class XCalendarMapper {
     public XCalendarMapper() {
     }
 
-    public XCalendarsResponse convert(List<SchoolCalendar> instance)
+    public XCalendarsResponse convert(List<SchoolCalendarWrapper> instance)
     {
         List<XCalendar> list = new ArrayList<>();
-        for(SchoolCalendar calendar : instance)
+        for(SchoolCalendarWrapper wrapper : instance)
         {
-            XCalendar xCalendar = map(calendar);
+            XCalendar xCalendar = map(wrapper.getSchoolCalendar(), wrapper.getDistrictId());
             if (xCalendar != null) {
                 list.add(xCalendar);
             }
@@ -37,20 +38,21 @@ public class XCalendarMapper {
         return response;
     }
 
-    public XCalendarResponse convert(SchoolCalendar instance)
+    public XCalendarResponse convert(SchoolCalendarWrapper instance)
     {
         XCalendarResponse response = new XCalendarResponse();
-        XCalendar xCalendar = map(instance);
+        XCalendar xCalendar = map(instance.getSchoolCalendar(), instance.getDistrictId());
         if (xCalendar != null) {
             response.setXCalendar(xCalendar);
         }
         return response;
     }
 
-    public XCalendar map(SchoolCalendar instance)
+    public XCalendar map(SchoolCalendar instance, String districtId)
     {
         XCalendar xCalendar = new XCalendar();
         try {
+            xCalendar.setDistrictId(districtId); //Required by Filtering
             xCalendar.setRefId(instance.getSchoolCalendarRefId());
             xCalendar.setSchoolRefId(instance.getSchool().getSchoolRefId());
             xCalendar.setSchoolYear(instance.getCalendarYear());

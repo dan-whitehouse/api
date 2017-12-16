@@ -4,6 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +20,12 @@ public class XRosterMapper {
     public XRosterMapper() {
     }
 
-    public XRostersResponse convert(List<CourseSection> instance)
+    public XRostersResponse convert(List<CourseSectionWrapper> instance)
     {
         List<XRoster> list = new ArrayList<>();
-        for(CourseSection courseSection : instance)
+        for(CourseSectionWrapper wrapper : instance)
         {
-            XRoster xRoster = map(courseSection);
+            XRoster xRoster = map(wrapper.getCourseSection(), wrapper.getDistrictId());
             if (xRoster != null) {
                 list.add(xRoster);
             }
@@ -38,10 +39,10 @@ public class XRosterMapper {
         return response;
     }
 
-    public XRosterResponse convert(CourseSection instance)
+    public XRosterResponse convert(CourseSectionWrapper instance)
     {
         XRosterResponse response = new XRosterResponse();
-        XRoster xRoster = map(instance);
+        XRoster xRoster = map(instance.getCourseSection(), instance.getDistrictId());
         if (xRoster != null) {
             response.setXRoster(xRoster);
         }
@@ -49,7 +50,7 @@ public class XRosterMapper {
     }
 
 
-    public XRoster map(CourseSection instance)
+    public XRoster map(CourseSection instance, String districtId)
     {
         XRoster xRoster = new XRoster();
         try {

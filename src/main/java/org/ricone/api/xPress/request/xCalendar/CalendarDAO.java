@@ -1,12 +1,14 @@
 package org.ricone.api.xPress.request.xCalendar;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.core.model.SchoolCalendarSession;
+import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NoContentException;
 import org.ricone.error.exception.NotFoundException;
@@ -23,29 +25,28 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 	private final String PRIMARY_KEY = "schoolCalendarRefId";
 
 	@Override
-	public List<SchoolCalendar> findAll(MetaData metaData) throws Exception {
+	public List<SchoolCalendarWrapper> findAll(MetaData metaData) throws Exception {
 
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<SchoolCalendar> select = cb.createQuery(SchoolCalendar.class);
+		final CriteriaQuery<SchoolCalendarWrapper> select = cb.createQuery(SchoolCalendarWrapper.class);
 		final Root<SchoolCalendar> from = select.from(SchoolCalendar.class);
-		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
-		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>fetch("schoolCalendarSessions", JoinType.LEFT);
+		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
+		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>join("schoolCalendarSessions", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(SchoolCalendarWrapper.class, lea.get("leaId"), from));
 		select.where(lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<SchoolCalendar> q = getSession().createQuery(select);
+		Query<SchoolCalendarWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<SchoolCalendar> instance = q.getResultList();
-
-		instance.forEach(sc -> {
-			sc.getSchoolCalendarSessions().forEach(scs -> scs.getSchoolCalendar());
+		List<SchoolCalendarWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			wrapper.getSchoolCalendar().getSchoolCalendarSessions().forEach(scs -> Hibernate.initialize(scs.getSchoolCalendar()));
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -53,16 +54,16 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 	}
 
 	@Override
-	public List<SchoolCalendar> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
+	public List<SchoolCalendarWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<SchoolCalendar> select = cb.createQuery(SchoolCalendar.class);
+		final CriteriaQuery<SchoolCalendarWrapper> select = cb.createQuery(SchoolCalendarWrapper.class);
 		final Root<SchoolCalendar> from = select.from(SchoolCalendar.class);
-		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>fetch("schoolCalendarSessions", JoinType.LEFT);
-		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>join("schoolCalendarSessions", JoinType.LEFT);
+		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(SchoolCalendarWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -73,28 +74,32 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<SchoolCalendar> q = getSession().createQuery(select);
+		Query<SchoolCalendarWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<SchoolCalendar> instance = q.getResultList();
+
+		List<SchoolCalendarWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			wrapper.getSchoolCalendar().getSchoolCalendarSessions().forEach(scs -> Hibernate.initialize(scs.getSchoolCalendar()));
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<SchoolCalendar> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
+	public List<SchoolCalendarWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<SchoolCalendar> select = cb.createQuery(SchoolCalendar.class);
+		final CriteriaQuery<SchoolCalendarWrapper> select = cb.createQuery(SchoolCalendarWrapper.class);
 		final Root<SchoolCalendar> from = select.from(SchoolCalendar.class);
-		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>fetch("schoolCalendarSessions", JoinType.LEFT);
-		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>join("schoolCalendarSessions", JoinType.LEFT);
+		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(SchoolCalendarWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -105,28 +110,32 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<SchoolCalendar> q = getSession().createQuery(select);
+		Query<SchoolCalendarWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<SchoolCalendar> instance = q.getResultList();
+
+		List<SchoolCalendarWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			wrapper.getSchoolCalendar().getSchoolCalendarSessions().forEach(scs -> Hibernate.initialize(scs.getSchoolCalendar()));
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<SchoolCalendar> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
+	public List<SchoolCalendarWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<SchoolCalendar> select = cb.createQuery(SchoolCalendar.class);
+		final CriteriaQuery<SchoolCalendarWrapper> select = cb.createQuery(SchoolCalendarWrapper.class);
 		final Root<SchoolCalendar> from = select.from(SchoolCalendar.class);
-		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
-		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>fetch("schoolCalendarSessions", JoinType.LEFT);
+		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
+		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>join("schoolCalendarSessions", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(SchoolCalendarWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -136,11 +145,11 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 			)
 		);
 
-		Query<SchoolCalendar> q = getSession().createQuery(select);
-		List<SchoolCalendar> instance = q.getResultList();
+		Query<SchoolCalendarWrapper> q = getSession().createQuery(select);
 
-		instance.forEach(sc -> {
-			sc.getSchoolCalendarSessions().forEach(scs -> scs.getSchoolCalendar());
+		List<SchoolCalendarWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			wrapper.getSchoolCalendar().getSchoolCalendarSessions().forEach(scs -> Hibernate.initialize(scs.getSchoolCalendar()));
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -148,17 +157,17 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 	}
 
 	@Override
-	public SchoolCalendar findByRefId(MetaData metaData, String refId) throws NotFoundException
+	public SchoolCalendarWrapper findByRefId(MetaData metaData, String refId) throws NotFoundException
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<SchoolCalendar> select = cb.createQuery(SchoolCalendar.class);
+		final CriteriaQuery<SchoolCalendarWrapper> select = cb.createQuery(SchoolCalendarWrapper.class);
 		final Root<SchoolCalendar> from = select.from(SchoolCalendar.class);
-		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
-		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>fetch("schoolCalendarSessions", JoinType.LEFT);
+		final Join<SchoolCalendar, School> school = (Join<SchoolCalendar, School>) from.<SchoolCalendar, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
+		final SetJoin<SchoolCalendar, SchoolCalendarSession> schoolCalendarSessions = (SetJoin<SchoolCalendar, SchoolCalendarSession>) from.<SchoolCalendar, SchoolCalendarSession>join("schoolCalendarSessions", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(SchoolCalendarWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -168,8 +177,11 @@ public class CalendarDAO extends AbstractDAO<Integer, SchoolCalendar> implements
 			)
 		);
 
-		Query<SchoolCalendar> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<SchoolCalendarWrapper> q = getSession().createQuery(select);
+
+		SchoolCalendarWrapper instance = q.getSingleResult();
+		instance.getSchoolCalendar().getSchoolCalendarSessions().forEach(scs -> Hibernate.initialize(scs.getSchoolCalendar()));
+		return instance;
 	}
 
 	@Override

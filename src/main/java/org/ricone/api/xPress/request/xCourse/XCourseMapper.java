@@ -4,6 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.ricone.api.core.model.Course;
 import org.ricone.api.core.model.CourseGrade;
 import org.ricone.api.core.model.CourseIdentifier;
+import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +21,12 @@ public class XCourseMapper {
     public XCourseMapper() {
     }
 
-    public XCoursesResponse convert(List<Course> instance)
+    public XCoursesResponse convert(List<CourseWrapper> instance)
     {
         List<XCourse> list = new ArrayList<>();
-        for(Course course : instance)
+        for(CourseWrapper wrapper : instance)
         {
-            XCourse xCourse = map(course);
+            XCourse xCourse = map(wrapper.getCourse(), wrapper.getDistrictId());
             if (xCourse != null) {
                 list.add(xCourse);
             }
@@ -39,10 +40,10 @@ public class XCourseMapper {
         return response;
     }
 
-    public XCourseResponse convert(Course instance)
+    public XCourseResponse convert(CourseWrapper instance)
     {
         XCourseResponse response = new XCourseResponse();
-        XCourse xCourse = map(instance);
+        XCourse xCourse = map(instance.getCourse(), instance.getDistrictId());
         if (xCourse != null) {
             response.setXCourse(xCourse);
         }
@@ -50,9 +51,10 @@ public class XCourseMapper {
     }
 
 
-    public XCourse map(Course instance)
+    public XCourse map(Course instance, String districtId)
     {
         XCourse xCourse = new XCourse();
+        xCourse.setDistrictId(districtId); //Required by Filtering
         xCourse.setRefId(instance.getCourseRefId());
         xCourse.setCourseTitle(instance.getTitle());
         xCourse.setSubject(instance.getSubjectCode());

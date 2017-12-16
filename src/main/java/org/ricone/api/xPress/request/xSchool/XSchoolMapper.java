@@ -6,6 +6,7 @@ import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolGrade;
 import org.ricone.api.core.model.SchoolIdentifier;
 import org.ricone.api.core.model.SchoolTelephone;
+import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +23,12 @@ public class XSchoolMapper {
     public XSchoolMapper() {
     }
 
-    public XSchoolsResponse convert(List<School> instance)
+    public XSchoolsResponse convert(List<SchoolWrapper> instance)
     {
         List<XSchool> list = new ArrayList<>();
-        for(School school : instance)
+        for(SchoolWrapper wrapper : instance)
         {
-            XSchool xSchool = map(school);
+            XSchool xSchool = map(wrapper.getSchool(), wrapper.getDistrictId());
             if (xSchool != null) {
                 list.add(xSchool);
             }
@@ -41,10 +42,10 @@ public class XSchoolMapper {
         return response;
     }
 
-    public XSchoolResponse convert(School instance)
+    public XSchoolResponse convert(SchoolWrapper instance)
     {
         XSchoolResponse response = new XSchoolResponse();
-        XSchool xSchool = map(instance);
+        XSchool xSchool = map(instance.getSchool(), instance.getDistrictId());
         if (xSchool != null) {
             response.setXSchool(xSchool);
         }
@@ -52,9 +53,10 @@ public class XSchoolMapper {
     }
 
 
-    public XSchool map(School instance)
+    public XSchool map(School instance, String districtId)
     {
         XSchool xSchool = new XSchool();
+        xSchool.setDistrictId(districtId); //Required by Filtering
         xSchool.setRefId(instance.getSchoolRefId());
         xSchool.setSchoolName(instance.getSchoolName());
         xSchool.setLeaRefId(instance.getLea().getLeaRefId());
