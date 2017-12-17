@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.StudentContactWrapper;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
@@ -20,38 +21,38 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 	private final String PRIMARY_KEY = "studentContactRefId";
 
 	@Override
-	public List<StudentContact> findAll(MetaData metaData) throws Exception {
+	public List<StudentContactWrapper> findAll(MetaData metaData) throws Exception {
 
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
+		final CriteriaQuery<StudentContactWrapper> select = cb.createQuery(StudentContactWrapper.class);
 		final Root<StudentContact> from = select.from(StudentContact.class);
-		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>fetch("studentContactRelationships", JoinType.LEFT);
-		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>fetch("student", JoinType.LEFT);
-		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>fetch("studentEnrollments", JoinType.LEFT);
-		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>join("studentContactRelationships", JoinType.LEFT);
+		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>join("studentEnrollments", JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StudentContactWrapper.class, lea.get("leaId"), from));
 		select.where(lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<StudentContact> q = getSession().createQuery(select);
+		Query<StudentContactWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 
-		List<StudentContact> instance = q.getResultList();
-		instance.forEach(o -> {
-			Hibernate.initialize(o.getStudentContactAddresses());
-			Hibernate.initialize(o.getStudentContactEmails());
-			Hibernate.initialize(o.getStudentContactIdentifiers());
-			Hibernate.initialize(o.getStudentContactOtherNames());
-			Hibernate.initialize(o.getStudentContactTelephones());
+		List<StudentContactWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactAddresses());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactEmails());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactIdentifiers());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactOtherNames());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactTelephones());
 
-			Hibernate.initialize(o.getStudentContactRelationships());
-			o.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactRelationships());
+			wrapper.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -59,18 +60,18 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 	}
 
 	@Override
-	public List<StudentContact> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
+	public List<StudentContactWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
+		final CriteriaQuery<StudentContactWrapper> select = cb.createQuery(StudentContactWrapper.class);
 		final Root<StudentContact> from = select.from(StudentContact.class);
-		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>fetch("studentContactRelationships", JoinType.LEFT);
-		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>fetch("student", JoinType.LEFT);
-		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>fetch("studentEnrollments", JoinType.LEFT);
-		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>join("studentContactRelationships", JoinType.LEFT);
+		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>join("studentEnrollments", JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StudentContactWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -81,22 +82,22 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<StudentContact> q = getSession().createQuery(select);
+		Query<StudentContactWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 
-		List<StudentContact> instance = q.getResultList();
-		instance.forEach(o -> {
-			Hibernate.initialize(o.getStudentContactAddresses());
-			Hibernate.initialize(o.getStudentContactEmails());
-			Hibernate.initialize(o.getStudentContactIdentifiers());
-			Hibernate.initialize(o.getStudentContactOtherNames());
-			Hibernate.initialize(o.getStudentContactTelephones());
+		List<StudentContactWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactAddresses());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactEmails());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactIdentifiers());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactOtherNames());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactTelephones());
 
-			Hibernate.initialize(o.getStudentContactRelationships());
-			o.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactRelationships());
+			wrapper.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -104,18 +105,18 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 	}
 
 	@Override
-	public List<StudentContact> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
+	public List<StudentContactWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
+		final CriteriaQuery<StudentContactWrapper> select = cb.createQuery(StudentContactWrapper.class);
 		final Root<StudentContact> from = select.from(StudentContact.class);
-		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>fetch("studentContactRelationships", JoinType.LEFT);
-		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>fetch("student", JoinType.LEFT);
-		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>fetch("studentEnrollments", JoinType.LEFT);
-		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>join("studentContactRelationships", JoinType.LEFT);
+		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>join("studentEnrollments", JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StudentContactWrapper.class, lea.get("leaId"), from));
 		select.where();
 		select.where
 		(
@@ -127,22 +128,22 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<StudentContact> q = getSession().createQuery(select);
+		Query<StudentContactWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 
-		List<StudentContact> instance = q.getResultList();
-		instance.forEach(o -> {
-			Hibernate.initialize(o.getStudentContactAddresses());
-			Hibernate.initialize(o.getStudentContactEmails());
-			Hibernate.initialize(o.getStudentContactIdentifiers());
-			Hibernate.initialize(o.getStudentContactOtherNames());
-			Hibernate.initialize(o.getStudentContactTelephones());
+		List<StudentContactWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactAddresses());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactEmails());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactIdentifiers());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactOtherNames());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactTelephones());
 
-			Hibernate.initialize(o.getStudentContactRelationships());
-			o.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactRelationships());
+			wrapper.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -150,20 +151,20 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 	}
 
 	@Override
-	public List<StudentContact> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
+	public List<StudentContactWrapper> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
+		final CriteriaQuery<StudentContactWrapper> select = cb.createQuery(StudentContactWrapper.class);
 		final Root<StudentContact> from = select.from(StudentContact.class);
-		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>fetch("studentContactRelationships", JoinType.LEFT);
-		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>fetch("student", JoinType.LEFT);
+		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>join("studentContactRelationships", JoinType.LEFT);
+		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>join("student", JoinType.LEFT);
 
-		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>fetch("studentEnrollments", JoinType.LEFT);
-		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>join("studentEnrollments", JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>join("lea", JoinType.LEFT);
 
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StudentContactWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -174,22 +175,22 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<StudentContact> q = getSession().createQuery(select);
+		Query<StudentContactWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 
-		List<StudentContact> instance = q.getResultList();
-		instance.forEach(o -> {
-			Hibernate.initialize(o.getStudentContactAddresses());
-			Hibernate.initialize(o.getStudentContactEmails());
-			Hibernate.initialize(o.getStudentContactIdentifiers());
-			Hibernate.initialize(o.getStudentContactOtherNames());
-			Hibernate.initialize(o.getStudentContactTelephones());
+		List<StudentContactWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactAddresses());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactEmails());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactIdentifiers());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactOtherNames());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactTelephones());
 
-			Hibernate.initialize(o.getStudentContactRelationships());
-			o.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactRelationships());
+			wrapper.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -197,18 +198,18 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 	}
 
 	@Override
-	public List<StudentContact> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
+	public List<StudentContactWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
+		final CriteriaQuery<StudentContactWrapper> select = cb.createQuery(StudentContactWrapper.class);
 		final Root<StudentContact> from = select.from(StudentContact.class);
-		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>fetch("studentContactRelationships", JoinType.LEFT);
-		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>fetch("student", JoinType.LEFT);
-		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>fetch("studentEnrollments", JoinType.LEFT);
-		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>join("studentContactRelationships", JoinType.LEFT);
+		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>join("studentEnrollments", JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StudentContactWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -218,18 +219,18 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 			)
 		);
 
-		Query<StudentContact> q = getSession().createQuery(select);
+		Query<StudentContactWrapper> q = getSession().createQuery(select);
 
-		List<StudentContact> instance = q.getResultList();
-		instance.forEach(o -> {
-			Hibernate.initialize(o.getStudentContactAddresses());
-			Hibernate.initialize(o.getStudentContactEmails());
-			Hibernate.initialize(o.getStudentContactIdentifiers());
-			Hibernate.initialize(o.getStudentContactOtherNames());
-			Hibernate.initialize(o.getStudentContactTelephones());
+		List<StudentContactWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactAddresses());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactEmails());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactIdentifiers());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactOtherNames());
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactTelephones());
 
-			Hibernate.initialize(o.getStudentContactRelationships());
-			o.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+			Hibernate.initialize(wrapper.getStudentContact().getStudentContactRelationships());
+			wrapper.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -237,19 +238,19 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 	}
 
 	@Override
-	public StudentContact findByRefId(MetaData metaData, String refId) throws Exception
+	public StudentContactWrapper findByRefId(MetaData metaData, String refId) throws Exception
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<StudentContact> select = cb.createQuery(StudentContact.class);
+		final CriteriaQuery<StudentContactWrapper> select = cb.createQuery(StudentContactWrapper.class);
 		final Root<StudentContact> from = select.from(StudentContact.class);
-		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>fetch("studentContactRelationships", JoinType.LEFT);
-		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>fetch("student", JoinType.LEFT);
-		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>fetch("studentEnrollments", JoinType.LEFT);
-		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<StudentContact, StudentContactRelationship> studentContactRelationships = (SetJoin<StudentContact, StudentContactRelationship>) from.<StudentContact, StudentContactRelationship>join("studentContactRelationships", JoinType.LEFT);
+		final Join<StudentContactRelationship, Student> student = (Join<StudentContactRelationship, Student>)studentContactRelationships.<StudentContactRelationship, Student>join("student", JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) student.<Student, StudentEnrollment>join("studentEnrollments", JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = (Join<StudentEnrollment, School>)studentEnrollments.<StudentEnrollment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>)school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StudentContactWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -259,18 +260,16 @@ public class ContactDAO extends AbstractDAO<Integer, StudentContact> implements 
 			)
 		);
 
-		Query<StudentContact> q = getSession().createQuery(select);
-		StudentContact instance = q.getSingleResult();
+		Query<StudentContactWrapper> q = getSession().createQuery(select);
 
-		Hibernate.initialize(instance.getStudentContactAddresses());
-		Hibernate.initialize(instance.getStudentContactEmails());
-		Hibernate.initialize(instance.getStudentContactIdentifiers());
-		Hibernate.initialize(instance.getStudentContactOtherNames());
-		Hibernate.initialize(instance.getStudentContactTelephones());
-
-		Hibernate.initialize(instance.getStudentContactRelationships());
-		instance.getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
-
+		StudentContactWrapper instance = q.getSingleResult();
+		Hibernate.initialize(instance.getStudentContact().getStudentContactAddresses());
+		Hibernate.initialize(instance.getStudentContact().getStudentContactEmails());
+		Hibernate.initialize(instance.getStudentContact().getStudentContactIdentifiers());
+		Hibernate.initialize(instance.getStudentContact().getStudentContactOtherNames());
+		Hibernate.initialize(instance.getStudentContact().getStudentContactTelephones());
+		Hibernate.initialize(instance.getStudentContact().getStudentContactRelationships());
+		instance.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
 		return instance;
 	}
 

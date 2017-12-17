@@ -1,6 +1,7 @@
 package org.ricone.api.xPress.request.xStaff;
 
 import org.ricone.api.core.model.Staff;
+import org.ricone.api.core.model.wrapper.StaffWrapper;
 import org.ricone.authentication.MetaData;
 
 import java.util.List;
@@ -8,25 +9,25 @@ import java.util.Set;
 
 public interface IStaffDAO
 {
-    List<Staff> findAll(MetaData metaData)throws Exception;
+    List<StaffWrapper> findAll(MetaData metaData)throws Exception;
 
-    List<Staff> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
+    List<StaffWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
+    List<StaffWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllByCourseRefId(MetaData metaData, String refId) throws Exception;
+    List<StaffWrapper> findAllByCourseRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
+    List<StaffWrapper> findAllByRosterRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findAllByStudentRefId(MetaData metaData, String refId) throws Exception;
+    List<StaffWrapper> findAllByStudentRefId(MetaData metaData, String refId) throws Exception;
 
-    List<Staff> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
+    List<StaffWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception;
 
-    Staff findByRefId(MetaData metaData, String refId) throws Exception;
+    StaffWrapper findByRefId(MetaData metaData, String refId) throws Exception;
 
-    Staff findByLocalId(MetaData metaData, String localId) throws Exception;
+    StaffWrapper findByLocalId(MetaData metaData, String localId) throws Exception;
 
-    Staff findByStateId(MetaData metaData, String id) throws Exception;
+    StaffWrapper findByStateId(MetaData metaData, String id) throws Exception;
 
     void save(Staff instance);
 

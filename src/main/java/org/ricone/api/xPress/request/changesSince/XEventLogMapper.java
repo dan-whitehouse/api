@@ -3,6 +3,7 @@ package org.ricone.api.xPress.request.changesSince;
 import org.ricone.api.core.model.EventLog;
 import org.ricone.api.core.model.EventObject;
 import org.ricone.api.core.model.EventType;
+import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.xPress.model.*;
 import org.ricone.api.xPress.request.xCalendar.XCalendarMapper;
 import org.ricone.api.xPress.request.xContact.XContactMapper;
@@ -45,11 +46,11 @@ public class XEventLogMapper {
     @Autowired
     private XContactMapper xContactMapper;
 
-    public XChangesSinceResponse convert(List<EventLog> instance) {
+    public XChangesSinceResponse convert(List<EventLogWrapper> instance) {
         List<XChangeSince> list = new ArrayList<>();
-        for(EventLog eventLog : instance)
+        for(EventLogWrapper wrapper : instance)
         {
-            XChangeSince xChangeSince = map(eventLog);
+            XChangeSince xChangeSince = map(wrapper.getEventLog(), wrapper.getDistrictId());
             if (xChangeSince != null) {
                 list.add(xChangeSince);
             }
@@ -63,7 +64,7 @@ public class XEventLogMapper {
         return response;
     }
 
-    private XChangeSince map(EventLog eventLog) {
+    private XChangeSince map(EventLog eventLog, String districtId) {
 
         XChangeSince xChangeSince = new XChangeSince();
         xChangeSince.setRefId(eventLog.getEventRefId());
@@ -72,36 +73,36 @@ public class XEventLogMapper {
         xChangeSince.setEventDate(eventLog.getEventTimestamp().toString());
 
         if(eventLog.getObject().equals(EventObject.LEA)){
-            mapXLea(xChangeSince, eventLog);
+            mapXLea(xChangeSince, eventLog, districtId);
         }
         else  if(eventLog.getObject().equals(EventObject.SCHOOL)){
-            mapXSchool(xChangeSince, eventLog);
+            mapXSchool(xChangeSince, eventLog, districtId);
         }
         else  if(eventLog.getObject().equals(EventObject.CALENDAR)){
-            mapXCalendar(xChangeSince, eventLog);
+            mapXCalendar(xChangeSince, eventLog, districtId);
         }
         else  if(eventLog.getObject().equals(EventObject.COURSE)){
-            mapXCourse(xChangeSince, eventLog);
+            mapXCourse(xChangeSince, eventLog, districtId);
         }
         else  if(eventLog.getObject().equals(EventObject.ROSTER)){
-            mapXRoster(xChangeSince, eventLog);
+            mapXRoster(xChangeSince, eventLog, districtId);
         }
         else  if(eventLog.getObject().equals(EventObject.STAFF)){
-            mapXStaff(xChangeSince, eventLog);
+            mapXStaff(xChangeSince, eventLog, districtId);
         }
         else  if(eventLog.getObject().equals(EventObject.STUDENT)){
-            mapXStudent(xChangeSince, eventLog);
+            mapXStudent(xChangeSince, eventLog, districtId);
         }
         else  if(eventLog.getObject().equals(EventObject.CONTACT)){
-            mapXContact(xChangeSince, eventLog);
+            mapXContact(xChangeSince, eventLog, districtId);
         }
         return xChangeSince;
     }
 
-    private void mapXLea(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXLea(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XLea xLea;
         if(eventLog.getLea() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xLea = xLeaMapper.map(eventLog.getLea(), null);
+            xLea = xLeaMapper.map(eventLog.getLea(), districtId);
         }
         else {
             xLea = new XLea(eventLog.getObjectRefId());
@@ -109,10 +110,10 @@ public class XEventLogMapper {
         xChangeSince.setXLea(xLea);
     }
 
-    private void mapXSchool(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXSchool(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XSchool xSchool;
         if(eventLog.getSchool() != null & !eventLog.getEventType().equals(EventType.DELETE)) {
-            xSchool = xSchoolMapper.map(eventLog.getSchool(), null);
+            xSchool = xSchoolMapper.map(eventLog.getSchool(), districtId);
         }
         else {
             xSchool = new XSchool(eventLog.getObjectRefId());
@@ -120,10 +121,10 @@ public class XEventLogMapper {
         xChangeSince.setXSchool(xSchool);
     }
 
-    private void mapXCalendar(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXCalendar(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XCalendar xCalendar;
         if(eventLog.getCalendar() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xCalendar = xCalendarMapper.map(eventLog.getCalendar(), null);
+            xCalendar = xCalendarMapper.map(eventLog.getCalendar(), districtId);
         }
         else {
             xCalendar = new XCalendar(eventLog.getObjectRefId());
@@ -131,10 +132,10 @@ public class XEventLogMapper {
         xChangeSince.setXCalendar(xCalendar);
     }
 
-    private void mapXCourse(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXCourse(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XCourse xCourse;
         if(eventLog.getCourse() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xCourse = xCourseMapper.map(eventLog.getCourse(), null);
+            xCourse = xCourseMapper.map(eventLog.getCourse(), districtId);
         }
         else {
             xCourse = new XCourse(eventLog.getObjectRefId());
@@ -142,10 +143,10 @@ public class XEventLogMapper {
         xChangeSince.setXCourse(xCourse);
     }
 
-    private void mapXRoster(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXRoster(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XRoster xRoster;
         if(eventLog.getRoster() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xRoster = xRosterMapper.map(eventLog.getRoster(), null);
+            xRoster = xRosterMapper.map(eventLog.getRoster(), districtId);
         }
         else {
             xRoster = new XRoster(eventLog.getObjectRefId());
@@ -153,10 +154,10 @@ public class XEventLogMapper {
         xChangeSince.setXRoster(xRoster);
     }
 
-    private void mapXStaff(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXStaff(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XStaff xStaff;
         if(eventLog.getStaff() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xStaff = xStaffMapper.map(eventLog.getStaff());
+            xStaff = xStaffMapper.map(eventLog.getStaff(), districtId);
         }
         else {
             xStaff = new XStaff(eventLog.getObjectRefId());
@@ -164,10 +165,10 @@ public class XEventLogMapper {
         xChangeSince.setxStaff(xStaff);
     }
 
-    private void mapXStudent(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXStudent(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XStudent xStudent;
         if(eventLog.getStudent() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xStudent = xStudentMapper.map(eventLog.getStudent());
+            xStudent = xStudentMapper.map(eventLog.getStudent(), districtId);
         }
         else {
             xStudent = new XStudent(eventLog.getObjectRefId());
@@ -175,10 +176,10 @@ public class XEventLogMapper {
         xChangeSince.setXStudent(xStudent);
     }
 
-    private void mapXContact(XChangeSince xChangeSince, EventLog eventLog) {
+    private void mapXContact(XChangeSince xChangeSince, EventLog eventLog, String districtId) {
         XContact xContact;
         if(eventLog.getContact() != null && !eventLog.getEventType().equals(EventType.DELETE)) {
-            xContact = xContactMapper.map(eventLog.getContact());
+            xContact = xContactMapper.map(eventLog.getContact(), districtId);
         }
         else {
             xContact = new XContact(eventLog.getObjectRefId());

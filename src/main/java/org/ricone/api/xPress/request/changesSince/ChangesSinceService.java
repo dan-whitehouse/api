@@ -1,6 +1,6 @@
 package org.ricone.api.xPress.request.changesSince;
 
-import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.EventType;
 import org.ricone.api.core.model.wrapper.*;
 import org.ricone.api.xPress.request.xCalendar.ICalendarDAO;
 import org.ricone.api.xPress.request.xContact.IContactDAO;
@@ -52,177 +52,161 @@ public class ChangesSinceService implements IChangesSinceService
 	private IContactDAO contact;
 
 	@Override
-	public List<EventLog> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByLea(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllByLea(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
 		List<LeaWrapper> leas = lea.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			leas.forEach(wrapper -> {
-				if(wrapper.getLea().getLeaRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setLea(wrapper.getLea());
-				}
-			});
-		});
+		eventLogs.forEach(eventLog -> leas.forEach(wrapper -> {
+            if(wrapper.getLea().getLeaRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setLea(wrapper.getLea());
+            }
+        }));
 
 		return eventLogs;
 	}
 
 	@Override
-	public List<EventLog> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllBySchool(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllBySchool(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
 		List<SchoolWrapper> schools = school.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			schools.forEach(wrapper -> {
-				if(wrapper.getSchool().getSchoolRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setSchool(wrapper.getSchool());
-				}
-			});
-		});
+		eventLogs.forEach(eventLog -> schools.forEach(wrapper -> {
+            if(wrapper.getSchool().getSchoolRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setSchool(wrapper.getSchool());
+            }
+        }));
 
 		return eventLogs;
 	}
 
 	@Override
-	public List<EventLog> findAllByCalendar(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByCalendar(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByCalendar(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllByCalendar(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
 		List<SchoolCalendarWrapper> calendars = calendar.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			calendars.forEach(wrapper -> {
-				if(wrapper.getSchoolCalendar().getSchoolCalendarRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setCalendar(wrapper.getSchoolCalendar());
-				}
-			});
-		});
+		eventLogs.forEach(eventLog -> calendars.forEach(wrapper -> {
+            if(wrapper.getSchoolCalendar().getSchoolCalendarRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setCalendar(wrapper.getSchoolCalendar());
+            }
+        }));
 
 		return eventLogs;
 	}
 
 	@Override
-	public List<EventLog> findAllByCourse(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByCourse(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByCourse(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllByCourse(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
 		List<CourseWrapper> courses = course.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			courses.forEach(wrapper -> {
-				if(wrapper.getCourse().getCourseRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setCourse(wrapper.getCourse());
-				}
-			});
-		});
+		eventLogs.forEach(eventLog -> courses.forEach(wrapper -> {
+            if(wrapper.getCourse().getCourseRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setCourse(wrapper.getCourse());
+            }
+        }));
 
 		return eventLogs;
 	}
 
 	@Override
-	public List<EventLog> findAllByRoster(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByRoster(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByRoster(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllByRoster(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
 		List<CourseSectionWrapper> courseSections = roster.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			courseSections.forEach(wrapper -> {
-				if(wrapper.getCourseSection().getCourseSectionRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setRoster(wrapper.getCourseSection());
-				}
-			});
-		});
+		eventLogs.forEach(eventLog -> courseSections.forEach(wrapper -> {
+            if(wrapper.getCourseSection().getCourseSectionRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setRoster(wrapper.getCourseSection());
+            }
+        }));
 
 		return eventLogs;
 	}
 
 	@Override
-	public List<EventLog> findAllByStaff(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByStaff(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByStaff(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllByStaff(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
-		List<Staff> staffs = staff.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			staffs.forEach(wrapper -> {
-				if(wrapper.getStaffRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setStaff(wrapper);
-				}
-			});
-		});
+		List<StaffWrapper> staffs = staff.findByRefIds(metaData, refIds);
+		eventLogs.forEach(eventLog -> staffs.forEach(wrapper -> {
+            if(wrapper.getStaff().getStaffRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setStaff(wrapper.getStaff());
+            }
+        }));
 
 		return eventLogs;
 	}
 
 	@Override
-	public List<EventLog> findAllByStudent(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByStudent(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByStudent(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllByStudent(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
-		List<Student> students = student.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			students.forEach(wrapper -> {
-				if(wrapper.getStudentRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setStudent(wrapper);
-				}
-			});
-		});
+		List<StudentWrapper> students = student.findByRefIds(metaData, refIds);
+		eventLogs.forEach(eventLog -> students.forEach(wrapper -> {
+            if(wrapper.getStudent().getStudentRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setStudent(wrapper.getStudent());
+            }
+        }));
 
 		return eventLogs;
 	}
 
 	@Override
-	public List<EventLog> findAllByContact(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByContact(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		Set<String> refIds = new HashSet<>();
-		List<EventLog> eventLogs = dao.findAllByContact(metaData, iso8601);
+		List<EventLogWrapper> eventLogs = dao.findAllByContact(metaData, iso8601);
 		eventLogs.forEach(eventLog -> {
-			if(!eventLog.getEventType().equals(EventType.DELETE)) {
-				refIds.add(eventLog.getObjectRefId());
+			if(!eventLog.getEventLog().getEventType().equals(EventType.DELETE)) {
+				refIds.add(eventLog.getEventLog().getObjectRefId());
 			}
 		});
 
-		List<StudentContact> contacts = contact.findByRefIds(metaData, refIds);
-		eventLogs.forEach(eventLog -> {
-			contacts.forEach(wrapper -> {
-				if(wrapper.getStudentContactRefId().equalsIgnoreCase(eventLog.getObjectRefId())){
-					eventLog.setContact(wrapper);
-				}
-			});
-		});
+		List<StudentContactWrapper> contacts = contact.findByRefIds(metaData, refIds);
+		eventLogs.forEach(eventLog -> contacts.forEach(wrapper -> {
+            if(wrapper.getStudentContact().getStudentContactRefId().equalsIgnoreCase(eventLog.getEventLog().getObjectRefId())){
+                eventLog.getEventLog().setContact(wrapper.getStudentContact());
+            }
+        }));
 
 		return eventLogs;
 	}

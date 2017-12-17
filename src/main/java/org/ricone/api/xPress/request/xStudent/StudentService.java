@@ -2,6 +2,7 @@ package org.ricone.api.xPress.request.xStudent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.core.model.Student;
+import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.util.Util;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NotFoundException;
@@ -19,37 +20,37 @@ public class StudentService implements IStudentService
 	private IStudentDAO dao;
 
 	@Override
-	public List<Student> findAll(MetaData metaData) throws Exception {
+	public List<StudentWrapper> findAll(MetaData metaData) throws Exception {
 		return dao.findAll(metaData);
 	}
 
 	@Override
-	public List<Student> findAllByLea(MetaData metaData, String refId) throws Exception {
+	public List<StudentWrapper> findAllByLea(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByLeaRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Student> findAllBySchool(MetaData metaData, String refId) throws Exception {
+	public List<StudentWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception {
 		return dao.findAllBySchoolRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Student> findAllByRoster(MetaData metaData, String refId) throws Exception {
+	public List<StudentWrapper> findAllByRoster(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByRosterRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Student> findAllByStaff(MetaData metaData, String refId) throws Exception {
+	public List<StudentWrapper> findAllByStaff(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByStaffRefId(metaData, refId);
 	}
 
 	@Override
-	public List<Student> findAllByContact(MetaData metaData, String refId) throws Exception {
+	public List<StudentWrapper> findAllByContact(MetaData metaData, String refId) throws Exception {
 		return dao.findAllByContactRefId(metaData, refId);
 	}
 
 	@Override
-	public Student findById(MetaData metaData, String id) throws Exception {
+	public StudentWrapper findById(MetaData metaData, String id) throws Exception {
 		if (Util.isRefId(id)) {
 			return dao.findByRefId(metaData, id);
 		}

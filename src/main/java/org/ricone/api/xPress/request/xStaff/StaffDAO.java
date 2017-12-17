@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.ricone.api.AbstractDAO;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.StaffWrapper;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NoContentException;
 import org.ricone.error.exception.NotFoundException;
@@ -23,45 +24,46 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	private final String IDENTIFICATION_SYSTEM_CODE = "identificationSystemCode";
 
 	@Override
-	public List<Staff> findAll(MetaData metaData) throws Exception {
+	public List<StaffWrapper> findAll(MetaData metaData) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where(lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Staff> q = getSession().createQuery(select);
+		Query<StaffWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Staff> instance = q.getResultList();
+
+		List<StaffWrapper> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Staff> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
+	public List<StaffWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -72,30 +74,36 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Staff> q = getSession().createQuery(select);
+		Query<StaffWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Staff> instance = q.getResultList();
+
+		List<StaffWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStaff().getStaffAssignments());
+			Hibernate.initialize(wrapper.getStaff().getStaffEmails());
+			Hibernate.initialize(wrapper.getStaff().getStaffIdentifiers());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Staff> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
+	public List<StaffWrapper> findAllBySchoolRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -106,34 +114,40 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Staff> q = getSession().createQuery(select);
+		Query<StaffWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Staff> instance = q.getResultList();
+
+		List<StaffWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStaff().getStaffAssignments());
+			Hibernate.initialize(wrapper.getStaff().getStaffEmails());
+			Hibernate.initialize(wrapper.getStaff().getStaffIdentifiers());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Staff> findAllByCourseRefId(MetaData metaData, String refId) throws Exception {
+	public List<StaffWrapper> findAllByCourseRefId(MetaData metaData, String refId) throws Exception {
 		//TODO - Not working correctly.
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
-		final Join<CourseSection, Course> course = (Join<CourseSection, Course>) courseSection.<CourseSection, Course>fetch("course", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>join("courseSection", JoinType.LEFT);
+		final Join<CourseSection, Course> course = (Join<CourseSection, Course>) courseSection.<CourseSection, Course>join("course", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -144,15 +158,17 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Staff> q = getSession().createQuery(select);
+		Query<StaffWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
 
-		List<Staff> instance = q.getResultList();
-		instance.forEach(staff -> {
-			Hibernate.initialize(staff.getStaffCourseSections());
+		List<StaffWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStaff().getStaffAssignments());
+			Hibernate.initialize(wrapper.getStaff().getStaffEmails());
+			Hibernate.initialize(wrapper.getStaff().getStaffIdentifiers());
 		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
@@ -160,20 +176,20 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 	}
 
 	@Override
-	public List<Staff> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
+	public List<StaffWrapper> findAllByRosterRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>join("courseSection", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -184,34 +200,40 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Staff> q = getSession().createQuery(select);
+		Query<StaffWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Staff> instance = q.getResultList();
+
+		List<StaffWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStaff().getStaffAssignments());
+			Hibernate.initialize(wrapper.getStaff().getStaffEmails());
+			Hibernate.initialize(wrapper.getStaff().getStaffIdentifiers());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Staff> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
+	public List<StaffWrapper> findAllByStudentRefId(MetaData metaData, String refId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>fetch("staffCourseSections", JoinType.LEFT);
-		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>fetch("courseSection", JoinType.LEFT);
-		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) courseSection.<CourseSection, StudentCourseSection>fetch("studentCourseSections", JoinType.LEFT);
-		final Join<StudentCourseSection, Student> student = (Join<StudentCourseSection, Student>) studentCourseSections.<StudentCourseSection, Student>fetch("student", JoinType.LEFT);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>join("staffCourseSections", JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = (Join<StaffCourseSection, CourseSection>) staffCourseSections.<StaffCourseSection, CourseSection>join("courseSection", JoinType.LEFT);
+		final SetJoin<CourseSection, StudentCourseSection> studentCourseSections = (SetJoin<CourseSection, StudentCourseSection>) courseSection.<CourseSection, StudentCourseSection>join("studentCourseSections", JoinType.LEFT);
+		final Join<StudentCourseSection, Student> student = (Join<StudentCourseSection, Student>) studentCourseSections.<StudentCourseSection, Student>join("student", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -222,30 +244,36 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query<Staff> q = getSession().createQuery(select);
+		Query<StaffWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<Staff> instance = q.getResultList();
+
+		List<StaffWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStaff().getStaffAssignments());
+			Hibernate.initialize(wrapper.getStaff().getStaffEmails());
+			Hibernate.initialize(wrapper.getStaff().getStaffIdentifiers());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<Staff> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
+	public List<StaffWrapper> findByRefIds(MetaData metaData, Set<String> refIds) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -254,28 +282,33 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 				lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
 			)
 		);
+		Query<StaffWrapper> q = getSession().createQuery(select);
 
-		Query<Staff> q = getSession().createQuery(select);
-		List<Staff> instance = q.getResultList();
+		List<StaffWrapper> instance = q.getResultList();
+		instance.forEach(wrapper -> {
+			Hibernate.initialize(wrapper.getStaff().getStaffAssignments());
+			Hibernate.initialize(wrapper.getStaff().getStaffEmails());
+			Hibernate.initialize(wrapper.getStaff().getStaffIdentifiers());
+		});
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public Staff findByRefId(MetaData metaData, String refId) throws NotFoundException
+	public StaffWrapper findByRefId(MetaData metaData, String refId) throws NotFoundException
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -285,24 +318,28 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 			)
 		);
 
-		Query<Staff> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<StaffWrapper> q = getSession().createQuery(select);
+		StaffWrapper instance = q.getSingleResult();
+		Hibernate.initialize(instance.getStaff().getStaffAssignments());
+		Hibernate.initialize(instance.getStaff().getStaffEmails());
+		Hibernate.initialize(instance.getStaff().getStaffIdentifiers());
+		return instance;
 	}
 
 	@Override
-	public Staff findByLocalId(MetaData metaData, String localId) throws NotFoundException
+	public StaffWrapper findByLocalId(MetaData metaData, String localId) throws NotFoundException
 	{
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -313,23 +350,27 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 			)
 		);
 
-		Query<Staff> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<StaffWrapper> q = getSession().createQuery(select);
+		StaffWrapper instance = q.getSingleResult();
+		Hibernate.initialize(instance.getStaff().getStaffAssignments());
+		Hibernate.initialize(instance.getStaff().getStaffEmails());
+		Hibernate.initialize(instance.getStaff().getStaffIdentifiers());
+		return instance;
 	}
 
 	@Override
-	public Staff findByStateId(MetaData metaData, String stateId) throws Exception {
+	public StaffWrapper findByStateId(MetaData metaData, String stateId) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<Staff> select = cb.createQuery(Staff.class);
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
 		final Root<Staff> from = select.from(Staff.class);
-		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>fetch("staffIdentifiers", JoinType.LEFT);
-		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>fetch("staffEmails", JoinType.LEFT);
-		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>fetch("staffAssignments", JoinType.LEFT);
-		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>fetch("school", JoinType.LEFT);
-		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>fetch("lea", JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join("staffIdentifiers", JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join("staffEmails", JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join("staffAssignments", JoinType.LEFT);
+		final Join<StaffAssignment, School> school = (Join<StaffAssignment, School>) staffAssignments.<StaffAssignment, School>join("school", JoinType.LEFT);
+		final Join<School, Lea> lea = (Join<School, Lea>) school.<School, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(StaffWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -340,8 +381,12 @@ public class StaffDAO extends AbstractDAO<Integer, Staff> implements IStaffDAO
 			)
 		);
 
-		Query<Staff> q = getSession().createQuery(select);
-		return q.getSingleResult();
+		Query<StaffWrapper> q = getSession().createQuery(select);
+		StaffWrapper instance = q.getSingleResult();
+		Hibernate.initialize(instance.getStaff().getStaffAssignments());
+		Hibernate.initialize(instance.getStaff().getStaffEmails());
+		Hibernate.initialize(instance.getStaff().getStaffIdentifiers());
+		return instance;
 	}
 
 	@Override

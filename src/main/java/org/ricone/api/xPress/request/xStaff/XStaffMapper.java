@@ -6,6 +6,7 @@ import org.ricone.api.core.model.Staff;
 import org.ricone.api.core.model.StaffAssignment;
 import org.ricone.api.core.model.StaffEmail;
 import org.ricone.api.core.model.StaffIdentifier;
+import org.ricone.api.core.model.wrapper.StaffWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +22,12 @@ public class XStaffMapper {
     public XStaffMapper() {
     }
 
-    public XStaffsResponse convert(List<Staff> instance)
+    public XStaffsResponse convert(List<StaffWrapper> instance)
     {
         List<XStaff> list = new ArrayList<>();
-        for(Staff staff : instance)
+        for(StaffWrapper wrapper : instance)
         {
-            XStaff xStaff = map(staff);
+            XStaff xStaff = map(wrapper.getStaff(), wrapper.getDistrictId());
             if (xStaff != null) {
                 list.add(xStaff);
             }
@@ -40,21 +41,22 @@ public class XStaffMapper {
         return response;
     }
 
-    public XStaffResponse convert(Staff instance)
+    public XStaffResponse convert(StaffWrapper instance)
     {
         XStaffResponse response = new XStaffResponse();
-        XStaff xStaff = map(instance);
+        XStaff xStaff = map(instance.getStaff(), instance.getDistrictId());
         if (xStaff != null) {
-            response.setXStaff(map(instance));;
+            response.setXStaff(xStaff);
         }
         return response;
     }
 
 
-    public XStaff map(Staff instance)
+    public XStaff map(Staff instance, String districtId)
     {
         try {
             XStaff xStaff = new XStaff();
+            xStaff.setDistrictId(districtId); //Required by Filtering
             xStaff.setRefId(instance.getStaffRefId());
             xStaff.setSex(instance.getSexCode());
 

@@ -3,6 +3,7 @@ package org.ricone.api.xPress.request.xContact;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.StudentContactWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +20,12 @@ public class XContactMapper {
     public XContactMapper() {
     }
 
-    public XContactsResponse convert(List<StudentContact> instance)
+    public XContactsResponse convert(List<StudentContactWrapper> instance)
     {
         List<XContact> list = new ArrayList<>();
-        for(StudentContact contact : instance)
+        for(StudentContactWrapper wrapper : instance)
         {
-            XContact xContact = map(contact);
+            XContact xContact = map(wrapper.getStudentContact(), wrapper.getDistrictId());
             if (xContact != null) {
                 list.add(xContact);
             }
@@ -38,19 +39,20 @@ public class XContactMapper {
         return response;
     }
 
-    public XContactResponse convert(StudentContact instance)
+    public XContactResponse convert(StudentContactWrapper instance)
     {
         XContactResponse response = new XContactResponse();
-        XContact xContact = map(instance);
+        XContact xContact = map(instance.getStudentContact(), instance.getDistrictId());
         if (xContact != null) {
             response.setXContact(xContact);
         }
         return response;
     }
 
-    public XContact map(StudentContact instance)
+    public XContact map(StudentContact instance, String districtId)
     {
         XContact xContact = new XContact();
+        xContact.setDistrictId(districtId); //Required by Filtering
         xContact.setRefId(instance.getStudentContactRefId());
         xContact.setEmployerType(instance.getEmployerType());
         xContact.setSex(instance.getSexCode());

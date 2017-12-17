@@ -5,6 +5,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xPress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -24,12 +25,12 @@ public class XStudentMapper {
     public XStudentMapper() {
     }
 
-    public XStudentsResponse convert(List<Student> instance)
+    public XStudentsResponse convert(List<StudentWrapper> instance)
     {
         List<XStudent> list = new ArrayList<>();
-        for(Student student : instance)
+        for(StudentWrapper wrapper : instance)
         {
-            XStudent xStudent = map(student);
+            XStudent xStudent = map(wrapper.getStudent(), wrapper.getDistrictId());
             if (xStudent != null) {
                 list.add(xStudent);
             }
@@ -43,20 +44,21 @@ public class XStudentMapper {
         return response;
     }
 
-    public XStudentResponse convert(Student instance)
+    public XStudentResponse convert(StudentWrapper instance)
     {
         XStudentResponse response = new XStudentResponse();
-        XStudent xStudent = map(instance);
+        XStudent xStudent = map(instance.getStudent(), instance.getDistrictId());
         if (xStudent != null) {
             response.setXStudent(xStudent);
         }
         return response;
     }
 
-    public XStudent map(Student instance)
+    public XStudent map(Student instance, String districtId)
     {
         try {
             XStudent xStudent = new XStudent();
+            xStudent.setDistrictId(districtId); //Required by Filtering
             xStudent.setRefId(instance.getStudentRefId());
 
             //Name

@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XChangeSince {
+public class XChangeSince extends XWrapper{
 
     @JsonProperty("@refId")
     @XmlElement(name = "@refId")

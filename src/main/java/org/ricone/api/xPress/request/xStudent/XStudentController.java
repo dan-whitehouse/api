@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xStudent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.model.Student;
+import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xPress.model.XStudentResponse;
 import org.ricone.api.xPress.model.XStudentsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class XStudentController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}", method = RequestMethod.GET)
     public XStudentResponse getXStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        Student instance = service.findById(getMetaData(pageRequest), refId);
+        StudentWrapper instance = service.findById(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -38,7 +38,7 @@ public class XStudentController extends AbstractController
     @RequestMapping(value = "/requests/xStudents", method = RequestMethod.GET)
     public XStudentsResponse getXStudents(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<Student> instance = service.findAll(getMetaData(pageRequest));
+        List<StudentWrapper> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -48,7 +48,7 @@ public class XStudentController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xStudents", method = RequestMethod.GET)
     public XStudentsResponse getXStudentsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Student> instance = service.findAllByLea(getMetaData(pageRequest), refId);
+        List<StudentWrapper> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -57,7 +57,7 @@ public class XStudentController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStudents", method = RequestMethod.GET)
     public XStudentsResponse getXStudentsBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Student> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
+        List<StudentWrapper> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -66,7 +66,7 @@ public class XStudentController extends AbstractController
     @RequestMapping(value= "/requests/xRosters/{refId}/xStudents", method = RequestMethod.GET)
     public XStudentsResponse getXStudentsByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Student> instance = service.findAllByRoster(getMetaData(pageRequest), refId);
+        List<StudentWrapper> instance = service.findAllByRoster(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -75,7 +75,7 @@ public class XStudentController extends AbstractController
     @RequestMapping(value= "/requests/xStaffs/{refId}/xStudents", method = RequestMethod.GET)
     public XStudentsResponse getXStudentsByStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Student> instance = service.findAllByStaff(getMetaData(pageRequest), refId);
+        List<StudentWrapper> instance = service.findAllByStaff(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -84,7 +84,7 @@ public class XStudentController extends AbstractController
     @RequestMapping(value= "/requests/xContacts/{refId}/xStudents", method = RequestMethod.GET)
     public XStudentsResponse getXStudentsByContact(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Student> instance = service.findAllByContact(getMetaData(pageRequest), refId);
+        List<StudentWrapper> instance = service.findAllByContact(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }

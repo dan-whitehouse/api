@@ -2,6 +2,8 @@ package org.ricone.api.xPress.request.aupp;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.wrapper.StaffWrapper;
+import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xPress.request.xStaff.IStaffDAO;
 import org.ricone.api.xPress.request.xStudent.IStudentDAO;
 import org.ricone.authentication.MetaData;
@@ -46,33 +48,33 @@ public class AppProvisioningService implements IAppProvisioningService
 	public void provisionStaffsBySchool(MetaData metaData, String refId) throws Exception{
 		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
 			if(CollectionUtils.isNotEmpty(metaData.getApp().getDistrictKVsBySchool(refId).entrySet())) {
-				List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
+				List<StaffWrapper> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
 				List<Staff> staffsWithIdentifiersCreated = new ArrayList<>();
 				int identifiersCreated = 0;
-				for (Staff t : staffs) {
-					Optional<StaffIdentifier> identifier = t.getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
+				for (StaffWrapper wrapper : staffs) {
+					Optional<StaffIdentifier> identifier = wrapper.getStaff().getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
 					if (!identifier.isPresent()) {
 						StaffIdentifier ti = new StaffIdentifier();
 						ti.setStaffIdentifierRefId(UUID.randomUUID().toString());
-						ti.setStaff(t);
+						ti.setStaff(wrapper.getStaff());
 
-						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, null);
+						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), wrapper.getStaff(), null);
 						ti.setStaffId(username);
 
 						// Counts how many LoginIds with the same name exist in model. If it's a new LoginId then the count will be 0.
 						// If multiple LoginId's start with the same name and/or ends in a number, we count them and subtract 0.
 						if(AppProvisioningUtil.doesUsernameRequireIncrement(EntityType.STAFF, metaData.getApp().getDistrictKVsBySchool(refId))) {
-							int increment = staffIdentifierDAO.countLoginIdsBySchoolRefId(refId, t.getStaffRefId(), ti.getStaffId());
+							int increment = staffIdentifierDAO.countLoginIdsBySchoolRefId(refId, wrapper.getStaff().getStaffRefId(), ti.getStaffId());
 							if(increment > 0){
-								ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), t, increment-1));
+								ti.setStaffId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), wrapper.getStaff(), increment-1));
 							}
 						}
 
 						ti.setIdentificationSystemCode(LOGIN_ID);
-						t.getStaffIdentifiers().add(ti);
-						staffDAO.update(t);
+						wrapper.getStaff().getStaffIdentifiers().add(ti);
+						staffDAO.update(wrapper.getStaff());
 						identifiersCreated++;
-						staffsWithIdentifiersCreated.add(t);
+						staffsWithIdentifiersCreated.add(wrapper.getStaff());
 					}
 				}
 				if(staffs.size() > 0 && identifiersCreated > 0){
@@ -91,33 +93,33 @@ public class AppProvisioningService implements IAppProvisioningService
 	public void provisionStudentsBySchool(MetaData metaData, String refId) throws Exception {
 		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
 			if(CollectionUtils.isNotEmpty(metaData.getApp().getDistrictKVsBySchool(refId).entrySet())) {
-				List<Student> students = studentDAO.findAllBySchoolRefId(metaData, refId);
+				List<StudentWrapper> students = studentDAO.findAllBySchoolRefId(metaData, refId);
 				List<Student> studentsWithIdentifiersCreated = new ArrayList<>();
 				int identifiersCreated = 0;
-				for (Student s : students) {
-					Optional<StudentIdentifier> identifier = s.getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
+				for (StudentWrapper wrapper : students) {
+					Optional<StudentIdentifier> identifier = wrapper.getStudent().getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
 					if (!identifier.isPresent()) {
 						StudentIdentifier ti = new StudentIdentifier();
 						ti.setStudentIdentifierRefId(UUID.randomUUID().toString());
-						ti.setStudent(s);
+						ti.setStudent(wrapper.getStudent());
 
-						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), s, null);
+						String username = generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), wrapper.getStudent(), null);
 						ti.setStudentId(username);
 
 						// Counts how many LoginIds with the same name exist in model. If it's a new LoginId then the count will be 0.
 						// If multiple LoginId's start with the same name, we count them and subtract 0.
 						if(AppProvisioningUtil.doesUsernameRequireIncrement(EntityType.STUDENT, metaData.getApp().getDistrictKVsBySchool(refId))) {
-							int increment = studentIdentifierDAO.countLoginIdsBySchoolRefId(refId, s.getStudentRefId(), ti.getStudentId());
+							int increment = studentIdentifierDAO.countLoginIdsBySchoolRefId(refId, wrapper.getStudent().getStudentRefId(), ti.getStudentId());
 							if(increment > 0){
-								ti.setStudentId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), s, increment-1));
+								ti.setStudentId(generator.getUsername(metaData.getApp().getDistrictKVsBySchool(refId), wrapper.getStudent(), increment-1));
 							}
 						}
 
 						ti.setIdentificationSystemCode(LOGIN_ID);
-						s.getStudentIdentifiers().add(ti);
-						studentDAO.update(s);
+						wrapper.getStudent().getStudentIdentifiers().add(ti);
+						studentDAO.update(wrapper.getStudent());
 						identifiersCreated++;
-						studentsWithIdentifiersCreated.add(s);
+						studentsWithIdentifiersCreated.add(wrapper.getStudent());
 					}
 				}
 				if(students.size() > 0 && identifiersCreated > 0){
@@ -136,8 +138,7 @@ public class AppProvisioningService implements IAppProvisioningService
 	public List<UserPassword> findStaffsBySchool(MetaData metaData, String refId) throws Exception {
 		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
 			userPasswordDAO.updateStaffsLastRetrievedBySchool(metaData, refId);
-			List<UserPassword> userPasswords = userPasswordDAO.findStaffsBySchool(metaData, refId);
-			return userPasswords;
+			return userPasswordDAO.findStaffsBySchool(metaData, refId);
 		}
 		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
@@ -146,8 +147,7 @@ public class AppProvisioningService implements IAppProvisioningService
 	public List<UserPassword> findStudentsBySchool(MetaData metaData, String refId) throws Exception {
 		if(metaData.getApp().getDistrictKVsBySchool(refId) != null) {
 			userPasswordDAO.updateStudentsLastRetrievedBySchool(metaData, refId);
-			List<UserPassword> userPasswords = userPasswordDAO.findStudentsBySchool(metaData, refId);
-			return userPasswords;
+			return userPasswordDAO.findStudentsBySchool(metaData, refId);
 		}
 		throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
 	}
@@ -170,11 +170,11 @@ public class AppProvisioningService implements IAppProvisioningService
 
 	@Override
 	public void deleteStaffsLoginIdBySchool(MetaData metaData, String refId) throws Exception {
-		List<Staff> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
-		for (Staff staff : staffs) {
-			Optional<StaffIdentifier> identifier = staff.getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
+		List<StaffWrapper> staffs = staffDAO.findAllBySchoolRefId(metaData, refId);
+		for (StaffWrapper wrapper : staffs) {
+			Optional<StaffIdentifier> identifier = wrapper.getStaff().getStaffIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
 			if(identifier.isPresent()) {
-				staff.getStaffIdentifiers().remove(identifier.get());
+				wrapper.getStaff().getStaffIdentifiers().remove(identifier.get());
 				staffIdentifierDAO.delete(identifier.get());
 			}
 		}
@@ -182,11 +182,11 @@ public class AppProvisioningService implements IAppProvisioningService
 
 	@Override
 	public void deleteStudentsLoginIdBySchool(MetaData metaData, String refId) throws Exception {
-		List<Student> students = studentDAO.findAllBySchoolRefId(metaData, refId);
-		for (Student student : students) {
-			Optional<StudentIdentifier> identifier = student.getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
+		List<StudentWrapper> students = studentDAO.findAllBySchoolRefId(metaData, refId);
+		for (StudentWrapper wrapper : students) {
+			Optional<StudentIdentifier> identifier = wrapper.getStudent().getStudentIdentifiers().stream().filter(si -> si.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
 			if(identifier.isPresent()) {
-				student.getStudentIdentifiers().remove(identifier.get());
+				wrapper.getStudent().getStudentIdentifiers().remove(identifier.get());
 				studentIdentifierDAO.delete(identifier.get());
 			}
 		}

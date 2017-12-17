@@ -54,6 +54,7 @@ public class XRosterMapper {
     {
         XRoster xRoster = new XRoster();
         try {
+            xRoster.setDistrictId(districtId); //Required by Filtering
             xRoster.setRefId(instance.getCourseSectionRefId());
 
             /* Course & School Data */

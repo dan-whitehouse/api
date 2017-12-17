@@ -6,6 +6,7 @@ import org.ricone.api.AbstractDAO;
 import org.ricone.api.core.model.EventLog;
 import org.ricone.api.core.model.EventObject;
 import org.ricone.api.core.model.Lea;
+import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.authentication.MetaData;
 import org.ricone.error.exception.NoContentException;
 import org.springframework.stereotype.Repository;
@@ -22,14 +23,14 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 	private final String EVENT_TIME_STAMP = "eventTimestamp";
 
 	@Override
-	public List<EventLog> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -41,26 +42,26 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
+		List<EventLogWrapper> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<EventLog> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -72,26 +73,26 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
+		List<EventLogWrapper> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<EventLog> findAllByCalendar(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByCalendar(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -103,26 +104,26 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
+		List<EventLogWrapper> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<EventLog> findAllByCourse(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByCourse(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -134,12 +135,12 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
+		List<EventLogWrapper> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
@@ -148,14 +149,14 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 
 
 	@Override
-	public List<EventLog> findAllByRoster(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByRoster(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -167,26 +168,26 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
+		List<EventLogWrapper> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<EventLog> findAllByStaff(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByStaff(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -198,26 +199,26 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
-
+		List<EventLogWrapper> instance = q.getResultList();
+		
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<EventLog> findAllByStudent(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByStudent(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -229,26 +230,26 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
-
+		List<EventLogWrapper> instance = q.getResultList();
+		
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;
 	}
 
 	@Override
-	public List<EventLog> findAllByContact(MetaData metaData, LocalDateTime iso8601) throws Exception {
+	public List<EventLogWrapper> findAllByContact(MetaData metaData, LocalDateTime iso8601) throws Exception {
 		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<EventLog> select = cb.createQuery(EventLog.class);
+		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<EventLog> from = select.from(EventLog.class);
-		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>fetch("lea", JoinType.LEFT);
+		final Join<EventLog, Lea> lea = (Join<EventLog, Lea>) from.<EventLog, Lea>join("lea", JoinType.LEFT);
 
 		select.distinct(true);
-		select.select(from);
+		select.select(cb.construct(EventLogWrapper.class, lea.get("leaId"), from));
 		select.where
 		(
 			cb.and
@@ -260,12 +261,12 @@ public class EventLogDAO extends AbstractDAO<Integer, EventLog> implements IEven
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIME_STAMP)));
 
-		Query<EventLog> q = getSession().createQuery(select);
+		Query<EventLogWrapper> q = getSession().createQuery(select);
 		if(metaData.getPaging().isPaged()){
 			q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
 			q.setMaxResults(metaData.getPaging().getPageSize());
 		}
-		List<EventLog> instance = q.getResultList();
+		List<EventLogWrapper> instance = q.getResultList();
 
 		if(CollectionUtils.isEmpty(instance)) throw new NoContentException();
 		return instance;

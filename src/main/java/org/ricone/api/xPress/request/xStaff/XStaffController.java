@@ -3,7 +3,7 @@ package org.ricone.api.xPress.request.xStaff;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ricone.api.AbstractController;
-import org.ricone.api.core.model.Staff;
+import org.ricone.api.core.model.wrapper.StaffWrapper;
 import org.ricone.api.xPress.model.XStaffResponse;
 import org.ricone.api.xPress.model.XStaffsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xStaffs/{refId}", method = RequestMethod.GET)
     public XStaffResponse getXStaff(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        Staff instance = service.findById(getMetaData(pageRequest), refId);
+        StaffWrapper instance = service.findById(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -38,7 +38,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value = "/requests/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffs(HttpServletResponse response, Pageable pageRequest) throws Exception
     {
-        List<Staff> instance = service.findAll(getMetaData(pageRequest));
+        List<StaffWrapper> instance = service.findAll(getMetaData(pageRequest));
         return mapper.convert(instance);
     }
 
@@ -48,7 +48,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xLeas/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByLea(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByLea(getMetaData(pageRequest), refId);
+        List<StaffWrapper> instance = service.findAllByLea(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -57,7 +57,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xSchools/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsBySchool(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
+        List<StaffWrapper> instance = service.findAllBySchool(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -66,7 +66,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xCourses/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByCourse(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByCourse(getMetaData(pageRequest), refId);
+        List<StaffWrapper> instance = service.findAllByCourse(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -75,7 +75,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xRosters/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByRoster(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByRoster(getMetaData(pageRequest), refId);
+        List<StaffWrapper> instance = service.findAllByRoster(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 
@@ -84,7 +84,7 @@ public class XStaffController extends AbstractController
     @RequestMapping(value= "/requests/xStudents/{refId}/xStaffs", method = RequestMethod.GET)
     public XStaffsResponse getXStaffsByStudent(HttpServletResponse response, Pageable pageRequest, @PathVariable(value="refId") String refId) throws Exception
     {
-        List<Staff> instance = service.findAllByStudent(getMetaData(pageRequest), refId);
+        List<StaffWrapper> instance = service.findAllByStudent(getMetaData(pageRequest), refId);
         return mapper.convert(instance);
     }
 }
