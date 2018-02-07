@@ -34,100 +34,86 @@ import java.util.List;
 
 @Configuration
 @ComponentScan(basePackages = "org.ricone")
-@Import({
-		EndpointWebMvcAutoConfiguration.class,
-		ManagementServerPropertiesAutoConfiguration.class,
-		EndpointAutoConfiguration.class, 
-		HealthIndicatorAutoConfiguration.class
-		})
+@Import({EndpointWebMvcAutoConfiguration.class, ManagementServerPropertiesAutoConfiguration.class, EndpointAutoConfiguration.class, HealthIndicatorAutoConfiguration.class})
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
 @EnableScheduling
 @EnableSpringDataWebSupport
-public class Config implements WebMvcConfigurer
-{
-	@Bean(name="viewProject")
-	public ViewResolver viewResolver() {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/WEB-INF/xPress/");
-		viewResolver.setSuffix(".jsp");
-		return viewResolver;
-	}
+public class Config implements WebMvcConfigurer {
+    @Bean(name = "viewProject")
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
     }
 
-	@Bean
-	public AuthHandler getAuthHandler() {
-		return new AuthHandler();
-	}
+    @Bean
+    public AuthHandler getAuthHandler() {
+        return new AuthHandler();
+    }
 
-	@Override
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
-		HandlerInterceptor permissionHandler = new PermissionHandler();
-    	HandlerInterceptor headerHandler = new HeaderHandler();
-    	HandlerInterceptor logHandler = new LogHandler();
+        HandlerInterceptor permissionHandler = new PermissionHandler();
+        HandlerInterceptor headerHandler = new HeaderHandler();
+        HandlerInterceptor logHandler = new LogHandler();
 
-		registry.addInterceptor(getAuthHandler());
-		registry.addInterceptor(permissionHandler);
-		registry.addInterceptor(headerHandler);
-		registry.addInterceptor(logHandler);
-	}
+        registry.addInterceptor(getAuthHandler());
+        registry.addInterceptor(permissionHandler);
+        registry.addInterceptor(headerHandler);
+        registry.addInterceptor(logHandler);
+    }
 
-	@Override
-	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		//Override default paging settings, so that an empty paging request is 'unpaged', instead of (0,10)
-		PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
-		resolver.setOneIndexedParameters(true);
-		resolver.setFallbackPageable(Pageable.unpaged());
-		argumentResolvers.add(resolver);
-	}
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        //Override default paging settings, so that an empty paging request is 'unpaged', instead of (0,10)
+        PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+        resolver.setOneIndexedParameters(true);
+        resolver.setFallbackPageable(Pageable.unpaged());
+        argumentResolvers.add(resolver);
+    }
 
-	@Override
-	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-		configurer
-			.favorPathExtension(false)
-			.favorParameter(true)
-			.parameterName("mediaType")
-			.ignoreAcceptHeader(false)
-			.ignoreUnknownPathExtensions(true)
-			.defaultContentType(MediaType.APPLICATION_JSON)
-			.mediaType("xml", MediaType.APPLICATION_XML)
-			.mediaType("json", MediaType.APPLICATION_JSON);
-	}
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false).favorParameter(true).parameterName("mediaType").ignoreAcceptHeader(false).ignoreUnknownPathExtensions(true).defaultContentType(MediaType.APPLICATION_JSON).mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
+    }
 
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		converters.add(jsonConverter());
-		converters.add(jaxbConverter());
-		//TODO Still need to figure out how to handle a 406 (Not Acceptable)
-	}
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(jsonConverter());
+        converters.add(jaxbConverter());
+        //TODO Still need to figure out how to handle a 406 (Not Acceptable)
+    }
 
-	@Bean
-	public MappingJackson2HttpMessageConverter jsonConverter() {
-		SimpleModule simpleModule = new SimpleModule();
-		simpleModule.addSerializer(String.class, new StringSerializer());
+    @Bean
+    public MappingJackson2HttpMessageConverter jsonConverter() {
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(String.class, new StringSerializer());
 
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-		mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
-		mapper.disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-		mapper.registerModule(simpleModule);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+        mapper.disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        mapper.registerModule(simpleModule);
 
-		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-		converter.setObjectMapper(mapper);
-		return converter;
-	}
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(mapper);
+        return converter;
+    }
 
-	@Bean
-	public Jaxb2RootElementHttpMessageConverter jaxbConverter() {
-		return new Jaxb2RootElementHttpMessageConverter();
-	}
+    @Bean
+    public Jaxb2RootElementHttpMessageConverter jaxbConverter() {
+        return new Jaxb2RootElementHttpMessageConverter();
+    }
 }

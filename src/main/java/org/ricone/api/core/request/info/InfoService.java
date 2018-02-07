@@ -13,21 +13,19 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 public class InfoService {
-	
-	@Autowired
-	private InfoDAO infoDao;
 
-	public Db getDB() throws NotFoundException
-	{
-		return infoDao.getDB();
-	}
+    @Autowired
+    private InfoDAO infoDao;
 
-	public Api getAPI() throws NotFoundException, ConfigException {
-		return infoDao.getAPI();
-	}
+    public Db getDB() throws NotFoundException {
+        return infoDao.getDB();
+    }
 
-	public Config getConfig() throws Exception
-	{
-		return infoDao.getConfig();
-	}
+    public Api getAPI() throws NotFoundException, ConfigException {
+        return infoDao.getAPI();
+    }
+
+    public Config getConfig() throws Exception {
+        return infoDao.getConfig();
+    }
 }

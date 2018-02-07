@@ -12,10 +12,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "schoolcalendar")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class SchoolCalendar implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class SchoolCalendar implements java.io.Serializable {
     private static final long serialVersionUID = -4748613855950099628L;
     private String schoolCalendarRefId;
     private School school;
@@ -24,17 +24,14 @@ public class SchoolCalendar implements java.io.Serializable
     private String calendarYear;
     private Set<SchoolCalendarSession> schoolCalendarSessions = new HashSet<>(0);
 
-    public SchoolCalendar()
-    {
+    public SchoolCalendar() {
     }
 
-    public SchoolCalendar(String schoolCalendarRefId)
-    {
+    public SchoolCalendar(String schoolCalendarRefId) {
         this.schoolCalendarRefId = schoolCalendarRefId;
     }
 
-    public SchoolCalendar(String schoolCalendarRefId, School school, String calendarCode, String calendarDescription, String calendarYear, Set<SchoolCalendarSession> schoolcalendarsessions)
-    {
+    public SchoolCalendar(String schoolCalendarRefId, School school, String calendarCode, String calendarDescription, String calendarYear, Set<SchoolCalendarSession> schoolcalendarsessions) {
         this.schoolCalendarRefId = schoolCalendarRefId;
         this.school = school;
         this.calendarCode = calendarCode;
@@ -45,60 +42,59 @@ public class SchoolCalendar implements java.io.Serializable
 
     @Id
     @Column(name = "SchoolCalendarRefId", unique = true, nullable = false, length = 64)
-    public String getSchoolCalendarRefId()
-    {
+    public String getSchoolCalendarRefId() {
         return this.schoolCalendarRefId;
     }
-    public void setSchoolCalendarRefId(String schoolCalendarRefId)
-    {
+
+    public void setSchoolCalendarRefId(String schoolCalendarRefId) {
         this.schoolCalendarRefId = schoolCalendarRefId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SchoolRefId", nullable = false)
-    public School getSchool()
-    {
+    public School getSchool() {
         return this.school;
     }
-    public void setSchool(School school)
-    {
+
+    public void setSchool(School school) {
         this.school = school;
     }
 
     @Column(name = "CalendarCode", length = 30)
-    public String getCalendarCode()
-    {
+    public String getCalendarCode() {
         return this.calendarCode;
     }
-    public void setCalendarCode(String calendarCode)
-    {
+
+    public void setCalendarCode(String calendarCode) {
         this.calendarCode = calendarCode;
     }
 
     @Column(name = "CalendarDescription", nullable = false, length = 60)
-    public String getCalendarDescription()
-    {
+    public String getCalendarDescription() {
         return this.calendarDescription;
     }
-    public void setCalendarDescription(String calendarDescription)
-    {
+
+    public void setCalendarDescription(String calendarDescription) {
         this.calendarDescription = calendarDescription;
     }
 
     @Column(name = "CalendarYear", length = 4)
-    public String getCalendarYear()
-    {
+    public String getCalendarYear() {
         return this.calendarYear;
     }
-    public void setCalendarYear(String calendarYear)
-    {
+
+    public void setCalendarYear(String calendarYear) {
         this.calendarYear = calendarYear;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "schoolCalendar") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<SchoolCalendarSession> getSchoolCalendarSessions()
-    {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "schoolCalendar")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<SchoolCalendarSession> getSchoolCalendarSessions() {
         return this.schoolCalendarSessions;
     }
-    public void setSchoolCalendarSessions(Set<SchoolCalendarSession> schoolcalendarsessions) { this.schoolCalendarSessions = schoolcalendarsessions; }
+
+    public void setSchoolCalendarSessions(Set<SchoolCalendarSession> schoolcalendarsessions) {
+        this.schoolCalendarSessions = schoolcalendarsessions;
+    }
 }

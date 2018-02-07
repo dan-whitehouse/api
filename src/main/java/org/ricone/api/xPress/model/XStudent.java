@@ -19,25 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "name",
-        "otherNames",
-        "localId",
-        "stateProvinceId",
-        "otherIds",
-        "address",
-        "phoneNumber",
-        "otherPhoneNumbers",
-        "email",
-        "otherEmails",
-        "demographics",
-        "enrollment",
-        "otherEnrollments",
-        "academicSummary",
-        "studentContacts",
-        "languages"
-})
+@JsonPropertyOrder({"refId", "name", "otherNames", "localId", "stateProvinceId", "otherIds", "address", "phoneNumber", "otherPhoneNumbers", "email", "otherEmails", "demographics", "enrollment", "otherEnrollments", "academicSummary", "studentContacts", "languages"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XStudent extends XWrapper {
@@ -294,24 +276,6 @@ public class XStudent extends XWrapper {
 
     @Override
     public String toString() {
-        return "XStudent{" +
-                "refId='" + refId + '\'' +
-                ", name=" + name +
-                ", otherNames=" + otherNames +
-                ", localId='" + localId + '\'' +
-                ", stateProvinceId='" + stateProvinceId + '\'' +
-                ", otherIds=" + otherIds +
-                ", address=" + address +
-                ", phoneNumber=" + phoneNumber +
-                ", otherPhoneNumbers=" + otherPhoneNumbers +
-                ", email=" + email +
-                ", otherEmails=" + otherEmails +
-                ", demographics=" + demographics +
-                ", enrollment=" + enrollment +
-                ", otherEnrollments=" + otherEnrollments +
-                ", academicSummary=" + academicSummary +
-                ", studentContacts=" + studentContacts +
-                ", languages=" + languages +
-                '}';
+        return "XStudent{" + "refId='" + refId + '\'' + ", name=" + name + ", otherNames=" + otherNames + ", localId='" + localId + '\'' + ", stateProvinceId='" + stateProvinceId + '\'' + ", otherIds=" + otherIds + ", address=" + address + ", phoneNumber=" + phoneNumber + ", otherPhoneNumbers=" + otherPhoneNumbers + ", email=" + email + ", otherEmails=" + otherEmails + ", demographics=" + demographics + ", enrollment=" + enrollment + ", otherEnrollments=" + otherEnrollments + ", academicSummary=" + academicSummary + ", studentContacts=" + studentContacts + ", languages=" + languages + '}';
     }
 }

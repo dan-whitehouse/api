@@ -5,14 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "refId",
-    "name",
-    "studentEnrollments",
-    "staffAssignments",
-    "courses",
-    "courseSections"
-})
+@JsonPropertyOrder({"refId", "name", "studentEnrollments", "staffAssignments", "courses", "courseSections"})
 public class School {
 
     @JsonProperty("refId")

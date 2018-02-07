@@ -18,14 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "races",
-        "hispanicLatinoEthnicity",
-        "sex",
-        "birthDate",
-        "countryOfBirth",
-        "usCitizenshipStatus"
-})
+@JsonPropertyOrder({"races", "hispanicLatinoEthnicity", "sex", "birthDate", "countryOfBirth", "usCitizenshipStatus"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Demographics {
@@ -124,19 +117,11 @@ public class Demographics {
 
     @Override
     public String toString() {
-        return "Demographics{" +
-                "races=" + races +
-                ", hispanicLatinoEthnicity='" + hispanicLatinoEthnicity + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birthDate='" + birthDate + '\'' +
-                ", countryOfBirth='" + countryOfBirth + '\'' +
-                ", usCitizenshipStatus='" + usCitizenshipStatus + '\'' +
-                '}';
+        return "Demographics{" + "races=" + races + ", hispanicLatinoEthnicity='" + hispanicLatinoEthnicity + '\'' + ", sex='" + sex + '\'' + ", birthDate='" + birthDate + '\'' + ", countryOfBirth='" + countryOfBirth + '\'' + ", usCitizenshipStatus='" + usCitizenshipStatus + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(races, hispanicLatinoEthnicity, sex, birthDate, countryOfBirth, usCitizenshipStatus).allMatch(Objects::isNull);
     }
 }

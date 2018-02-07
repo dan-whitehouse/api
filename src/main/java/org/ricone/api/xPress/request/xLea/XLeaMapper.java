@@ -17,13 +17,11 @@ public class XLeaMapper {
     public XLeaMapper() {
     }
 
-    public XLeasResponse convert(List<LeaWrapper> instance)
-    {
+    public XLeasResponse convert(List<LeaWrapper> instance) {
         List<XLea> list = new ArrayList<>();
-        for(LeaWrapper wrapper : instance)
-        {
+        for (LeaWrapper wrapper : instance) {
             XLea xLea = map(wrapper.getLea(), wrapper.getDistrictId());
-            if (xLea != null) {
+            if(xLea != null) {
                 list.add(xLea);
             }
         }
@@ -36,15 +34,13 @@ public class XLeaMapper {
         return response;
     }
 
-    public XLeaResponse convert(LeaWrapper wrapper)
-    {
+    public XLeaResponse convert(LeaWrapper wrapper) {
         XLeaResponse response = new XLeaResponse();
         response.setXLea(map(wrapper.getLea(), wrapper.getDistrictId()));
         return response;
     }
 
-    public XLea map(Lea instance, String districtId)
-    {
+    public XLea map(Lea instance, String districtId) {
         XLea xLea = new XLea();
         xLea.setDistrictId(districtId); //Required by Filtering
         xLea.setRefId(instance.getLeaRefId());
@@ -56,17 +52,15 @@ public class XLeaMapper {
 
         //Address
         Address address = mapAddress(instance);
-        if (address != null) {
+        if(address != null) {
             xLea.setAddress(address);
         }
 
         //PhoneNumber - Primary
         List<PhoneNumber> phoneNumbers = new ArrayList<>();
-        for(LeaTelephone telephone : instance.getLeaTelephones())
-        {
+        for (LeaTelephone telephone : instance.getLeaTelephones()) {
             PhoneNumber phone = mapPhone(telephone);
-            if(phone != null)
-            {
+            if(phone != null) {
                 if(telephone.getPrimaryTelephoneNumberIndicator()) {
                     xLea.setPhoneNumber(phone);
                 }
@@ -77,8 +71,7 @@ public class XLeaMapper {
         }
 
         //PhoneNumbers - Other
-        if(CollectionUtils.isNotEmpty(phoneNumbers))
-        {
+        if(CollectionUtils.isNotEmpty(phoneNumbers)) {
             OtherPhoneNumbers otherPhoneNumbers = new OtherPhoneNumbers();
             otherPhoneNumbers.setPhoneNumber(phoneNumbers);
             xLea.setOtherPhoneNumbers(otherPhoneNumbers);
@@ -87,8 +80,7 @@ public class XLeaMapper {
         return xLea;
     }
 
-    private Address mapAddress(Lea lea)
-    {
+    private Address mapAddress(Lea lea) {
         Address address = new Address();
         address.setAddressType(lea.getAddressType());
         address.setLine1(lea.getStreetNumberAndName());
@@ -98,22 +90,19 @@ public class XLeaMapper {
         address.setCountryCode(lea.getCountryCode());
         address.setStateProvince(lea.getStateCode());
 
-        if(address.isEmptyObject())
-        {
+        if(address.isEmptyObject()) {
             return null;
         }
         return address;
     }
 
-    private PhoneNumber mapPhone(LeaTelephone telephone)
-    {
+    private PhoneNumber mapPhone(LeaTelephone telephone) {
         PhoneNumber phone = new PhoneNumber();
         phone.setNumber(telephone.getTelephoneNumber());
         phone.setPhoneNumberType(telephone.getTelephoneNumberTypeCode());
         phone.setPrimaryIndicator(BooleanUtils.toStringTrueFalse(telephone.getPrimaryTelephoneNumberIndicator()));
 
-        if(phone.isEmptyObject())
-        {
+        if(phone.isEmptyObject()) {
             return null;
         }
         return phone;

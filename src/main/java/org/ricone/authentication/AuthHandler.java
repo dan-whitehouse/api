@@ -22,13 +22,13 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class AuthHandler extends HandlerInterceptorAdapter 
+public class AuthHandler extends HandlerInterceptorAdapter
 {
 	@Autowired
 	private ILeaService leaService;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception 
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
 	{
 		System.out.println("AuthHandler - preHandle ");
 		AuthRequest authRequest = new AuthRequest(request);
@@ -136,6 +136,7 @@ public class AuthHandler extends HandlerInterceptorAdapter
 		List<PathPermission> pathPermissions = new ArrayList<>();
 		pathPermissions.add(pathPermission1);
 		pathPermissions.add(pathPermission2);
+		pathPermissions.add(pathPermission21);
 		pathPermissions.add(pathPermission3);
 		pathPermissions.add(pathPermission4);
 		pathPermissions.add(pathPermission5);
@@ -174,7 +175,7 @@ public class AuthHandler extends HandlerInterceptorAdapter
 		   Though this would limit applications from running multiple clients simultaneously where they would each generate a new token, expiring the ones generated before.
 		 */
 		if(!StringUtils.equalsIgnoreCase(decodedToken.getTokenString(), session.getToken().getTokenString())) {
-			boolean isNewer = decodedToken.getExp().after(session.getToken().getExp());		
+			boolean isNewer = decodedToken.getExp().after(session.getToken().getExp());
 			if(isNewer) {
 				session.setToken(decodedToken);
 			}

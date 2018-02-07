@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "district"
-})
+@JsonPropertyOrder({"district"})
 public class Districts {
 
     @JsonProperty("district")

@@ -21,10 +21,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "code",
-        "otherCode"
-})
+@JsonPropertyOrder({"code", "otherCode"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class EntryType {
@@ -70,15 +67,11 @@ public class EntryType {
 
     @Override
     public String toString() {
-        return "EntryType{" +
-                "code='" + code + '\'' +
-                ", otherCode=" + otherCode +
-                '}';
+        return "EntryType{" + "code='" + code + '\'' + ", otherCode=" + otherCode + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(code, otherCode).allMatch(Objects::isNull) || (StringUtils.isBlank(code) && otherCode.isEmpty());
     }
 }

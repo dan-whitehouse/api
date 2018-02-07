@@ -2,8 +2,7 @@ package org.ricone.api.xPress.request.aupp;
 
 import org.ricone.api.core.model.StudentIdentifier;
 
-public interface IStudentIdentifierDAO
-{
+public interface IStudentIdentifierDAO {
     int countLoginIdsBySchoolRefId(String refId, String staffRefId, String logInId) throws Exception;
 
     void save(StudentIdentifier instance);

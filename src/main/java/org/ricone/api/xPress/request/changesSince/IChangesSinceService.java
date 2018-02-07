@@ -6,8 +6,7 @@ import org.ricone.authentication.MetaData;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface IChangesSinceService
-{
+public interface IChangesSinceService {
     List<EventLogWrapper> findAllByLea(MetaData metaData, LocalDateTime iso8601) throws Exception;
 
     List<EventLogWrapper> findAllBySchool(MetaData metaData, LocalDateTime iso8601) throws Exception;

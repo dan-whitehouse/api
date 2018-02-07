@@ -22,56 +22,53 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Repository
-public class InfoDAO extends AbstractDAO<Integer, SchemaVersion>
-{
-	private final String MAJOR = "major";
-	private final String MINOR = "minor";
-	private final String BUG = "bugFix";
+public class InfoDAO extends AbstractDAO<Integer, SchemaVersion> {
+    private final String MAJOR = "major";
+    private final String MINOR = "minor";
+    private final String BUG = "bugFix";
 
-	@Resource
-	private Environment env;
+    @Resource
+    private Environment env;
 
-	public Db getDB()
-	{
-		final CriteriaBuilder cb = getSession().getCriteriaBuilder();
-		final CriteriaQuery<SchemaVersion> select = cb.createQuery(SchemaVersion.class);
-		final Root<SchemaVersion> from = select.from(SchemaVersion.class);
+    public Db getDB() {
+        final CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        final CriteriaQuery<SchemaVersion> select = cb.createQuery(SchemaVersion.class);
+        final Root<SchemaVersion> from = select.from(SchemaVersion.class);
 
-		select.distinct(true);
-		select.select(from);
+        select.distinct(true);
+        select.select(from);
 
-		select.orderBy(cb.desc(from.get(MAJOR)), cb.desc(from.get(MINOR)), cb.desc(from.get(BUG)));
+        select.orderBy(cb.desc(from.get(MAJOR)), cb.desc(from.get(MINOR)), cb.desc(from.get(BUG)));
 
-		Query<SchemaVersion> q = getSession().createQuery(select).setMaxResults(1);
-		SchemaVersion schemaVersion = q.getSingleResult();
+        Query<SchemaVersion> q = getSession().createQuery(select).setMaxResults(1);
+        SchemaVersion schemaVersion = q.getSingleResult();
 
-		Db db = new Db();
-		if(schemaVersion != null) {
-			db.setVersion(schemaVersion.getVersion());
-			db.setStatus("Up");
-		}
-		else {
-			db.setStatus("Down");
-		}
-		return db;
-	}
+        Db db = new Db();
+        if(schemaVersion != null) {
+            db.setVersion(schemaVersion.getVersion());
+            db.setStatus("Up");
+        }
+        else {
+            db.setStatus("Down");
+        }
+        return db;
+    }
 
-	public Api getAPI() throws ConfigException {
-		Api api = new Api();
-		api.setVersion(env.getRequiredProperty("info.app.version"));
-		api.setStarted(ConfigProperties.getInstance().getProperty("init.startTime"));
+    public Api getAPI() throws ConfigException {
+        Api api = new Api();
+        api.setVersion(env.getRequiredProperty("info.app.version"));
+        api.setStarted(ConfigProperties.getInstance().getProperty("init.startTime"));
 
-		LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(api.getStarted())), ZoneId.systemDefault());
-		LocalDateTime now = LocalDateTime.now();
+        LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(api.getStarted())), ZoneId.systemDefault());
+        LocalDateTime now = LocalDateTime.now();
 
-		Duration d = Duration.between(start, now);
-		api.setUptime((double)d.getSeconds());
+        Duration d = Duration.between(start, now);
+        api.setUptime((double) d.getSeconds());
 
-		return api;
-	}
+        return api;
+    }
 
-	public Config getConfig()
-	{
-		return ConfigService.getInstance().getConfigStatus();
-	}
+    public Config getConfig() {
+        return ConfigService.getInstance().getConfigStatus();
+    }
 }

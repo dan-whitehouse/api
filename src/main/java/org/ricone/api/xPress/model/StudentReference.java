@@ -18,12 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "givenName",
-        "familyName",
-        "localId"
-})
+@JsonPropertyOrder({"refId", "givenName", "familyName", "localId"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StudentReference {
@@ -94,17 +89,11 @@ public class StudentReference {
 
     @Override
     public String toString() {
-        return "StudentReference{" +
-                "refId='" + refId + '\'' +
-                ", givenName='" + givenName + '\'' +
-                ", familyName='" + familyName + '\'' +
-                ", localId='" + localId + '\'' +
-                '}';
+        return "StudentReference{" + "refId='" + refId + '\'' + ", givenName='" + givenName + '\'' + ", familyName='" + familyName + '\'' + ", localId='" + localId + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(refId, localId, givenName, familyName).allMatch(Objects::isNull);
     }
 }

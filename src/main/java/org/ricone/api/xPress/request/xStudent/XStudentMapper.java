@@ -25,13 +25,11 @@ public class XStudentMapper {
     public XStudentMapper() {
     }
 
-    public XStudentsResponse convert(List<StudentWrapper> instance)
-    {
+    public XStudentsResponse convert(List<StudentWrapper> instance) {
         List<XStudent> list = new ArrayList<>();
-        for(StudentWrapper wrapper : instance)
-        {
+        for (StudentWrapper wrapper : instance) {
             XStudent xStudent = map(wrapper.getStudent(), wrapper.getDistrictId());
-            if (xStudent != null) {
+            if(xStudent != null) {
                 list.add(xStudent);
             }
         }
@@ -44,18 +42,16 @@ public class XStudentMapper {
         return response;
     }
 
-    public XStudentResponse convert(StudentWrapper instance)
-    {
+    public XStudentResponse convert(StudentWrapper instance) {
         XStudentResponse response = new XStudentResponse();
         XStudent xStudent = map(instance.getStudent(), instance.getDistrictId());
-        if (xStudent != null) {
+        if(xStudent != null) {
             response.setXStudent(xStudent);
         }
         return response;
     }
 
-    public XStudent map(Student instance, String districtId)
-    {
+    public XStudent map(Student instance, String districtId) {
         try {
             XStudent xStudent = new XStudent();
             xStudent.setDistrictId(districtId); //Required by Filtering
@@ -69,15 +65,13 @@ public class XStudentMapper {
 
             //Other Names
             List<Name> otherNameList = new ArrayList<>();
-            for(StudentOtherName studentOtherName : instance.getStudentOtherNames())
-            {
+            for (StudentOtherName studentOtherName : instance.getStudentOtherNames()) {
                 Name otherName = mapOtherName(studentOtherName);
-                if(otherName != null){
+                if(otherName != null) {
                     otherNameList.add(otherName);
                 }
             }
-            if(CollectionUtils.isNotEmpty(otherNameList))
-            {
+            if(CollectionUtils.isNotEmpty(otherNameList)) {
                 OtherNames otherNames = new OtherNames();
                 otherNames.setName(otherNameList);
                 xStudent.setOtherNames(otherNames);
@@ -85,20 +79,19 @@ public class XStudentMapper {
 
             //Email
             List<Email> emailList = new ArrayList<>();
-            for(StudentEmail studentEmail : instance.getStudentEmails())
-            {
+            for (StudentEmail studentEmail : instance.getStudentEmails()) {
                 Email email = mapEmail(studentEmail);
                 if(email != null) {
-                    if (studentEmail.getPrimaryEmailAddressIndicator()) {
+                    if(studentEmail.getPrimaryEmailAddressIndicator()) {
                         xStudent.setEmail(email);
-                    } else {
+                    }
+                    else {
                         emailList.add(email);
                     }
                 }
             }
             //Other Emails
-            if(CollectionUtils.isNotEmpty(emailList))
-            {
+            if(CollectionUtils.isNotEmpty(emailList)) {
                 OtherEmails otherEmails = new OtherEmails();
                 otherEmails.setEmail(emailList);
                 xStudent.setOtherEmails(otherEmails);
@@ -106,8 +99,7 @@ public class XStudentMapper {
 
             //Identifiers
             List<OtherId> otherIdList = new ArrayList<>();
-            for(StudentIdentifier id : instance.getStudentIdentifiers())
-            {
+            for (StudentIdentifier id : instance.getStudentIdentifiers()) {
                 if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
                     xStudent.setLocalId(id.getStudentId());
                 }
@@ -122,18 +114,15 @@ public class XStudentMapper {
                 }
             }
             //Other Identifiers
-            if(CollectionUtils.isNotEmpty(otherIdList))
-            {
+            if(CollectionUtils.isNotEmpty(otherIdList)) {
                 OtherIds otherIds = new OtherIds();
                 otherIds.setOtherId(otherIdList);
                 xStudent.setOtherIds(otherIds);
             }
 
             //Address
-            for(StudentAddress studentAddress : instance.getStudentAddresses())
-            {
-                if(PRIMARY_ADDRESS_TYPE.equalsIgnoreCase(studentAddress.getAddressTypeCode()))
-                {
+            for (StudentAddress studentAddress : instance.getStudentAddresses()) {
+                if(PRIMARY_ADDRESS_TYPE.equalsIgnoreCase(studentAddress.getAddressTypeCode())) {
                     Address address = mapAddress(studentAddress);
                     if(address != null) {
                         xStudent.setAddress(address);
@@ -149,10 +138,8 @@ public class XStudentMapper {
             }
 
             //Phone
-            for(StudentTelephone studentTelephone : instance.getStudentTelephones())
-            {
-                if(studentTelephone.getPrimaryTelephoneNumberIndicator())
-                {
+            for (StudentTelephone studentTelephone : instance.getStudentTelephones()) {
+                if(studentTelephone.getPrimaryTelephoneNumberIndicator()) {
                     PhoneNumber phoneNumber = mapPhone(studentTelephone);
                     if(phoneNumber != null) {
                         xStudent.setPhoneNumber(phoneNumber);
@@ -163,11 +150,9 @@ public class XStudentMapper {
 
             //Enrollments
             List<Enrollment> enrollmentList = new ArrayList<>();
-            for(StudentEnrollment studentEnrollment : instance.getStudentEnrollments())
-            {
+            for (StudentEnrollment studentEnrollment : instance.getStudentEnrollments()) {
                 Enrollment enrollment = mapEnrollment(studentEnrollment);
-                if(enrollment != null)
-                {
+                if(enrollment != null) {
                     if(MEMBERSHIP_TYPE_CODE.equalsIgnoreCase(studentEnrollment.getMembershipTypeCode())) {
                         xStudent.setEnrollment(enrollment);
                     }
@@ -177,8 +162,7 @@ public class XStudentMapper {
                 }
             }
             //Other Enrollments
-            if(CollectionUtils.isNotEmpty(enrollmentList))
-            {
+            if(CollectionUtils.isNotEmpty(enrollmentList)) {
                 OtherEnrollments otherEnrollments = new OtherEnrollments();
                 otherEnrollments.setEnrollment(enrollmentList);
                 xStudent.setOtherEnrollments(otherEnrollments);
@@ -204,21 +188,18 @@ public class XStudentMapper {
 
             return xStudent;
         }
-        catch(Exception ex)
-        {
+        catch (Exception ex) {
             ex.printStackTrace();
             throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
         }
     }
 
 
-
     private AcademicSummary mapAcademicSummary(Set<StudentAcademicRecord> studentAcademicRecords) {
         List<StudentAcademicRecord> academicRecordList = new ArrayList<>(studentAcademicRecords); //Need list for sorting
         StudentAcademicRecord academicRecord;
 
-        if(CollectionUtils.isNotEmpty(academicRecordList))
-        {
+        if(CollectionUtils.isNotEmpty(academicRecordList)) {
             academicRecordList.sort(Comparator.comparing(StudentAcademicRecord::getAsOfDate)); //Sort by Latest Date
 
             academicRecord = academicRecordList.get(0); //Get Latest Date
@@ -227,8 +208,7 @@ public class XStudentMapper {
             academicSummary.setCumulativeWeightedGpa(Objects.toString(academicRecord.getGradePointAverageCumulative()));
             academicSummary.setTermWeightedGpa(Objects.toString(academicRecord.getGradePointAverageGivenSession()));
 
-            if(academicSummary.isEmptyObject())
-            {
+            if(academicSummary.isEmptyObject()) {
                 return null;
             }
             return academicSummary;
@@ -238,7 +218,7 @@ public class XStudentMapper {
 
     private Demographics mapDemographics(Student instance) {
         Demographics demographics = new Demographics();
-        if(instance.getBirthdate() != null){
+        if(instance.getBirthdate() != null) {
             demographics.setBirthDate(DateFormatUtils.format(instance.getBirthdate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
         }
         demographics.setCountryOfBirth(instance.getCountryOfBirth());
@@ -252,8 +232,7 @@ public class XStudentMapper {
             demographics.setRaces(races);
         }
 
-        if(demographics.isEmptyObject())
-        {
+        if(demographics.isEmptyObject()) {
             return null;
         }
         return demographics;
@@ -261,14 +240,13 @@ public class XStudentMapper {
 
     private Races mapRaces(Set<StudentRace> studentRaces) {
         Races races = new Races();
-        for(StudentRace studentRace : studentRaces) {
+        for (StudentRace studentRace : studentRaces) {
             Race race = new Race();
             race.setRace(studentRace.getRaceCode());
             races.getRace().add(race);
         }
 
-        if(races.isEmptyObject())
-        {
+        if(races.isEmptyObject()) {
             return null;
         }
         return races;
@@ -284,8 +262,7 @@ public class XStudentMapper {
         address.setCountryCode(studentAddress.getCountryCode());
         address.setStateProvince(studentAddress.getStateCode());
 
-        if(address.isEmptyObject())
-        {
+        if(address.isEmptyObject()) {
             return null;
         }
         return address;
@@ -297,8 +274,7 @@ public class XStudentMapper {
         phone.setPhoneNumberType(telephone.getTelephoneNumberTypeCode());
         phone.setPrimaryIndicator(BooleanUtils.toStringTrueFalse(telephone.getPrimaryTelephoneNumberIndicator()));
 
-        if(phone.isEmptyObject())
-        {
+        if(phone.isEmptyObject()) {
             return null;
         }
         return phone;
@@ -309,8 +285,7 @@ public class XStudentMapper {
         otherId.setId(id.getStudentId());
         otherId.setType(id.getIdentificationSystemCode());
 
-        if(otherId.isEmptyObject())
-        {
+        if(otherId.isEmptyObject()) {
             return null;
         }
         return otherId;
@@ -325,8 +300,7 @@ public class XStudentMapper {
         name.setSuffix(instance.getGenerationCode());
         name.setType(instance.getType());
 
-        if(name.isEmptyObject())
-        {
+        if(name.isEmptyObject()) {
             return null;
         }
         return name;
@@ -341,8 +315,7 @@ public class XStudentMapper {
         name.setSuffix(studentOtherName.getGenerationCode());
         name.setType(studentOtherName.getType());
 
-        if(name.isEmptyObject())
-        {
+        if(name.isEmptyObject()) {
             return null;
         }
         return name;
@@ -353,8 +326,7 @@ public class XStudentMapper {
         email.setEmailAddress(studentEmail.getEmailAddress());
         email.setEmailType(studentEmail.getEmailTypeCode());
 
-        if(email.isEmptyObject())
-        {
+        if(email.isEmptyObject()) {
             return null;
         }
         return email;
@@ -362,13 +334,11 @@ public class XStudentMapper {
 
     private StudentContacts mapStudentContacts(Set<StudentContactRelationship> relationships) {
         StudentContacts studentContacts = new StudentContacts();
-        for(StudentContactRelationship relationship : relationships)
-        {
+        for (StudentContactRelationship relationship : relationships) {
             studentContacts.getContactPersonRefId().add(relationship.getStudentContact().getStudentContactRefId());
         }
 
-        if(studentContacts.isEmptyObject())
-        {
+        if(studentContacts.isEmptyObject()) {
             return null;
         }
         return studentContacts;
@@ -376,16 +346,14 @@ public class XStudentMapper {
 
     private Languages mapLanguages(Set<StudentLanguage> studentLanguages) {
         Languages languages = new Languages();
-        for(StudentLanguage studentLanguage : studentLanguages)
-        {
+        for (StudentLanguage studentLanguage : studentLanguages) {
             Language language = mapLanguage(studentLanguage);
             if(language != null) {
                 languages.getLanguage().add(language);
             }
         }
 
-        if(languages.isEmptyObject())
-        {
+        if(languages.isEmptyObject()) {
             return null;
         }
         return languages;
@@ -396,8 +364,7 @@ public class XStudentMapper {
         language.setCode(studentLanguage.getLanguageCode());
         language.setType(studentLanguage.getLanguageUseTypeCode());
 
-        if(language.isEmptyObject())
-        {
+        if(language.isEmptyObject()) {
             return null;
         }
         return language;
@@ -412,18 +379,17 @@ public class XStudentMapper {
         enrollment.setProjectedGraduationYear(null);
         enrollment.setResponsibleSchoolType(studentEnrollment.getResponsibleSchoolTypeCode());
 
-        if(studentEnrollment.getEnrollmentEntryDate() != null){
+        if(studentEnrollment.getEnrollmentEntryDate() != null) {
             enrollment.setEntryDate(DateFormatUtils.format(studentEnrollment.getEnrollmentEntryDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
         }
 
-        if(studentEnrollment.getEnrollmentExitDate() != null){
+        if(studentEnrollment.getEnrollmentExitDate() != null) {
             enrollment.setExitDate(DateFormatUtils.format(studentEnrollment.getEnrollmentExitDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
         }
 
-        if(studentEnrollment.getSchool() != null)
-        {
+        if(studentEnrollment.getSchool() != null) {
             enrollment.setSchoolRefId(studentEnrollment.getSchool().getSchoolRefId());
-            if(studentEnrollment.getSchool().getLea() != null){
+            if(studentEnrollment.getSchool().getLea() != null) {
                 enrollment.setLeaRefId(studentEnrollment.getSchool().getLea().getLeaRefId());
             }
         }
@@ -443,7 +409,7 @@ public class XStudentMapper {
         //Home Room Teacher
         if(studentEnrollment.getTeacher() != null) {
             HomeRoomTeacher homeRoomTeacher = mapHomeRoomTeacher(studentEnrollment.getTeacher());
-            if(homeRoomTeacher != null){
+            if(homeRoomTeacher != null) {
                 enrollment.setHomeRoomTeacher(homeRoomTeacher);
             }
         }
@@ -451,13 +417,12 @@ public class XStudentMapper {
         //Counselor
         if(studentEnrollment.getCounselor() != null) {
             Counselor counselor = mapCounselor(studentEnrollment.getCounselor());
-            if(counselor != null){
+            if(counselor != null) {
                 enrollment.setCounselor(counselor);
             }
         }
 
-        if(enrollment.isEmptyObject())
-        {
+        if(enrollment.isEmptyObject()) {
             return null;
         }
         return enrollment;
@@ -469,16 +434,14 @@ public class XStudentMapper {
         counselor.setFamilyName(staff.getLastName());
         counselor.setGivenName(staff.getFirstName());
 
-        for(StaffIdentifier id : staff.getStaffIdentifiers())
-        {
-            if(LOCAL_ID.equalsIgnoreCase(id.getIdentificationSystemCode())){
+        for (StaffIdentifier id : staff.getStaffIdentifiers()) {
+            if(LOCAL_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
                 counselor.setLocalId(id.getStaffId());
                 break;
             }
         }
 
-        if(counselor.isEmptyObject())
-        {
+        if(counselor.isEmptyObject()) {
             return null;
         }
         return counselor;
@@ -490,16 +453,14 @@ public class XStudentMapper {
         homeRoomTeacher.setFamilyName(staff.getLastName());
         homeRoomTeacher.setGivenName(staff.getFirstName());
 
-        for(StaffIdentifier id : staff.getStaffIdentifiers())
-        {
-            if(LOCAL_ID.equalsIgnoreCase(id.getIdentificationSystemCode())){
+        for (StaffIdentifier id : staff.getStaffIdentifiers()) {
+            if(LOCAL_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
                 homeRoomTeacher.setLocalId(id.getStaffId());
                 break;
             }
         }
 
-        if(homeRoomTeacher.isEmptyObject())
-        {
+        if(homeRoomTeacher.isEmptyObject()) {
             return null;
         }
         return homeRoomTeacher;
@@ -510,28 +471,23 @@ public class XStudentMapper {
         EntryType entryType = new EntryType();
 
         List<OtherCode> otherCodes = new ArrayList<>();
-        for(EntryExitCode entryExitCode : entryExitCodes)
-        {
-            if(SYSTEM_TYPE_CODE.equalsIgnoreCase(entryExitCode.getSystemTypeCode()) && ENTRY_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
-            {
+        for (EntryExitCode entryExitCode : entryExitCodes) {
+            if(SYSTEM_TYPE_CODE.equalsIgnoreCase(entryExitCode.getSystemTypeCode()) && ENTRY_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType())) {
                 entryType.setCode(entryExitCode.getCode());
             }
-            else if(ENTRY_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
-            {
+            else if(ENTRY_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType())) {
                 OtherCode otherCode = mapOtherCode(entryExitCode);
-                if(otherCode != null){
+                if(otherCode != null) {
                     otherCodes.add(otherCode);
                 }
             }
         }
 
-        if(CollectionUtils.isNotEmpty(otherCodes))
-        {
+        if(CollectionUtils.isNotEmpty(otherCodes)) {
             entryType.setOtherCode(otherCodes);
         }
 
-        if(entryType.isEmptyObject())
-        {
+        if(entryType.isEmptyObject()) {
             return null;
         }
         return entryType;
@@ -541,28 +497,23 @@ public class XStudentMapper {
         ExitType exitType = new ExitType();
 
         List<OtherCode> otherCodes = new ArrayList<>();
-        for(EntryExitCode entryExitCode : entryExitCodes)
-        {
-            if(SYSTEM_TYPE_CODE.equalsIgnoreCase(entryExitCode.getSystemTypeCode()) && EXIT_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
-            {
+        for (EntryExitCode entryExitCode : entryExitCodes) {
+            if(SYSTEM_TYPE_CODE.equalsIgnoreCase(entryExitCode.getSystemTypeCode()) && EXIT_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType())) {
                 exitType.setCode(entryExitCode.getCode());
             }
-            else if(EXIT_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType()))
-            {
+            else if(EXIT_TYPE.equalsIgnoreCase(entryExitCode.getEntryExitType())) {
                 OtherCode otherCode = mapOtherCode(entryExitCode);
-                if(otherCode != null){
+                if(otherCode != null) {
                     otherCodes.add(otherCode);
                 }
             }
         }
 
-        if(CollectionUtils.isNotEmpty(otherCodes))
-        {
+        if(CollectionUtils.isNotEmpty(otherCodes)) {
             exitType.setOtherCode(otherCodes);
         }
 
-        if(exitType.isEmptyObject())
-        {
+        if(exitType.isEmptyObject()) {
             return null;
         }
         return exitType;
@@ -573,8 +524,7 @@ public class XStudentMapper {
         otherCode.setCodesetName(entryExitCode.getSystemTypeCode());
         otherCode.setOtherCodeValue(entryExitCode.getCode());
 
-        if(otherCode.isEmptyObject())
-        {
+        if(otherCode.isEmptyObject()) {
             return null;
         }
         return otherCode;

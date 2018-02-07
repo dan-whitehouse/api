@@ -12,10 +12,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "course")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Course implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Course implements java.io.Serializable {
     private static final long serialVersionUID = -7068659701898642886L;
     private String courseRefId;
     private School school;
@@ -30,29 +30,24 @@ public class Course implements java.io.Serializable
     private Set<CourseGrade> courseGrades = new HashSet<CourseGrade>(0);
     private Boolean isDeleted = null;
 
-    public Course()
-    {
+    public Course() {
     }
 
-    public Course(String courseRefId)
-    {
+    public Course(String courseRefId) {
         this.courseRefId = courseRefId;
     }
 
-    public Course(String courseRefId, Boolean isDeleted)
-    {
+    public Course(String courseRefId, Boolean isDeleted) {
         this.courseRefId = courseRefId;
         this.isDeleted = isDeleted;
     }
 
-    public Course(String courseRefId, School school)
-    {
+    public Course(String courseRefId, School school) {
         this.courseRefId = courseRefId;
         this.school = school;
     }
 
-    public Course(String courseRefId, School school, String title, String description, String subjectCode, String scedcourseCode, String scedcourseLevelCode, String scedcourseSubjectAreaCode, Set<CourseSection> coursesections, Set<CourseIdentifier> courseidentifiers, Set<CourseGrade> coursegrades)
-    {
+    public Course(String courseRefId, School school, String title, String description, String subjectCode, String scedcourseCode, String scedcourseLevelCode, String scedcourseSubjectAreaCode, Set<CourseSection> coursesections, Set<CourseIdentifier> courseidentifiers, Set<CourseGrade> coursegrades) {
         this.courseRefId = courseRefId;
         this.school = school;
         this.title = title;
@@ -68,117 +63,117 @@ public class Course implements java.io.Serializable
 
     @Id
     @Column(name = "CourseRefId", unique = true, nullable = false, length = 64)
-    public String getCourseRefId()
-    {
+    public String getCourseRefId() {
         return this.courseRefId;
     }
-    public void setCourseRefId(String courseRefId)
-    {
+
+    public void setCourseRefId(String courseRefId) {
         this.courseRefId = courseRefId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SchoolRefId", nullable = false)
-    public School getSchool()
-    {
+    public School getSchool() {
         return this.school;
     }
-    public void setSchool(School school)
-    {
+
+    public void setSchool(School school) {
         this.school = school;
     }
 
     @Column(name = "Title", length = 60)
-    public String getTitle()
-    {
+    public String getTitle() {
         return this.title;
     }
-    public void setTitle(String title)
-    {
+
+    public void setTitle(String title) {
         this.title = title;
     }
 
     @Column(name = "Description", length = 60)
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
-    public void setDescription(String description)
-    {
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
     @Column(name = "SubjectCode", length = 50)
-    public String getSubjectCode()
-    {
+    public String getSubjectCode() {
         return this.subjectCode;
     }
-    public void setSubjectCode(String subjectCode)
-    {
+
+    public void setSubjectCode(String subjectCode) {
         this.subjectCode = subjectCode;
     }
 
     @Column(name = "SCEDCourseCode", length = 5)
-    public String getScedCourseCode()
-    {
+    public String getScedCourseCode() {
         return this.scedCourseCode;
     }
-    public void setScedCourseCode(String scedcourseCode)
-    {
+
+    public void setScedCourseCode(String scedcourseCode) {
         this.scedCourseCode = scedcourseCode;
     }
 
     @Column(name = "SCEDCourseLevelCode", length = 50)
-    public String getScedCourseLevelCode()
-    {
+    public String getScedCourseLevelCode() {
         return this.scedCourseLevelCode;
     }
-    public void setScedCourseLevelCode(String scedcourseLevelCode)
-    {
+
+    public void setScedCourseLevelCode(String scedcourseLevelCode) {
         this.scedCourseLevelCode = scedcourseLevelCode;
     }
 
     @Column(name = "SCEDCourseSubjectAreaCode", length = 50)
-    public String getScedCourseSubjectAreaCode()
-    {
+    public String getScedCourseSubjectAreaCode() {
         return this.scedCourseSubjectAreaCode;
     }
-    public void setScedCourseSubjectAreaCode(String scedcourseSubjectAreaCode) { this.scedCourseSubjectAreaCode = scedcourseSubjectAreaCode; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<CourseSection> getCourseSections()
-    {
+    public void setScedCourseSubjectAreaCode(String scedcourseSubjectAreaCode) {
+        this.scedCourseSubjectAreaCode = scedcourseSubjectAreaCode;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<CourseSection> getCourseSections() {
         return this.courseSections;
     }
-    public void setCourseSections(Set<CourseSection> coursesections)
-    {
+
+    public void setCourseSections(Set<CourseSection> coursesections) {
         this.courseSections = coursesections;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<CourseIdentifier> getCourseIdentifiers()
-    {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<CourseIdentifier> getCourseIdentifiers() {
         return this.courseIdentifiers;
     }
-    public void setCourseIdentifiers(Set<CourseIdentifier> courseidentifiers) { this.courseIdentifiers = courseidentifiers; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<CourseGrade> getCourseGrades()
-    {
+    public void setCourseIdentifiers(Set<CourseIdentifier> courseidentifiers) {
+        this.courseIdentifiers = courseidentifiers;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<CourseGrade> getCourseGrades() {
         return this.courseGrades;
     }
-    public void setCourseGrades(Set<CourseGrade> coursegrades)
-    {
+
+    public void setCourseGrades(Set<CourseGrade> coursegrades) {
         this.courseGrades = coursegrades;
     }
 
     @Transient
-    public Boolean getIsDeleted()
-    {
+    public Boolean getIsDeleted() {
         return isDeleted;
     }
-    public void setIsDeleted(Boolean isDeleted)
-    {
+
+    public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

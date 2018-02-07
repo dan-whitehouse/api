@@ -36,14 +36,7 @@ import java.io.Serializable;
 */
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "path",
-        "get",
-        "post",
-        "put",
-        "delete",
-        "head"
-})
+@JsonPropertyOrder({"path", "get", "post", "put", "delete", "head"})
 public class PathPermission implements Serializable {
 
     @JsonProperty("path")
@@ -88,6 +81,7 @@ public class PathPermission implements Serializable {
     public String getPath() {
         return path;
     }
+
     @JsonProperty("path")
     public void setPath(String path) {
         this.path = path;
@@ -100,6 +94,7 @@ public class PathPermission implements Serializable {
         }
         return get;
     }
+
     @JsonProperty("get")
     public void setGet(Boolean get) {
         this.get = get;
@@ -112,6 +107,7 @@ public class PathPermission implements Serializable {
         }
         return post;
     }
+
     @JsonProperty("post")
     public void setPost(Boolean post) {
         this.post = post;
@@ -124,6 +120,7 @@ public class PathPermission implements Serializable {
         }
         return put;
     }
+
     @JsonProperty("put")
     public void setPut(Boolean put) {
         this.put = put;
@@ -136,8 +133,11 @@ public class PathPermission implements Serializable {
         }
         return delete;
     }
+
     @JsonProperty("delete")
-    public void setDelete(Boolean delete) { this.delete = delete; }
+    public void setDelete(Boolean delete) {
+        this.delete = delete;
+    }
 
     @JsonProperty("head")
     public Boolean getHead() {
@@ -146,6 +146,7 @@ public class PathPermission implements Serializable {
         }
         return head;
     }
+
     @JsonProperty("head")
     public void setHead(Boolean head) {
         this.head = head;

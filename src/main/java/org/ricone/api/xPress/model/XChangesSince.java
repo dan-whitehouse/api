@@ -21,9 +21,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xChangeSince"
-})
+@JsonPropertyOrder({"xChangeSince"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XChangesSince {
@@ -54,8 +52,6 @@ public class XChangesSince {
 
     @Override
     public String toString() {
-        return "xChangesSince{" +
-                "xChangeSince=" + xChangeSince +
-                '}';
+        return "xChangesSince{" + "xChangeSince=" + xChangeSince + '}';
     }
 }

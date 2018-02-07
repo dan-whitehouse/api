@@ -19,9 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xContacts"
-})
+@JsonPropertyOrder({"xContacts"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XContactsResponse {
@@ -50,8 +48,6 @@ public class XContactsResponse {
 
     @Override
     public String toString() {
-        return "XContactsResponse{" +
-                "xContacts=" + xContacts +
-                '}';
+        return "XContactsResponse{" + "xContacts=" + xContacts + '}';
     }
 }

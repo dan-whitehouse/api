@@ -22,13 +22,11 @@ public class XStaffMapper {
     public XStaffMapper() {
     }
 
-    public XStaffsResponse convert(List<StaffWrapper> instance)
-    {
+    public XStaffsResponse convert(List<StaffWrapper> instance) {
         List<XStaff> list = new ArrayList<>();
-        for(StaffWrapper wrapper : instance)
-        {
+        for (StaffWrapper wrapper : instance) {
             XStaff xStaff = map(wrapper.getStaff(), wrapper.getDistrictId());
-            if (xStaff != null) {
+            if(xStaff != null) {
                 list.add(xStaff);
             }
         }
@@ -41,19 +39,17 @@ public class XStaffMapper {
         return response;
     }
 
-    public XStaffResponse convert(StaffWrapper instance)
-    {
+    public XStaffResponse convert(StaffWrapper instance) {
         XStaffResponse response = new XStaffResponse();
         XStaff xStaff = map(instance.getStaff(), instance.getDistrictId());
-        if (xStaff != null) {
+        if(xStaff != null) {
             response.setXStaff(xStaff);
         }
         return response;
     }
 
 
-    public XStaff map(Staff instance, String districtId)
-    {
+    public XStaff map(Staff instance, String districtId) {
         try {
             XStaff xStaff = new XStaff();
             xStaff.setDistrictId(districtId); //Required by Filtering
@@ -62,18 +58,15 @@ public class XStaffMapper {
 
             //Name
             Name name = mapName(instance);
-            if (name != null) {
+            if(name != null) {
                 xStaff.setName(name);
             }
 
             //Email
-            for (StaffEmail staffEmail : instance.getStaffEmails())
-            {
-                if (staffEmail.getPrimaryEmailAddressIndicator() != null && staffEmail.getPrimaryEmailAddressIndicator())
-                {
+            for (StaffEmail staffEmail : instance.getStaffEmails()) {
+                if(staffEmail.getPrimaryEmailAddressIndicator() != null && staffEmail.getPrimaryEmailAddressIndicator()) {
                     Email email = mapEmail(staffEmail);
-                    if (staffEmail != null)
-                    {
+                    if(staffEmail != null) {
                         xStaff.setEmail(email);
                         break;
                     }
@@ -83,27 +76,23 @@ public class XStaffMapper {
 
             //Identifiers
             List<OtherId> otherIdList = new ArrayList<>();
-            for (StaffIdentifier id : instance.getStaffIdentifiers())
-            {
-                if (LOCAL_ID.equals(id.getIdentificationSystemCode()))
-                {
+            for (StaffIdentifier id : instance.getStaffIdentifiers()) {
+                if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
                     xStaff.setLocalId(id.getStaffId());
                 }
-                else if (STATE_ID.equals(id.getIdentificationSystemCode()))
-                {
+                else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
                     xStaff.setStateProvinceId(id.getStaffId());
                 }
-                else
-                {
+                else {
                     OtherId otherId = mapOtherId(id);
-                    if (otherId != null) {
+                    if(otherId != null) {
                         otherIdList.add(otherId);
                     }
                 }
             }
 
             //Other Identifiers
-            if (CollectionUtils.isNotEmpty(otherIdList)) {
+            if(CollectionUtils.isNotEmpty(otherIdList)) {
                 OtherIds otherIds = new OtherIds();
                 otherIds.setOtherId(otherIdList);
                 xStaff.setOtherIds(otherIds);
@@ -112,21 +101,22 @@ public class XStaffMapper {
             //Assignments
             List<StaffPersonAssignment> assignmentList = new ArrayList<>();
             for (StaffAssignment assignment : instance.getStaffAssignments()) {
-                if (assignment.getPrimaryAssignment()) {
+                if(assignment.getPrimaryAssignment()) {
                     PrimaryAssignment primaryAssignment = mapPrimaryAssignment(assignment);
-                    if (primaryAssignment != null) {
+                    if(primaryAssignment != null) {
                         xStaff.setPrimaryAssignment(primaryAssignment);
                     }
-                } else {
+                }
+                else {
                     StaffPersonAssignment staffPersonAssignment = mapOtherAssignment(assignment);
-                    if (staffPersonAssignment != null) {
+                    if(staffPersonAssignment != null) {
                         assignmentList.add(staffPersonAssignment);
                     }
                 }
             }
 
             //Other Assignments
-            if (CollectionUtils.isNotEmpty(assignmentList)) {
+            if(CollectionUtils.isNotEmpty(assignmentList)) {
                 OtherAssignments otherAssignments = new OtherAssignments();
                 otherAssignments.setStaffPersonAssignment(assignmentList);
                 xStaff.setOtherAssignments(otherAssignments);
@@ -134,8 +124,7 @@ public class XStaffMapper {
 
             return xStaff;
         }
-        catch(Exception ex)
-        {
+        catch (Exception ex) {
             ex.printStackTrace();
             throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
         }
@@ -146,8 +135,7 @@ public class XStaffMapper {
         otherId.setId(id.getStaffId());
         otherId.setType(id.getIdentificationSystemCode());
 
-        if(otherId.isEmptyObject())
-        {
+        if(otherId.isEmptyObject()) {
             return null;
         }
         return otherId;
@@ -162,8 +150,7 @@ public class XStaffMapper {
         name.setSuffix(instance.getGenerationCode());
         name.setType(instance.getType());
 
-        if(name.isEmptyObject())
-        {
+        if(name.isEmptyObject()) {
             return null;
         }
         return name;
@@ -173,16 +160,14 @@ public class XStaffMapper {
         PrimaryAssignment primaryAssignment = new PrimaryAssignment();
         primaryAssignment.setJobFunction(assignment.getPositionTitle());
 
-        if(assignment.getSchool() != null)
-        {
+        if(assignment.getSchool() != null) {
             primaryAssignment.setSchoolRefId(assignment.getSchool().getSchoolRefId());
             if(assignment.getSchool().getLea() != null) {
                 primaryAssignment.setLeaRefId(assignment.getSchool().getLea().getLeaRefId());
             }
         }
 
-        if(primaryAssignment.isEmptyObject())
-        {
+        if(primaryAssignment.isEmptyObject()) {
             return null;
         }
         return primaryAssignment;
@@ -192,16 +177,14 @@ public class XStaffMapper {
         StaffPersonAssignment staffPersonAssignment = new StaffPersonAssignment();
         staffPersonAssignment.setJobFunction(assignment.getPositionTitle());
 
-        if(assignment.getSchool() != null)
-        {
+        if(assignment.getSchool() != null) {
             staffPersonAssignment.setSchoolRefId(assignment.getSchool().getSchoolRefId());
             if(assignment.getSchool().getLea() != null) {
                 staffPersonAssignment.setLeaRefId(assignment.getSchool().getLea().getLeaRefId());
             }
         }
 
-        if(staffPersonAssignment.isEmptyObject())
-        {
+        if(staffPersonAssignment.isEmptyObject()) {
             return null;
         }
         return staffPersonAssignment;
@@ -212,8 +195,7 @@ public class XStaffMapper {
         email.setEmailAddress(staffEmail.getEmailAddress());
         email.setEmailType(staffEmail.getEmailTypeCode());
 
-        if(email.isEmptyObject())
-        {
+        if(email.isEmptyObject()) {
             return null;
         }
         return email;

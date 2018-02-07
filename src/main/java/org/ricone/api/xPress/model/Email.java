@@ -18,10 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "emailType",
-        "emailAddress"
-})
+@JsonPropertyOrder({"emailType", "emailAddress"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Email {
@@ -64,15 +61,11 @@ public class Email {
 
     @Override
     public String toString() {
-        return "Email{" +
-                "emailType='" + emailType + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                '}';
+        return "Email{" + "emailType='" + emailType + '\'' + ", emailAddress='" + emailAddress + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(emailType, emailAddress).allMatch(Objects::isNull);
     }
 }

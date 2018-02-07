@@ -24,10 +24,9 @@ public class XAppProvisioningMapper {
 
     public XAppProvisioningResponse convert(List<UserPassword> instance) {
         List<XAppProvisioningInfo> list = new ArrayList<>();
-        for(UserPassword userPassword : instance)
-        {
+        for (UserPassword userPassword : instance) {
             XAppProvisioningInfo xAppProvisioningInfo = map(userPassword);
-            if (xAppProvisioningInfo != null) {
+            if(xAppProvisioningInfo != null) {
                 list.add(xAppProvisioningInfo);
             }
         }
@@ -53,16 +52,13 @@ public class XAppProvisioningMapper {
 
     private String mapLoginId(UserPassword userPassword) {
         if(userPassword.getStaff() != null) {
-            Optional<StaffIdentifier> identifier = userPassword.getStaff().getStaffIdentifiers().stream()
-                    .filter(staffIdentifier -> staffIdentifier.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID))
-                    .findFirst();
+            Optional<StaffIdentifier> identifier = userPassword.getStaff().getStaffIdentifiers().stream().filter(staffIdentifier -> staffIdentifier.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
             if(identifier.isPresent()) {
                 return identifier.get().getStaffId();
             }
         }
         else if(userPassword.getStudent() != null) {
-            Optional<StudentIdentifier> identifier = userPassword.getStudent().getStudentIdentifiers().stream()
-                    .filter(studentIdentifier -> studentIdentifier.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
+            Optional<StudentIdentifier> identifier = userPassword.getStudent().getStudentIdentifiers().stream().filter(studentIdentifier -> studentIdentifier.getIdentificationSystemCode().equalsIgnoreCase(LOGIN_ID)).findFirst();
             if(identifier.isPresent()) {
                 return identifier.get().getStudentId();
             }

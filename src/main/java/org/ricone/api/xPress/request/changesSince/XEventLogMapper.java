@@ -48,10 +48,9 @@ public class XEventLogMapper {
 
     public XChangesSinceResponse convert(List<EventLogWrapper> instance) {
         List<XChangeSince> list = new ArrayList<>();
-        for(EventLogWrapper wrapper : instance)
-        {
+        for (EventLogWrapper wrapper : instance) {
             XChangeSince xChangeSince = map(wrapper.getEventLog(), wrapper.getDistrictId());
-            if (xChangeSince != null) {
+            if(xChangeSince != null) {
                 list.add(xChangeSince);
             }
         }
@@ -72,28 +71,28 @@ public class XEventLogMapper {
         xChangeSince.setEventType(eventLog.getEventType());
         xChangeSince.setEventDate(eventLog.getEventTimestamp().toString());
 
-        if(eventLog.getObject().equals(EventObject.LEA)){
+        if(eventLog.getObject().equals(EventObject.LEA)) {
             mapXLea(xChangeSince, eventLog, districtId);
         }
-        else  if(eventLog.getObject().equals(EventObject.SCHOOL)){
+        else if(eventLog.getObject().equals(EventObject.SCHOOL)) {
             mapXSchool(xChangeSince, eventLog, districtId);
         }
-        else  if(eventLog.getObject().equals(EventObject.CALENDAR)){
+        else if(eventLog.getObject().equals(EventObject.CALENDAR)) {
             mapXCalendar(xChangeSince, eventLog, districtId);
         }
-        else  if(eventLog.getObject().equals(EventObject.COURSE)){
+        else if(eventLog.getObject().equals(EventObject.COURSE)) {
             mapXCourse(xChangeSince, eventLog, districtId);
         }
-        else  if(eventLog.getObject().equals(EventObject.ROSTER)){
+        else if(eventLog.getObject().equals(EventObject.ROSTER)) {
             mapXRoster(xChangeSince, eventLog, districtId);
         }
-        else  if(eventLog.getObject().equals(EventObject.STAFF)){
+        else if(eventLog.getObject().equals(EventObject.STAFF)) {
             mapXStaff(xChangeSince, eventLog, districtId);
         }
-        else  if(eventLog.getObject().equals(EventObject.STUDENT)){
+        else if(eventLog.getObject().equals(EventObject.STUDENT)) {
             mapXStudent(xChangeSince, eventLog, districtId);
         }
-        else  if(eventLog.getObject().equals(EventObject.CONTACT)){
+        else if(eventLog.getObject().equals(EventObject.CONTACT)) {
             mapXContact(xChangeSince, eventLog, districtId);
         }
         return xChangeSince;

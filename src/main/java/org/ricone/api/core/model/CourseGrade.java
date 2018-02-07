@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "coursegrade")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 public class CourseGrade implements java.io.Serializable {
     private static final long serialVersionUID = 2650694715490007664L;
     private String courseGradeRefId;

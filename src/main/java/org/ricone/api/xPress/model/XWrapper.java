@@ -15,7 +15,10 @@ public abstract class XWrapper {
 
     @JsonIgnore
     @XmlTransient
-    public String getDistrictId() { return districtId; }
+    public String getDistrictId() {
+        return districtId;
+    }
+
     @JsonIgnore
     public void setDistrictId(String districtId) {
         this.districtId = districtId;

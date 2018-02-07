@@ -7,8 +7,7 @@ import org.ricone.authentication.MetaData;
 import java.util.List;
 
 
-public interface IStaffService
-{
+public interface IStaffService {
     List<StaffWrapper> findAll(MetaData metaData) throws Exception;
 
     List<StaffWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;

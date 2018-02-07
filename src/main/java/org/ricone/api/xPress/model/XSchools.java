@@ -21,9 +21,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xSchool"
-})
+@JsonPropertyOrder({"xSchool"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XSchools {
@@ -54,8 +52,6 @@ public class XSchools {
 
     @Override
     public String toString() {
-        return "XSchools{" +
-                "xSchool=" + xSchool +
-                '}';
+        return "XSchools{" + "xSchool=" + xSchool + '}';
     }
 }

@@ -6,11 +6,10 @@ import org.ricone.api.core.model.EntityType;
 
 import java.util.HashMap;
 
-public class AppProvisioningUtil
-{
+public class AppProvisioningUtil {
     public static boolean doesUsernameRequireIncrement(EntityType entityType, HashMap<String, String> kv) {
         String key;
-        if(entityType.equals(EntityType.STAFF)){
+        if(entityType.equals(EntityType.STAFF)) {
             key = "api.aupp.username.method.staff";
         }
         else {

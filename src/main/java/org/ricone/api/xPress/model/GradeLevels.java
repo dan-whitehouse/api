@@ -18,9 +18,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "gradeLevel"
-})
+@JsonPropertyOrder({"gradeLevel"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GradeLevels {
@@ -51,9 +49,7 @@ public class GradeLevels {
 
     @Override
     public String toString() {
-        return "GradeLevels{" +
-                "gradeLevel=" + gradeLevel +
-                '}';
+        return "GradeLevels{" + "gradeLevel=" + gradeLevel + '}';
     }
 
     @JsonIgnore

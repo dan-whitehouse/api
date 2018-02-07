@@ -19,17 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "name",
-        "localId",
-        "stateProvinceId",
-        "otherIds",
-        "sex",
-        "email",
-        "primaryAssignment",
-        "otherAssignments"
-})
+@JsonPropertyOrder({"refId", "name", "localId", "stateProvinceId", "otherIds", "sex", "email", "primaryAssignment", "otherAssignments"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XStaff extends XWrapper {
@@ -68,7 +58,7 @@ public class XStaff extends XWrapper {
     public XStaff(String refId) {
         this.refId = refId;
     }
-    
+
     public XStaff(String refId, Name name, String localId, String stateProvinceId, OtherIds otherIds, String sex, Email email, PrimaryAssignment primaryAssignment, OtherAssignments otherAssignments) {
         super();
         this.refId = refId;
@@ -174,16 +164,6 @@ public class XStaff extends XWrapper {
 
     @Override
     public String toString() {
-        return "XStaff{" +
-                "refId='" + refId + '\'' +
-                ", name=" + name +
-                ", localId='" + localId + '\'' +
-                ", stateProvinceId='" + stateProvinceId + '\'' +
-                ", otherIds=" + otherIds +
-                ", sex='" + sex + '\'' +
-                ", email=" + email +
-                ", primaryAssignment=" + primaryAssignment +
-                ", otherAssignments=" + otherAssignments +
-                '}';
+        return "XStaff{" + "refId='" + refId + '\'' + ", name=" + name + ", localId='" + localId + '\'' + ", stateProvinceId='" + stateProvinceId + '\'' + ", otherIds=" + otherIds + ", sex='" + sex + '\'' + ", email=" + email + ", primaryAssignment=" + primaryAssignment + ", otherAssignments=" + otherAssignments + '}';
     }
 }

@@ -10,8 +10,7 @@ import java.util.List;
  * @project: ricone
  * @author: Dan on 9/12/2017.
  */
-public interface ISchoolService
-{
+public interface ISchoolService {
     List<SchoolWrapper> findAll(MetaData metaData) throws Exception;
 
     List<SchoolWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;

@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "status",
-        "started",
-        "uptime"
-})
+@JsonPropertyOrder({"status", "started", "uptime"})
 public class Config {
 
     @JsonProperty("status")

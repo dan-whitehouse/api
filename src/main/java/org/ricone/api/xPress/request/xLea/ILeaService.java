@@ -6,8 +6,7 @@ import org.ricone.authentication.MetaData;
 
 import java.util.List;
 
-public interface ILeaService
-{
+public interface ILeaService {
     List<LeaWrapper> findAll(MetaData metaData) throws Exception;
 
     List<LeaWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception;

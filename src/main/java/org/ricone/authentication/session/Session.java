@@ -3,31 +3,28 @@ package org.ricone.authentication.session;
 import org.ricone.authentication.DecodedToken;
 import org.ricone.config.model.App;
 
-public class Session 
-{
-	private DecodedToken token;
-	private App app;
+public class Session {
+    private DecodedToken token;
+    private App app;
 
-	public Session(DecodedToken token, App app) {
-		this.token = token;
-		this.app = app;
-	}
+    public Session(DecodedToken token, App app) {
+        this.token = token;
+        this.app = app;
+    }
 
-	public DecodedToken getToken()
-	{
-		return token;
-	}
-	public void setToken(DecodedToken token) 
-	{
-		this.token = token;
-	}
+    public DecodedToken getToken() {
+        return token;
+    }
 
-	public App getApp() 
-	{
-		return app;
-	}
-	public void setApp(App app) 
-	{
-		this.app = app;
-	}
+    public void setToken(DecodedToken token) {
+        this.token = token;
+    }
+
+    public App getApp() {
+        return app;
+    }
+
+    public void setApp(App app) {
+        this.app = app;
+    }
 }

@@ -19,13 +19,11 @@ public class XCalendarMapper {
     public XCalendarMapper() {
     }
 
-    public XCalendarsResponse convert(List<SchoolCalendarWrapper> instance)
-    {
+    public XCalendarsResponse convert(List<SchoolCalendarWrapper> instance) {
         List<XCalendar> list = new ArrayList<>();
-        for(SchoolCalendarWrapper wrapper : instance)
-        {
+        for (SchoolCalendarWrapper wrapper : instance) {
             XCalendar xCalendar = map(wrapper.getSchoolCalendar(), wrapper.getDistrictId());
-            if (xCalendar != null) {
+            if(xCalendar != null) {
                 list.add(xCalendar);
             }
         }
@@ -38,18 +36,16 @@ public class XCalendarMapper {
         return response;
     }
 
-    public XCalendarResponse convert(SchoolCalendarWrapper instance)
-    {
+    public XCalendarResponse convert(SchoolCalendarWrapper instance) {
         XCalendarResponse response = new XCalendarResponse();
         XCalendar xCalendar = map(instance.getSchoolCalendar(), instance.getDistrictId());
-        if (xCalendar != null) {
+        if(xCalendar != null) {
             response.setXCalendar(xCalendar);
         }
         return response;
     }
 
-    public XCalendar map(SchoolCalendar instance, String districtId)
-    {
+    public XCalendar map(SchoolCalendar instance, String districtId) {
         XCalendar xCalendar = new XCalendar();
         try {
             xCalendar.setDistrictId(districtId); //Required by Filtering
@@ -60,18 +56,18 @@ public class XCalendarMapper {
             List<SessionList> sessionsList = new ArrayList<>();
             for (SchoolCalendarSession calendarSession : instance.getSchoolCalendarSessions()) {
                 SessionList sessionList = mapSessionList(calendarSession);
-                if (sessionList != null) {
+                if(sessionList != null) {
                     sessionsList.add(sessionList);
                 }
             }
 
-            if (CollectionUtils.isNotEmpty(sessionsList)) {
+            if(CollectionUtils.isNotEmpty(sessionsList)) {
                 Sessions sessions = new Sessions();
                 sessions.setSessionList(sessionsList);
                 xCalendar.setSessions(sessions);
             }
         }
-        catch(Exception e){
+        catch (Exception e) {
             xCalendar = null;
             e.printStackTrace();
             throw new MappingException("Mapping Exception: " + e.getLocalizedMessage());
@@ -79,8 +75,7 @@ public class XCalendarMapper {
         return xCalendar;
     }
 
-    private SessionList mapSessionList(SchoolCalendarSession calendarSession)
-    {
+    private SessionList mapSessionList(SchoolCalendarSession calendarSession) {
         SessionList sessionList = new SessionList();
         sessionList.setDescription(calendarSession.getDescription());
         sessionList.setSessionCode(calendarSession.getCode());
@@ -90,15 +85,14 @@ public class XCalendarMapper {
         sessionList.setMarkingTerm(BooleanUtils.toStringTrueFalse(calendarSession.getMarkingTermIndicator()));
         sessionList.setSchedulingTerm(BooleanUtils.toStringTrueFalse(calendarSession.getSchedulingTermIndicator()));
 
-        if(calendarSession.getBeginDate() != null){
+        if(calendarSession.getBeginDate() != null) {
             sessionList.setStartDate(DateFormatUtils.format(calendarSession.getBeginDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
         }
         if(calendarSession.getEndDate() != null) {
             sessionList.setEndDate(DateFormatUtils.format(calendarSession.getEndDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
         }
 
-        if(sessionList.isEmptyObject())
-        {
+        if(sessionList.isEmptyObject()) {
             return null;
         }
         return sessionList;

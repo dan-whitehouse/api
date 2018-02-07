@@ -19,18 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "leaRefId",
-        "localId",
-        "stateProvinceId",
-        "otherIds",
-        "schoolName",
-        "gradeLevels",
-        "address",
-        "phoneNumber",
-        "otherPhoneNumbers"
-})
+@JsonPropertyOrder({"refId", "leaRefId", "localId", "stateProvinceId", "otherIds", "schoolName", "gradeLevels", "address", "phoneNumber", "otherPhoneNumbers"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XSchool extends XWrapper {
@@ -189,17 +178,6 @@ public class XSchool extends XWrapper {
 
     @Override
     public String toString() {
-        return "XSchool{" +
-                "refId='" + refId + '\'' +
-                ", leaRefId='" + leaRefId + '\'' +
-                ", localId='" + localId + '\'' +
-                ", stateProvinceId='" + stateProvinceId + '\'' +
-                ", otherIds=" + otherIds +
-                ", schoolName='" + schoolName + '\'' +
-                ", gradeLevels=" + gradeLevels +
-                ", address=" + address +
-                ", phoneNumber=" + phoneNumber +
-                ", otherPhoneNumbers=" + otherPhoneNumbers +
-                '}';
+        return "XSchool{" + "refId='" + refId + '\'' + ", leaRefId='" + leaRefId + '\'' + ", localId='" + localId + '\'' + ", stateProvinceId='" + stateProvinceId + '\'' + ", otherIds=" + otherIds + ", schoolName='" + schoolName + '\'' + ", gradeLevels=" + gradeLevels + ", address=" + address + ", phoneNumber=" + phoneNumber + ", otherPhoneNumbers=" + otherPhoneNumbers + '}';
     }
 }

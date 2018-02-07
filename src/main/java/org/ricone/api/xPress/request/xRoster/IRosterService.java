@@ -10,8 +10,7 @@ import java.util.List;
  * @project: ricone
  * @author: Dan on 9/12/2017.
  */
-public interface IRosterService
-{
+public interface IRosterService {
     List<CourseSectionWrapper> findAll(MetaData metaData) throws Exception;
 
     List<CourseSectionWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;

@@ -18,16 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "timeTableDay",
-        "classMeetingDays",
-        "timeTablePeriod",
-        "roomNumber",
-        "classBeginningTime",
-        "classEndingTime",
-        "sessionCode",
-        "schoolCalendarRefId"
-})
+@JsonPropertyOrder({"timeTableDay", "classMeetingDays", "timeTablePeriod", "roomNumber", "classBeginningTime", "classEndingTime", "sessionCode", "schoolCalendarRefId"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MeetingTime {
@@ -154,21 +145,11 @@ public class MeetingTime {
 
     @Override
     public String toString() {
-        return "MeetingTime{" +
-                "timeTableDay='" + timeTableDay + '\'' +
-                ", classMeetingDays=" + classMeetingDays +
-                ", timeTablePeriod='" + timeTablePeriod + '\'' +
-                ", roomNumber='" + roomNumber + '\'' +
-                ", classBeginningTime='" + classBeginningTime + '\'' +
-                ", classEndingTime='" + classEndingTime + '\'' +
-                ", sessionCode='" + sessionCode + '\'' +
-                ", schoolCalendarRefId='" + schoolCalendarRefId + '\'' +
-                '}';
+        return "MeetingTime{" + "timeTableDay='" + timeTableDay + '\'' + ", classMeetingDays=" + classMeetingDays + ", timeTablePeriod='" + timeTablePeriod + '\'' + ", roomNumber='" + roomNumber + '\'' + ", classBeginningTime='" + classBeginningTime + '\'' + ", classEndingTime='" + classEndingTime + '\'' + ", sessionCode='" + sessionCode + '\'' + ", schoolCalendarRefId='" + schoolCalendarRefId + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(timeTableDay, classMeetingDays, timeTablePeriod, roomNumber, classBeginningTime, classEndingTime, sessionCode, schoolCalendarRefId).allMatch(Objects::isNull);
     }
 }

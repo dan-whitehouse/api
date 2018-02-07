@@ -11,43 +11,42 @@ import java.util.List;
 
 @Service("calendarService")
 @Transactional
-public class CalendarService implements ICalendarService
-{
-	@Autowired
-	private ICalendarDAO dao;
+public class CalendarService implements ICalendarService {
+    @Autowired
+    private ICalendarDAO dao;
 
-	@Override
-	public List<SchoolCalendarWrapper> findAll(MetaData metaData) throws Exception {
-		return dao.findAll(metaData);
-	}
+    @Override
+    public List<SchoolCalendarWrapper> findAll(MetaData metaData) throws Exception {
+        return dao.findAll(metaData);
+    }
 
-	@Override
-	public List<SchoolCalendarWrapper> findAllByLea(MetaData metaData, String refId) throws Exception {
-		return dao.findAllByLeaRefId(metaData, refId);
-	}
+    @Override
+    public List<SchoolCalendarWrapper> findAllByLea(MetaData metaData, String refId) throws Exception {
+        return dao.findAllByLeaRefId(metaData, refId);
+    }
 
-	@Override
-	public List<SchoolCalendarWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception {
-		return dao.findAllBySchoolRefId(metaData, refId);
-	}
+    @Override
+    public List<SchoolCalendarWrapper> findAllBySchool(MetaData metaData, String refId) throws Exception {
+        return dao.findAllBySchoolRefId(metaData, refId);
+    }
 
-	@Override
-	public SchoolCalendarWrapper findByRefId(MetaData metaData, String refId) throws Exception {
-		return dao.findByRefId(metaData, refId);
-	}
+    @Override
+    public SchoolCalendarWrapper findByRefId(MetaData metaData, String refId) throws Exception {
+        return dao.findByRefId(metaData, refId);
+    }
 
-	@Override
-	public void save(SchoolCalendar instance) {
-		dao.save(instance);
-	}
+    @Override
+    public void save(SchoolCalendar instance) {
+        dao.save(instance);
+    }
 
-	@Override
-	public void update(SchoolCalendar instance) {
-		dao.update(instance);
-	}
+    @Override
+    public void update(SchoolCalendar instance) {
+        dao.update(instance);
+    }
 
-	@Override
-	public void delete(SchoolCalendar instance) {
-		dao.delete(instance);
-	}
+    @Override
+    public void delete(SchoolCalendar instance) {
+        dao.delete(instance);
+    }
 }

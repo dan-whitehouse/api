@@ -7,20 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "schoolRefId",
-        "schoolYear",
-        "sessionssessionListsessionType",
-        "sessionssessionListsessionCode",
-        "sessionssessionListdescription",
-        "sessionssessionListmarkingTerm",
-        "sessionssessionListschedulingTerm",
-        "sessionssessionListlinkedSessionCode",
-        "sessionssessionListstartDate",
-        "sessionssessionListendDate",
-        "id"
-})
+@JsonPropertyOrder({"refId", "schoolRefId", "schoolYear", "sessionssessionListsessionType", "sessionssessionListsessionCode", "sessionssessionListdescription", "sessionssessionListmarkingTerm", "sessionssessionListschedulingTerm", "sessionssessionListlinkedSessionCode", "sessionssessionListstartDate", "sessionssessionListendDate", "id"})
 public class XCalendarFilter implements IFilter<XCalendarFilter>, Serializable {
 
     @JsonProperty("refId")

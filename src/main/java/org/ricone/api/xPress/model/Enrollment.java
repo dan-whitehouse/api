@@ -18,22 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "leaRefId",
-        "schoolRefId",
-        "studentSchoolAssociationRefId",
-        "responsibleSchoolType",
-        "membershipType",
-        "entryDate",
-        "entryType",
-        "exitDate",
-        "exitType",
-        "homeRoomNumber",
-        "homeRoomTeacher",
-        "gradeLevel",
-        "projectedGraduationYear",
-        "counselor"
-})
+@JsonPropertyOrder({"leaRefId", "schoolRefId", "studentSchoolAssociationRefId", "responsibleSchoolType", "membershipType", "entryDate", "entryType", "exitDate", "exitType", "homeRoomNumber", "homeRoomTeacher", "gradeLevel", "projectedGraduationYear", "counselor"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Enrollment {
@@ -244,22 +229,7 @@ public class Enrollment {
 
     @Override
     public String toString() {
-        return "Enrollment{" +
-                "leaRefId='" + leaRefId + '\'' +
-                ", schoolRefId='" + schoolRefId + '\'' +
-                ", studentSchoolAssociationRefId='" + studentSchoolAssociationRefId + '\'' +
-                ", responsibleSchoolType='" + responsibleSchoolType + '\'' +
-                ", membershipType='" + membershipType + '\'' +
-                ", entryDate='" + entryDate + '\'' +
-                ", entryType=" + entryType +
-                ", exitDate='" + exitDate + '\'' +
-                ", exitType=" + exitType +
-                ", homeRoomNumber='" + homeRoomNumber + '\'' +
-                ", homeRoomTeacher=" + homeRoomTeacher +
-                ", gradeLevel='" + gradeLevel + '\'' +
-                ", projectedGraduationYear='" + projectedGraduationYear + '\'' +
-                ", counselor=" + counselor +
-                '}';
+        return "Enrollment{" + "leaRefId='" + leaRefId + '\'' + ", schoolRefId='" + schoolRefId + '\'' + ", studentSchoolAssociationRefId='" + studentSchoolAssociationRefId + '\'' + ", responsibleSchoolType='" + responsibleSchoolType + '\'' + ", membershipType='" + membershipType + '\'' + ", entryDate='" + entryDate + '\'' + ", entryType=" + entryType + ", exitDate='" + exitDate + '\'' + ", exitType=" + exitType + ", homeRoomNumber='" + homeRoomNumber + '\'' + ", homeRoomTeacher=" + homeRoomTeacher + ", gradeLevel='" + gradeLevel + '\'' + ", projectedGraduationYear='" + projectedGraduationYear + '\'' + ", counselor=" + counselor + '}';
     }
 
     @JsonIgnore

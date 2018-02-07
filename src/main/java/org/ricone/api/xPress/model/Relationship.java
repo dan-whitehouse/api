@@ -18,18 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "studentRefId",
-        "relationshipCode",
-        "restrictions",
-        "livesWith",
-        "primaryContactIndicator",
-        "emergencyContactIndicator",
-        "financialResponsibilityIndicator",
-        "custodialIndicator",
-        "communicationsIndicator",
-        "contactSequence"
-})
+@JsonPropertyOrder({"studentRefId", "relationshipCode", "restrictions", "livesWith", "primaryContactIndicator", "emergencyContactIndicator", "financialResponsibilityIndicator", "custodialIndicator", "communicationsIndicator", "contactSequence"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Relationship {
@@ -184,23 +173,11 @@ public class Relationship {
 
     @Override
     public String toString() {
-        return "Relationship{" +
-                "studentRefId='" + studentRefId + '\'' +
-                ", relationshipCode='" + relationshipCode + '\'' +
-                ", restrictions='" + restrictions + '\'' +
-                ", livesWith='" + livesWith + '\'' +
-                ", primaryContactIndicator='" + primaryContactIndicator + '\'' +
-                ", emergencyContactIndicator='" + emergencyContactIndicator + '\'' +
-                ", financialResponsibilityIndicator='" + financialResponsibilityIndicator + '\'' +
-                ", custodialIndicator='" + custodialIndicator + '\'' +
-                ", communicationsIndicator='" + communicationsIndicator + '\'' +
-                ", contactSequence='" + contactSequence + '\'' +
-                '}';
+        return "Relationship{" + "studentRefId='" + studentRefId + '\'' + ", relationshipCode='" + relationshipCode + '\'' + ", restrictions='" + restrictions + '\'' + ", livesWith='" + livesWith + '\'' + ", primaryContactIndicator='" + primaryContactIndicator + '\'' + ", emergencyContactIndicator='" + emergencyContactIndicator + '\'' + ", financialResponsibilityIndicator='" + financialResponsibilityIndicator + '\'' + ", custodialIndicator='" + custodialIndicator + '\'' + ", communicationsIndicator='" + communicationsIndicator + '\'' + ", contactSequence='" + contactSequence + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(studentRefId, relationshipCode, restrictions, livesWith, primaryContactIndicator, emergencyContactIndicator, financialResponsibilityIndicator, custodialIndicator, communicationsIndicator, contactSequence).allMatch(Objects::isNull);
     }
 }

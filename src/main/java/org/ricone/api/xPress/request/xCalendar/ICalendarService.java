@@ -10,8 +10,7 @@ import java.util.List;
  * @project: ricone
  * @author: Dan on 9/12/2017.
  */
-public interface ICalendarService
-{
+public interface ICalendarService {
     List<SchoolCalendarWrapper> findAll(MetaData metaData) throws Exception;
 
     List<SchoolCalendarWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;

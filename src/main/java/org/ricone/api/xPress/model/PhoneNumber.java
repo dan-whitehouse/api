@@ -18,11 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "phoneNumberType",
-        "number",
-        "primaryIndicator"
-})
+@JsonPropertyOrder({"phoneNumberType", "number", "primaryIndicator"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PhoneNumber {
@@ -79,16 +75,11 @@ public class PhoneNumber {
 
     @Override
     public String toString() {
-        return "PhoneNumber{" +
-                "phoneNumberType='" + phoneNumberType + '\'' +
-                ", number='" + number + '\'' +
-                ", primaryIndicator='" + primaryIndicator + '\'' +
-                '}';
+        return "PhoneNumber{" + "phoneNumberType='" + phoneNumberType + '\'' + ", number='" + number + '\'' + ", primaryIndicator='" + primaryIndicator + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(phoneNumberType, number, primaryIndicator).allMatch(Objects::isNull);
     }
 }

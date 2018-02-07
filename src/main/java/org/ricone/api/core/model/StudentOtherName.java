@@ -6,9 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "studentothername")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-public class StudentOtherName implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+public class StudentOtherName implements java.io.Serializable {
     private static final long serialVersionUID = -2946697742300249084L;
     private String studentOtherNameRefId;
     private Student student;
@@ -19,17 +18,14 @@ public class StudentOtherName implements java.io.Serializable
     private String prefix;
     private String type;
 
-    public StudentOtherName()
-    {
+    public StudentOtherName() {
     }
 
-    public StudentOtherName(String studentOtherNameRefId)
-    {
+    public StudentOtherName(String studentOtherNameRefId) {
         this.studentOtherNameRefId = studentOtherNameRefId;
     }
 
-    public StudentOtherName(String studentOtherNameRefId, Student student, String firstName, String middleName, String lastName, String generationCode, String prefix, String type)
-    {
+    public StudentOtherName(String studentOtherNameRefId, Student student, String firstName, String middleName, String lastName, String generationCode, String prefix, String type) {
         this.studentOtherNameRefId = studentOtherNameRefId;
         this.student = student;
         this.firstName = firstName;
@@ -42,91 +38,75 @@ public class StudentOtherName implements java.io.Serializable
 
     @Id
     @Column(name = "StudentOtherNameRefId", unique = true, nullable = false, length = 64)
-    public String getStudentOtherNameRefId()
-    {
+    public String getStudentOtherNameRefId() {
         return this.studentOtherNameRefId;
     }
 
-    public void setStudentOtherNameRefId(String studentOtherNameRefId)
-    {
+    public void setStudentOtherNameRefId(String studentOtherNameRefId) {
         this.studentOtherNameRefId = studentOtherNameRefId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudentRefId")
-    public Student getStudent()
-    {
+    public Student getStudent() {
         return this.student;
     }
 
-    public void setStudent(Student student)
-    {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
     @Column(name = "FirstName", length = 35)
-    public String getFirstName()
-    {
+    public String getFirstName() {
         return this.firstName;
     }
 
-    public void setFirstName(String firstName)
-    {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     @Column(name = "MiddleName", length = 35)
-    public String getMiddleName()
-    {
+    public String getMiddleName() {
         return this.middleName;
     }
 
-    public void setMiddleName(String middleName)
-    {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
     @Column(name = "LastName", length = 35)
-    public String getLastName()
-    {
+    public String getLastName() {
         return this.lastName;
     }
 
-    public void setLastName(String lastName)
-    {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
     @Column(name = "GenerationCode", length = 10)
-    public String getGenerationCode()
-    {
+    public String getGenerationCode() {
         return this.generationCode;
     }
 
-    public void setGenerationCode(String generationCode)
-    {
+    public void setGenerationCode(String generationCode) {
         this.generationCode = generationCode;
     }
 
     @Column(name = "Prefix", length = 30)
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return this.prefix;
     }
 
-    public void setPrefix(String prefix)
-    {
+    public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
     @Column(name = "Type", length = 50)
-    public String getType()
-    {
+    public String getType() {
         return this.type;
     }
 
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 }

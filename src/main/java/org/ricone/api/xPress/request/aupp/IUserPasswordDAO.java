@@ -16,7 +16,7 @@ public interface IUserPasswordDAO {
 
     void provisionStaffsBySchool(MetaData metaData, HashMap<String, String> kv, List<Staff> staffs) throws Exception;
 
-    void provisionStudentsBySchool(MetaData metaData, HashMap<String, String> kv, List<Student> students)throws Exception;
+    void provisionStudentsBySchool(MetaData metaData, HashMap<String, String> kv, List<Student> students) throws Exception;
 
     void updateStaffsLastRetrievedBySchool(MetaData metaData, String refId) throws Exception;
 

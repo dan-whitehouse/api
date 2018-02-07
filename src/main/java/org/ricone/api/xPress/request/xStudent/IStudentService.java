@@ -6,8 +6,7 @@ import org.ricone.authentication.MetaData;
 
 import java.util.List;
 
-public interface IStudentService
-{
+public interface IStudentService {
     List<StudentWrapper> findAll(MetaData metaData) throws Exception;
 
     List<StudentWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;

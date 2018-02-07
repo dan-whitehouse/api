@@ -18,10 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "type",
-        "id"
-})
+@JsonPropertyOrder({"type", "id"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OtherId {
@@ -64,15 +61,11 @@ public class OtherId {
 
     @Override
     public String toString() {
-        return "OtherId{" +
-                "type='" + type + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        return "OtherId{" + "type='" + type + '\'' + ", id='" + id + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(type, id).allMatch(Objects::isNull);
     }
 }

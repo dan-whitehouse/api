@@ -6,9 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "staffassignment")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-public class StaffAssignment implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+public class StaffAssignment implements java.io.Serializable {
     private static final long serialVersionUID = -3255881408462782727L;
     private String staffAssignmentRefId;
     private Staff staff;
@@ -16,19 +15,16 @@ public class StaffAssignment implements java.io.Serializable
     private Boolean primaryAssignment;
     private String positionTitle;
 
-    public StaffAssignment()
-    {
+    public StaffAssignment() {
     }
 
-    public StaffAssignment(String staffAssignmentRefId, Staff staff, School school)
-    {
+    public StaffAssignment(String staffAssignmentRefId, Staff staff, School school) {
         this.staffAssignmentRefId = staffAssignmentRefId;
         this.staff = staff;
         this.school = school;
     }
 
-    public StaffAssignment(String staffAssignmentRefId, Staff staff, School school, Boolean primaryAssignment, String positionTitle)
-    {
+    public StaffAssignment(String staffAssignmentRefId, Staff staff, School school, Boolean primaryAssignment, String positionTitle) {
         this.staffAssignmentRefId = staffAssignmentRefId;
         this.staff = staff;
         this.school = school;
@@ -38,59 +34,49 @@ public class StaffAssignment implements java.io.Serializable
 
     @Id
     @Column(name = "StaffAssignmentRefId", unique = true, nullable = false, length = 64)
-    public String getStaffAssignmentRefId()
-    {
+    public String getStaffAssignmentRefId() {
         return this.staffAssignmentRefId;
     }
 
-    public void setStaffAssignmentRefId(String staffAssignmentRefId)
-    {
+    public void setStaffAssignmentRefId(String staffAssignmentRefId) {
         this.staffAssignmentRefId = staffAssignmentRefId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StaffRefId", nullable = false)
-    public Staff getStaff()
-    {
+    public Staff getStaff() {
         return this.staff;
     }
 
-    public void setStaff(Staff staff)
-    {
+    public void setStaff(Staff staff) {
         this.staff = staff;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SchoolRefId", nullable = false)
-    public School getSchool()
-    {
+    public School getSchool() {
         return this.school;
     }
 
-    public void setSchool(School school)
-    {
+    public void setSchool(School school) {
         this.school = school;
     }
 
     @Column(name = "PrimaryAssignment")
-    public Boolean getPrimaryAssignment()
-    {
+    public Boolean getPrimaryAssignment() {
         return this.primaryAssignment;
     }
 
-    public void setPrimaryAssignment(Boolean primaryAssignment)
-    {
+    public void setPrimaryAssignment(Boolean primaryAssignment) {
         this.primaryAssignment = primaryAssignment;
     }
 
     @Column(name = "PositionTitle", length = 45)
-    public String getPositionTitle()
-    {
+    public String getPositionTitle() {
         return this.positionTitle;
     }
 
-    public void setPositionTitle(String positionTitle)
-    {
+    public void setPositionTitle(String positionTitle) {
         this.positionTitle = positionTitle;
     }
 }

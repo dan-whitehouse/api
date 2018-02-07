@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "version",
-        "status"
-})
+@JsonPropertyOrder({"version", "status"})
 public class Db {
 
     @JsonProperty("version")

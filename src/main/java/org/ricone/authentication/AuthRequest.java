@@ -7,23 +7,20 @@ import org.ricone.init.ConfigProperties;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class AuthRequest
-{
+public class AuthRequest {
     private boolean allowTokenParameter;
     private boolean isParameter;
     private boolean isHeader;
     private String token;
 
-    public AuthRequest(HttpServletRequest request) throws ConfigException
-    {
+    public AuthRequest(HttpServletRequest request) throws ConfigException {
         allowTokenParameter = allowTokenParams();
         isHeader = StringUtils.isNotBlank(request.getHeader("Authorization"));
         isParameter = StringUtils.isNotBlank(request.getParameter("access_token"));
 
-        if(isHeader)
-        {
+        if(isHeader) {
             //Strip away the key if Bearer, otherwise it will keep it's key and fail
-            token = StringUtils.replace(request.getHeader("Authorization"), "Bearer ",  "");
+            token = StringUtils.replace(request.getHeader("Authorization"), "Bearer ", "");
         }
         else if(isParameter) //Parameter tokens are allowed, and parameter is set
         {
@@ -54,11 +51,6 @@ public class AuthRequest
 
     @Override
     public String toString() {
-        return "AuthRequest{" +
-                "allowTokenParameter=" + allowTokenParameter +
-                ", isParameter=" + isParameter +
-                ", isHeader=" + isHeader +
-                ", token='" + token + '\'' +
-                '}';
+        return "AuthRequest{" + "allowTokenParameter=" + allowTokenParameter + ", isParameter=" + isParameter + ", isHeader=" + isHeader + ", token='" + token + '\'' + '}';
     }
 }

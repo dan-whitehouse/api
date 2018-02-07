@@ -19,9 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xCalendar"
-})
+@JsonPropertyOrder({"xCalendar"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XCalendarResponse {
@@ -50,8 +48,6 @@ public class XCalendarResponse {
 
     @Override
     public String toString() {
-        return "XCalendarResponse{" +
-                "xCalendar=" + xCalendar +
-                '}';
+        return "XCalendarResponse{" + "xCalendar=" + xCalendar + '}';
     }
 }

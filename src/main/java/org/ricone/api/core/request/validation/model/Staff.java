@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "total",
-    "email",
-    "localId"
-})
+@JsonPropertyOrder({"total", "email", "localId"})
 public class Staff {
 
     @JsonProperty("total")

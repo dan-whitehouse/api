@@ -19,20 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "schoolRefId",
-        "schoolCourseId",
-        "leaCourseId",
-        "otherIds",
-        "courseTitle",
-        "description",
-        "subject",
-        "applicableEducationLevels",
-        "scedCourseCode",
-        "scedCourseLevelCode",
-        "scedCourseSubjectAreaCode"
-})
+@JsonPropertyOrder({"refId", "schoolRefId", "schoolCourseId", "leaCourseId", "otherIds", "courseTitle", "description", "subject", "applicableEducationLevels", "scedCourseCode", "scedCourseLevelCode", "scedCourseSubjectAreaCode"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XCourse extends XWrapper {
@@ -94,7 +81,6 @@ public class XCourse extends XWrapper {
         this.subject = subject;
         this.applicableEducationLevels = applicableEducationLevels;
     }
-
 
 
     @JsonProperty("refId")
@@ -219,19 +205,6 @@ public class XCourse extends XWrapper {
 
     @Override
     public String toString() {
-        return "XCourse{" +
-                "refId='" + refId + '\'' +
-                ", schoolRefId='" + schoolRefId + '\'' +
-                ", schoolCourseId='" + schoolCourseId + '\'' +
-                ", leaCourseId='" + leaCourseId + '\'' +
-                ", otherIds=" + otherIds +
-                ", courseTitle='" + courseTitle + '\'' +
-                ", description='" + description + '\'' +
-                ", subject='" + subject + '\'' +
-                ", applicableEducationLevels=" + applicableEducationLevels +
-                ", scedCourseCode='" + scedCourseCode + '\'' +
-                ", scedCourseLevelCode='" + scedCourseLevelCode + '\'' +
-                ", scedCourseSubjectAreaCode='" + scedCourseSubjectAreaCode + '\'' +
-                '}';
+        return "XCourse{" + "refId='" + refId + '\'' + ", schoolRefId='" + schoolRefId + '\'' + ", schoolCourseId='" + schoolCourseId + '\'' + ", leaCourseId='" + leaCourseId + '\'' + ", otherIds=" + otherIds + ", courseTitle='" + courseTitle + '\'' + ", description='" + description + '\'' + ", subject='" + subject + '\'' + ", applicableEducationLevels=" + applicableEducationLevels + ", scedCourseCode='" + scedCourseCode + '\'' + ", scedCourseLevelCode='" + scedCourseLevelCode + '\'' + ", scedCourseSubjectAreaCode='" + scedCourseSubjectAreaCode + '\'' + '}';
     }
 }

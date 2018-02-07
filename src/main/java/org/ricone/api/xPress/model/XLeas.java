@@ -21,9 +21,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xLea"
-})
+@JsonPropertyOrder({"xLea"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XLeas {
@@ -55,8 +53,6 @@ public class XLeas {
 
     @Override
     public String toString() {
-        return "XLeas{" +
-                "xLea=" + xLea +
-                '}';
+        return "XLeas{" + "xLea=" + xLea + '}';
     }
 }

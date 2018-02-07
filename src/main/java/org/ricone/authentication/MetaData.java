@@ -39,17 +39,21 @@ public class MetaData {
         this.paging = paging;
     }
 
-    public Map<String, String> getHeaders() { return headers; }
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
 
     public String getHeader(String header) {
         if(headers != null) {
-            Optional<Map.Entry<String, String>> map =  headers.entrySet().stream().filter(entry -> entry.getKey().equalsIgnoreCase(header)).findAny();
+            Optional<Map.Entry<String, String>> map = headers.entrySet().stream().filter(entry -> entry.getKey().equalsIgnoreCase(header)).findAny();
             if(map.isPresent()) {
                 return map.get().getValue();
             }
         }
-       return null;
+        return null;
     }
 
-    public void setHeaders(Map<String, String> headers) { this.headers = headers; }
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
 }

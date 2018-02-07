@@ -18,11 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "cumulativeWeightedGpa",
-        "termWeightedGpa",
-        "classRank"
-})
+@JsonPropertyOrder({"cumulativeWeightedGpa", "termWeightedGpa", "classRank"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AcademicSummary {
@@ -79,16 +75,11 @@ public class AcademicSummary {
 
     @Override
     public String toString() {
-        return "AcademicSummary{" +
-                "cumulativeWeightedGpa='" + cumulativeWeightedGpa + '\'' +
-                ", termWeightedGpa='" + termWeightedGpa + '\'' +
-                ", classRank='" + classRank + '\'' +
-                '}';
+        return "AcademicSummary{" + "cumulativeWeightedGpa='" + cumulativeWeightedGpa + '\'' + ", termWeightedGpa='" + termWeightedGpa + '\'' + ", classRank='" + classRank + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(cumulativeWeightedGpa, termWeightedGpa, classRank).allMatch(Objects::isNull);
     }
 }

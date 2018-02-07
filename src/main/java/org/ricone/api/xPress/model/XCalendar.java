@@ -19,12 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "schoolRefId",
-        "schoolYear",
-        "sessions"
-})
+@JsonPropertyOrder({"refId", "schoolRefId", "schoolYear", "sessions"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XCalendar extends XWrapper {
@@ -56,7 +51,6 @@ public class XCalendar extends XWrapper {
         this.schoolYear = schoolYear;
         this.sessions = sessions;
     }
-
 
 
     @JsonProperty("refId")
@@ -101,11 +95,6 @@ public class XCalendar extends XWrapper {
 
     @Override
     public String toString() {
-        return "XCalendar{" +
-                "refId='" + refId + '\'' +
-                ", schoolRefId='" + schoolRefId + '\'' +
-                ", schoolYear='" + schoolYear + '\'' +
-                ", sessions=" + sessions +
-                '}';
+        return "XCalendar{" + "refId='" + refId + '\'' + ", schoolRefId='" + schoolRefId + '\'' + ", schoolYear='" + schoolYear + '\'' + ", sessions=" + sessions + '}';
     }
 }

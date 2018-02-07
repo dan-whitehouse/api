@@ -6,8 +6,7 @@ import org.ricone.authentication.MetaData;
 
 import java.util.List;
 
-public interface IContactService
-{
+public interface IContactService {
     List<StudentContactWrapper> findAll(MetaData metaData) throws Exception;
 
     List<StudentContactWrapper> findAllByLea(MetaData metaData, String refId) throws Exception;

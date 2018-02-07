@@ -18,15 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "addressType",
-        "line1",
-        "line2",
-        "city",
-        "stateProvince",
-        "countryCode",
-        "postalCode"
-})
+@JsonPropertyOrder({"addressType", "line1", "line2", "city", "stateProvince", "countryCode", "postalCode"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
@@ -139,20 +131,11 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "addressType='" + addressType + '\'' +
-                ", line1='" + line1 + '\'' +
-                ", line2='" + line2 + '\'' +
-                ", city='" + city + '\'' +
-                ", stateProvince='" + stateProvince + '\'' +
-                ", countryCode='" + countryCode + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                '}';
+        return "Address{" + "addressType='" + addressType + '\'' + ", line1='" + line1 + '\'' + ", line2='" + line2 + '\'' + ", city='" + city + '\'' + ", stateProvince='" + stateProvince + '\'' + ", countryCode='" + countryCode + '\'' + ", postalCode='" + postalCode + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(addressType, line1, line2, city, stateProvince, countryCode, postalCode).allMatch(Objects::isNull);
     }
 }

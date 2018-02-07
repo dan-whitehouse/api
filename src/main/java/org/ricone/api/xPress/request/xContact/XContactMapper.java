@@ -20,13 +20,11 @@ public class XContactMapper {
     public XContactMapper() {
     }
 
-    public XContactsResponse convert(List<StudentContactWrapper> instance)
-    {
+    public XContactsResponse convert(List<StudentContactWrapper> instance) {
         List<XContact> list = new ArrayList<>();
-        for(StudentContactWrapper wrapper : instance)
-        {
+        for (StudentContactWrapper wrapper : instance) {
             XContact xContact = map(wrapper.getStudentContact(), wrapper.getDistrictId());
-            if (xContact != null) {
+            if(xContact != null) {
                 list.add(xContact);
             }
         }
@@ -39,18 +37,16 @@ public class XContactMapper {
         return response;
     }
 
-    public XContactResponse convert(StudentContactWrapper instance)
-    {
+    public XContactResponse convert(StudentContactWrapper instance) {
         XContactResponse response = new XContactResponse();
         XContact xContact = map(instance.getStudentContact(), instance.getDistrictId());
-        if (xContact != null) {
+        if(xContact != null) {
             response.setXContact(xContact);
         }
         return response;
     }
 
-    public XContact map(StudentContact instance, String districtId)
-    {
+    public XContact map(StudentContact instance, String districtId) {
         XContact xContact = new XContact();
         xContact.setDistrictId(districtId); //Required by Filtering
         xContact.setRefId(instance.getStudentContactRefId());
@@ -65,15 +61,13 @@ public class XContactMapper {
 
         //Other Names
         List<Name> otherNameList = new ArrayList<>();
-        for(StudentContactOtherName contactOtherName : instance.getStudentContactOtherNames())
-        {
+        for (StudentContactOtherName contactOtherName : instance.getStudentContactOtherNames()) {
             Name otherName = mapOtherName(contactOtherName);
-            if(otherName != null){
+            if(otherName != null) {
                 otherNameList.add(otherName);
             }
         }
-        if(CollectionUtils.isNotEmpty(otherNameList))
-        {
+        if(CollectionUtils.isNotEmpty(otherNameList)) {
             OtherNames otherNames = new OtherNames();
             otherNames.setName(otherNameList);
             xContact.setOtherNames(otherNames);
@@ -81,20 +75,19 @@ public class XContactMapper {
 
         //Email
         List<Email> emailList = new ArrayList<>();
-        for(StudentContactEmail contactEmail : instance.getStudentContactEmails())
-        {
+        for (StudentContactEmail contactEmail : instance.getStudentContactEmails()) {
             Email email = mapEmail(contactEmail);
             if(email != null) {
-                if (contactEmail.getPrimaryEmailAddressIndicator()) {
+                if(contactEmail.getPrimaryEmailAddressIndicator()) {
                     xContact.setEmail(email);
-                } else {
+                }
+                else {
                     emailList.add(email);
                 }
             }
         }
         //Other Emails
-        if(CollectionUtils.isNotEmpty(emailList))
-        {
+        if(CollectionUtils.isNotEmpty(emailList)) {
             OtherEmails otherEmails = new OtherEmails();
             otherEmails.setEmail(emailList);
             xContact.setOtherEmails(otherEmails);
@@ -102,8 +95,7 @@ public class XContactMapper {
 
         //Identifiers
         List<OtherId> otherIdList = new ArrayList<>();
-        for(StudentContactIdentifier id : instance.getStudentContactIdentifiers())
-        {
+        for (StudentContactIdentifier id : instance.getStudentContactIdentifiers()) {
             if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
                 xContact.setLocalId(id.getStudentContactId());
             }
@@ -115,18 +107,15 @@ public class XContactMapper {
             }
         }
         //Other Identifiers
-        if(CollectionUtils.isNotEmpty(otherIdList))
-        {
+        if(CollectionUtils.isNotEmpty(otherIdList)) {
             OtherIds otherIds = new OtherIds();
             otherIds.setOtherId(otherIdList);
             xContact.setOtherIds(otherIds);
         }
 
         //Address
-        for(StudentContactAddress contactAddress : instance.getStudentContactAddresses())
-        {
-            if(PRIMARY_ADDRESS_TYPE.equalsIgnoreCase(contactAddress.getAddressTypeCode()))
-            {
+        for (StudentContactAddress contactAddress : instance.getStudentContactAddresses()) {
+            if(PRIMARY_ADDRESS_TYPE.equalsIgnoreCase(contactAddress.getAddressTypeCode())) {
                 Address address = mapAddress(contactAddress);
                 if(address != null) {
                     xContact.setAddress(address);
@@ -136,10 +125,8 @@ public class XContactMapper {
         }
 
         //Phone
-        for(StudentContactTelephone telephone : instance.getStudentContactTelephones())
-        {
-            if(telephone.getPrimaryTelephoneNumberIndicator())
-            {
+        for (StudentContactTelephone telephone : instance.getStudentContactTelephones()) {
+            if(telephone.getPrimaryTelephoneNumberIndicator()) {
                 PhoneNumber phoneNumber = mapPhone(telephone);
                 if(phoneNumber != null) {
                     xContact.setPhoneNumber(phoneNumber);
@@ -150,15 +137,13 @@ public class XContactMapper {
 
         //Relationships
         List<Relationship> relationshipList = new ArrayList<>();
-        for(StudentContactRelationship studentContactRelationship : instance.getStudentContactRelationships())
-        {
+        for (StudentContactRelationship studentContactRelationship : instance.getStudentContactRelationships()) {
             Relationship relationship = mapRelationship(studentContactRelationship);
             if(relationship != null) {
                 relationshipList.add(relationship);
             }
         }
-        if(CollectionUtils.isNotEmpty(relationshipList))
-        {
+        if(CollectionUtils.isNotEmpty(relationshipList)) {
             Relationships relationships = new Relationships();
             relationships.setRelationship(relationshipList);
             xContact.setRelationships(relationships);
@@ -179,8 +164,7 @@ public class XContactMapper {
         address.setCountryCode(contactAddress.getCountryCode());
         address.setStateProvince(contactAddress.getStateCode());
 
-        if(address.isEmptyObject())
-        {
+        if(address.isEmptyObject()) {
             return null;
         }
         return address;
@@ -192,8 +176,7 @@ public class XContactMapper {
         phone.setPhoneNumberType(telephone.getTelephoneNumberTypeCode());
         phone.setPrimaryIndicator(BooleanUtils.toStringTrueFalse(telephone.getPrimaryTelephoneNumberIndicator()));
 
-        if(phone.isEmptyObject())
-        {
+        if(phone.isEmptyObject()) {
             return null;
         }
         return phone;
@@ -204,8 +187,7 @@ public class XContactMapper {
         otherId.setId(id.getStudentContactId());
         otherId.setType(id.getIdentificationSystemCode());
 
-        if(otherId.isEmptyObject())
-        {
+        if(otherId.isEmptyObject()) {
             return null;
         }
         return otherId;
@@ -220,8 +202,7 @@ public class XContactMapper {
         name.setSuffix(instance.getGenerationCode());
         name.setType(instance.getType());
 
-        if(name.isEmptyObject())
-        {
+        if(name.isEmptyObject()) {
             return null;
         }
         return name;
@@ -236,8 +217,7 @@ public class XContactMapper {
         name.setSuffix(otherName.getGenerationCode());
         name.setType(otherName.getType());
 
-        if(name.isEmptyObject())
-        {
+        if(name.isEmptyObject()) {
             return null;
         }
         return name;
@@ -248,8 +228,7 @@ public class XContactMapper {
         email.setEmailAddress(contactEmail.getEmailAddress());
         email.setEmailType(contactEmail.getEmailTypeCode());
 
-        if(email.isEmptyObject())
-        {
+        if(email.isEmptyObject()) {
             return null;
         }
         return email;
@@ -268,8 +247,7 @@ public class XContactMapper {
         relationship.setRestrictions(r.getContactRestrictions());
         relationship.setStudentRefId(r.getStudent().getStudentRefId());
 
-        if(relationship.isEmptyObject())
-        {
+        if(relationship.isEmptyObject()) {
             return null;
         }
         return relationship;

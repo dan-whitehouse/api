@@ -13,10 +13,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "staff")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-@Cacheable @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Staff implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Staff implements java.io.Serializable {
     private static final long serialVersionUID = 1919054468978898526L;
     private String staffRefId;
     private String firstName;
@@ -36,17 +36,14 @@ public class Staff implements java.io.Serializable
     private Set<StaffEmail> staffEmails = new HashSet<>(0);
     private Set<StaffAssignment> staffAssignments = new HashSet<>(0);
 
-    public Staff()
-    {
+    public Staff() {
     }
 
-    public Staff(String staffRefId)
-    {
+    public Staff(String staffRefId) {
         this.staffRefId = staffRefId;
     }
 
-    public Staff(String staffRefId, String firstName, String middleName, String lastName, String generationCode, String prefix, Date birthdate, String sexCode, Boolean hispanicLatinoEthnicity, String uscitizenshipStatusCode, Long slk, String type, Set<StaffCourseSection> staffcoursesections, Set<StaffIdentifier> staffidentifiers, Set<StudentEnrollment> studentenrollments, Set<StaffEmail> staffemails, Set<StaffAssignment> staffassignments)
-    {
+    public Staff(String staffRefId, String firstName, String middleName, String lastName, String generationCode, String prefix, Date birthdate, String sexCode, Boolean hispanicLatinoEthnicity, String uscitizenshipStatusCode, Long slk, String type, Set<StaffCourseSection> staffcoursesections, Set<StaffIdentifier> staffidentifiers, Set<StudentEnrollment> studentenrollments, Set<StaffEmail> staffemails, Set<StaffAssignment> staffassignments) {
         this.staffRefId = staffRefId;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -68,161 +65,166 @@ public class Staff implements java.io.Serializable
 
     @Id
     @Column(name = "StaffRefId", unique = true, nullable = false, length = 64)
-    public String getStaffRefId()
-    {
+    public String getStaffRefId() {
         return this.staffRefId;
     }
-    public void setStaffRefId(String staffRefId)
-    {
+
+    public void setStaffRefId(String staffRefId) {
         this.staffRefId = staffRefId;
     }
 
     @Column(name = "FirstName", length = 35)
-    public String getFirstName()
-    {
+    public String getFirstName() {
         return this.firstName;
     }
-    public void setFirstName(String firstName)
-    {
+
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     @Column(name = "MiddleName", length = 35)
-    public String getMiddleName()
-    {
+    public String getMiddleName() {
         return this.middleName;
     }
-    public void setMiddleName(String middleName)
-    {
+
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
     @Column(name = "LastName", length = 35)
-    public String getLastName()
-    {
+    public String getLastName() {
         return this.lastName;
     }
-    public void setLastName(String lastName)
-    {
+
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
     @Column(name = "GenerationCode", length = 10)
-    public String getGenerationCode()
-    {
+    public String getGenerationCode() {
         return this.generationCode;
     }
-    public void setGenerationCode(String generationCode)
-    {
+
+    public void setGenerationCode(String generationCode) {
         this.generationCode = generationCode;
     }
 
     @Column(name = "Prefix", length = 30)
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return this.prefix;
     }
-    public void setPrefix(String prefix)
-    {
+
+    public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
     @Temporal(TemporalType.DATE)
     @Column(name = "Birthdate", length = 10)
-    public Date getBirthdate()
-    {
+    public Date getBirthdate() {
         return this.birthdate;
     }
-    public void setBirthdate(Date birthdate)
-    {
+
+    public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
     }
 
     @Column(name = "SexCode", length = 50)
-    public String getSexCode()
-    {
+    public String getSexCode() {
         return this.sexCode;
     }
-    public void setSexCode(String sexCode)
-    {
+
+    public void setSexCode(String sexCode) {
         this.sexCode = sexCode;
     }
 
     @Column(name = "HispanicLatinoEthnicity")
-    public Boolean getHispanicLatinoEthnicity()
-    {
+    public Boolean getHispanicLatinoEthnicity() {
         return this.hispanicLatinoEthnicity;
     }
-    public void setHispanicLatinoEthnicity(Boolean hispanicLatinoEthnicity) { this.hispanicLatinoEthnicity = hispanicLatinoEthnicity; }
+
+    public void setHispanicLatinoEthnicity(Boolean hispanicLatinoEthnicity) {
+        this.hispanicLatinoEthnicity = hispanicLatinoEthnicity;
+    }
 
     @Column(name = "USCitizenshipStatusCode", length = 50)
-    public String getUsCitizenshipStatusCode()
-    {
+    public String getUsCitizenshipStatusCode() {
         return this.usCitizenshipStatusCode;
     }
-    public void setUsCitizenshipStatusCode(String uscitizenshipStatusCode) { this.usCitizenshipStatusCode = uscitizenshipStatusCode; }
+
+    public void setUsCitizenshipStatusCode(String uscitizenshipStatusCode) {
+        this.usCitizenshipStatusCode = uscitizenshipStatusCode;
+    }
 
     @Column(name = "SLK")
-    public Long getSlk()
-    {
+    public Long getSlk() {
         return this.slk;
     }
-    public void setSlk(Long slk)
-    {
+
+    public void setSlk(Long slk) {
         this.slk = slk;
     }
 
     @Column(name = "Type", length = 32)
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
-    public void setType(String type)
-    {
+
+    public void setType(String type) {
         this.type = type;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<StaffCourseSection> getStaffCourseSections()
-    {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<StaffCourseSection> getStaffCourseSections() {
         return this.staffCourseSections;
     }
-    public void setStaffCourseSections(Set<StaffCourseSection> staffcoursesections) { this.staffCourseSections = staffcoursesections; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff", cascade = CascadeType.ALL) @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<StaffIdentifier> getStaffIdentifiers()
-    {
+    public void setStaffCourseSections(Set<StaffCourseSection> staffcoursesections) {
+        this.staffCourseSections = staffcoursesections;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<StaffIdentifier> getStaffIdentifiers() {
         return this.staffIdentifiers;
     }
-    public void setStaffIdentifiers(Set<StaffIdentifier> staffidentifiers)
-    {
+
+    public void setStaffIdentifiers(Set<StaffIdentifier> staffidentifiers) {
         this.staffIdentifiers = staffidentifiers;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "teacher") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<StudentEnrollment> getStudentEnrollments()
-    {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "teacher")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<StudentEnrollment> getStudentEnrollments() {
         return this.studentEnrollments;
     }
-    public void setStudentEnrollments(Set<StudentEnrollment> studentenrollments) { this.studentEnrollments = studentenrollments; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<StaffEmail> getStaffEmails()
-    {
+    public void setStudentEnrollments(Set<StudentEnrollment> studentenrollments) {
+        this.studentEnrollments = studentenrollments;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<StaffEmail> getStaffEmails() {
         return this.staffEmails;
     }
-    public void setStaffEmails(Set<StaffEmail> staffemails)
-    {
+
+    public void setStaffEmails(Set<StaffEmail> staffemails) {
         this.staffEmails = staffemails;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff") @Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-    public Set<StaffAssignment> getStaffAssignments()
-    {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 20)
+    public Set<StaffAssignment> getStaffAssignments() {
         return this.staffAssignments;
     }
-    public void setStaffAssignments(Set<StaffAssignment> staffassignments)
-    {
+
+    public void setStaffAssignments(Set<StaffAssignment> staffassignments) {
         this.staffAssignments = staffassignments;
     }
 }

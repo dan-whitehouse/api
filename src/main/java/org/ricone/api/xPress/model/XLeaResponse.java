@@ -17,9 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xLea"
-})
+@JsonPropertyOrder({"xLea"})
 @XmlRootElement
 public class XLeaResponse {
 
@@ -47,8 +45,6 @@ public class XLeaResponse {
 
     @Override
     public String toString() {
-        return "XLeaResponse{" +
-                "xLea=" + xLea +
-                '}';
+        return "XLeaResponse{" + "xLea=" + xLea + '}';
     }
 }

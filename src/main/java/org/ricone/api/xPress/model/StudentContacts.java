@@ -18,9 +18,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "contactPersonRefId"
-})
+@JsonPropertyOrder({"contactPersonRefId"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StudentContacts {
@@ -51,9 +49,7 @@ public class StudentContacts {
 
     @Override
     public String toString() {
-        return "StudentContacts{" +
-                "contactPersonRefId=" + contactPersonRefId +
-                '}';
+        return "StudentContacts{" + "contactPersonRefId=" + contactPersonRefId + '}';
     }
 
     @JsonIgnore

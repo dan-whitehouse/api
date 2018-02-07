@@ -6,8 +6,8 @@ import org.hibernate.type.StandardBasicTypes;
 
 public class MySQLDialect extends MySQL5Dialect {
 
-   public MySQLDialect() {
-      super();
-      registerFunction("regexp", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "?1 REGEXP ?2"));
-   }
+    public MySQLDialect() {
+        super();
+        registerFunction("regexp", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "?1 REGEXP ?2"));
+    }
 }

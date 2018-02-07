@@ -21,23 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-@JsonPropertyOrder({
-        "@refId",
-        "eventObject",
-        "eventType",
-        "eventDate",
-        "xLea",
-        "xSchool",
-        "xCalendar",
-        "xCourse",
-        "xRoster",
-        "xStaff",
-        "xStudent",
-        "xContact"
-})
+@JsonPropertyOrder({"@refId", "eventObject", "eventType", "eventDate", "xLea", "xSchool", "xCalendar", "xCourse", "xRoster", "xStaff", "xStudent", "xContact"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XChangeSince extends XWrapper{
+public class XChangeSince extends XWrapper {
 
     @JsonProperty("@refId")
     @XmlElement(name = "@refId")
@@ -91,18 +78,27 @@ public class XChangeSince extends XWrapper{
     public String getRefId() {
         return refId;
     }
+
     @JsonProperty("@refId")
-    public void setRefId(String refId) { this.refId = refId; }
+    public void setRefId(String refId) {
+        this.refId = refId;
+    }
 
     @JsonProperty("eventObject")
-    public EventObject getEventObject() { return eventObject; }
+    public EventObject getEventObject() {
+        return eventObject;
+    }
+
     @JsonProperty("eventObject")
-    public void setEventObject(EventObject eventObject) { this.eventObject = eventObject; }
+    public void setEventObject(EventObject eventObject) {
+        this.eventObject = eventObject;
+    }
 
     @JsonProperty("eventType")
     public EventType getEventType() {
         return eventType;
     }
+
     @JsonProperty("eventType")
     public void setEventType(EventType eventType) {
         this.eventType = eventType;
@@ -112,58 +108,94 @@ public class XChangeSince extends XWrapper{
     public String getEventDate() {
         return eventDate;
     }
+
     @JsonProperty("eventDate")
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
 
     @JsonProperty("xLea")
-    public XLea getXLea() { return xLea; }
+    public XLea getXLea() {
+        return xLea;
+    }
+
     @JsonProperty("xLea")
-    public void setXLea(XLea xLea) { this.xLea = xLea; }
+    public void setXLea(XLea xLea) {
+        this.xLea = xLea;
+    }
 
     @JsonProperty("xSchool")
-    public XSchool getXSchool() { return xSchool; }
+    public XSchool getXSchool() {
+        return xSchool;
+    }
+
     @JsonProperty("xSchool")
-    public void setXSchool(XSchool xSchool) { this.xSchool = xSchool; }
+    public void setXSchool(XSchool xSchool) {
+        this.xSchool = xSchool;
+    }
 
     @JsonProperty("xCalendar")
-    public XCalendar getXCalendar() { return xCalendar; }
+    public XCalendar getXCalendar() {
+        return xCalendar;
+    }
+
     @JsonProperty("xCalendar")
-    public void setXCalendar(XCalendar xCalendar) { this.xCalendar = xCalendar; }
+    public void setXCalendar(XCalendar xCalendar) {
+        this.xCalendar = xCalendar;
+    }
 
     @JsonProperty("xCourse")
-    public XCourse getXCourse() { return xCourse; }
+    public XCourse getXCourse() {
+        return xCourse;
+    }
+
     @JsonProperty("xCourse")
-    public void setXCourse(XCourse xCourse) { this.xCourse = xCourse; }
+    public void setXCourse(XCourse xCourse) {
+        this.xCourse = xCourse;
+    }
 
     @JsonProperty("xRoster")
-    public XRoster getXRoster() { return xRoster; }
+    public XRoster getXRoster() {
+        return xRoster;
+    }
+
     @JsonProperty("xRoster")
-    public void setXRoster(XRoster xRoster) { this.xRoster = xRoster; }
+    public void setXRoster(XRoster xRoster) {
+        this.xRoster = xRoster;
+    }
 
     @JsonProperty("xStaff")
-    public XStaff getxStaff() { return xStaff; }
+    public XStaff getxStaff() {
+        return xStaff;
+    }
+
     @JsonProperty("xStaff")
-    public void setxStaff(XStaff xStaff) { this.xStaff = xStaff; }
+    public void setxStaff(XStaff xStaff) {
+        this.xStaff = xStaff;
+    }
 
     @JsonProperty("xStudent")
-    public XStudent getXStudent() { return xStudent; }
+    public XStudent getXStudent() {
+        return xStudent;
+    }
+
     @JsonProperty("xStudent")
-    public void setXStudent(XStudent xStudent) { this.xStudent = xStudent; }
+    public void setXStudent(XStudent xStudent) {
+        this.xStudent = xStudent;
+    }
 
     @JsonProperty("xContact")
-    public XContact getXContact() { return xContact; }
+    public XContact getXContact() {
+        return xContact;
+    }
+
     @JsonProperty("xContact")
-    public void setXContact(XContact xContact) { this.xContact = xContact; }
+    public void setXContact(XContact xContact) {
+        this.xContact = xContact;
+    }
 
     @Override
     public String toString() {
-        return "XChangeSince{" +
-                "refId='" + refId + '\'' +
-                ", eventTObject='" + eventObject + '\'' +
-                ", eventType='" + eventType + '\'' +
-                ", eventDate=" + eventDate +
-                '}';
+        return "XChangeSince{" + "refId='" + refId + '\'' + ", eventTObject='" + eventObject + '\'' + ", eventType='" + eventType + '\'' + ", eventDate=" + eventDate + '}';
     }
 }

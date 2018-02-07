@@ -6,9 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "studentcoursesection")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-public class StudentCourseSection implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+public class StudentCourseSection implements java.io.Serializable {
     private static final long serialVersionUID = 8992517437619935826L;
     private String studentCourseSectionRefId;
     private CourseSection courseSection;
@@ -19,19 +18,16 @@ public class StudentCourseSection implements java.io.Serializable
     private String exitOrWithdrawalStatusCode;
     private String gradeLevelWhenCourseTakenCode;
 
-    public StudentCourseSection()
-    {
+    public StudentCourseSection() {
     }
 
-    public StudentCourseSection(String studentCourseSectionRefId, CourseSection courseSection, Student student)
-    {
+    public StudentCourseSection(String studentCourseSectionRefId, CourseSection courseSection, Student student) {
         this.studentCourseSectionRefId = studentCourseSectionRefId;
         this.courseSection = courseSection;
         this.student = student;
     }
 
-    public StudentCourseSection(String studentCourseSectionRefId, CourseSection courseSection, Student student, String courseSectionEnrollmentStatusTypeCode, String courseSectionEntryTypeCode, String courseSectionExitTypeCode, String exitOrWithdrawalStatusCode, String gradeLevelWhenCourseTakenCode)
-    {
+    public StudentCourseSection(String studentCourseSectionRefId, CourseSection courseSection, Student student, String courseSectionEnrollmentStatusTypeCode, String courseSectionEntryTypeCode, String courseSectionExitTypeCode, String exitOrWithdrawalStatusCode, String gradeLevelWhenCourseTakenCode) {
         this.studentCourseSectionRefId = studentCourseSectionRefId;
         this.courseSection = courseSection;
         this.student = student;
@@ -44,92 +40,76 @@ public class StudentCourseSection implements java.io.Serializable
 
     @Id
     @Column(name = "StudentCourseSectionRefId", unique = true, nullable = false, length = 64)
-    public String getStudentCourseSectionRefId()
-    {
+    public String getStudentCourseSectionRefId() {
         return this.studentCourseSectionRefId;
     }
 
-    public void setStudentCourseSectionRefId(String studentCourseSectionRefId)
-    {
+    public void setStudentCourseSectionRefId(String studentCourseSectionRefId) {
         this.studentCourseSectionRefId = studentCourseSectionRefId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseSectionRefId", nullable = false)
-    public CourseSection getCourseSection()
-    {
+    public CourseSection getCourseSection() {
         return this.courseSection;
     }
 
-    public void setCourseSection(CourseSection courseSection)
-    {
+    public void setCourseSection(CourseSection courseSection) {
         this.courseSection = courseSection;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudentRefId", nullable = false)
-    public Student getStudent()
-    {
+    public Student getStudent() {
         return this.student;
     }
 
-    public void setStudent(Student student)
-    {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
     @Column(name = "CourseSectionEnrollmentStatusTypeCode", length = 50)
-    public String getCourseSectionEnrollmentStatusTypeCode()
-    {
+    public String getCourseSectionEnrollmentStatusTypeCode() {
         return this.courseSectionEnrollmentStatusTypeCode;
     }
 
-    public void setCourseSectionEnrollmentStatusTypeCode(String courseSectionEnrollmentStatusTypeCode)
-    {
+    public void setCourseSectionEnrollmentStatusTypeCode(String courseSectionEnrollmentStatusTypeCode) {
         this.courseSectionEnrollmentStatusTypeCode = courseSectionEnrollmentStatusTypeCode;
     }
 
     @Column(name = "CourseSectionEntryTypeCode", length = 50)
-    public String getCourseSectionEntryTypeCode()
-    {
+    public String getCourseSectionEntryTypeCode() {
         return this.courseSectionEntryTypeCode;
     }
 
-    public void setCourseSectionEntryTypeCode(String courseSectionEntryTypeCode)
-    {
+    public void setCourseSectionEntryTypeCode(String courseSectionEntryTypeCode) {
         this.courseSectionEntryTypeCode = courseSectionEntryTypeCode;
     }
 
     @Column(name = "CourseSectionExitTypeCode", length = 50)
-    public String getCourseSectionExitTypeCode()
-    {
+    public String getCourseSectionExitTypeCode() {
         return this.courseSectionExitTypeCode;
     }
 
-    public void setCourseSectionExitTypeCode(String courseSectionExitTypeCode)
-    {
+    public void setCourseSectionExitTypeCode(String courseSectionExitTypeCode) {
         this.courseSectionExitTypeCode = courseSectionExitTypeCode;
     }
 
     @Column(name = "ExitOrWithdrawalStatusCode", length = 50)
-    public String getExitOrWithdrawalStatusCode()
-    {
+    public String getExitOrWithdrawalStatusCode() {
         return this.exitOrWithdrawalStatusCode;
     }
 
-    public void setExitOrWithdrawalStatusCode(String exitOrWithdrawalStatusCode)
-    {
+    public void setExitOrWithdrawalStatusCode(String exitOrWithdrawalStatusCode) {
         this.exitOrWithdrawalStatusCode = exitOrWithdrawalStatusCode;
     }
 
     @Column(name = "GradeLevelWhenCourseTakenCode", length = 50)
-    public String getGradeLevelWhenCourseTakenCode()
-    {
+    public String getGradeLevelWhenCourseTakenCode() {
         return this.gradeLevelWhenCourseTakenCode;
     }
 
-    public void setGradeLevelWhenCourseTakenCode(String gradeLevelWhenCourseTakenCode)
-    {
+    public void setGradeLevelWhenCourseTakenCode(String gradeLevelWhenCourseTakenCode) {
         this.gradeLevelWhenCourseTakenCode = gradeLevelWhenCourseTakenCode;
     }
 

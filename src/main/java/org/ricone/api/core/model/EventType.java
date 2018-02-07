@@ -1,24 +1,25 @@
 package org.ricone.api.core.model;
 
 public enum EventType {
-    INSERT("i"),
-    UPDATE("u"),
-    DELETE("d");
+    INSERT("i"), UPDATE("u"), DELETE("d");
 
     String dbValue;
 
     EventType(String dbValue) {
         this.dbValue = dbValue;
     }
-    public String getDbValue() { return this.dbValue; }
+
+    public String getDbValue() {
+        return this.dbValue;
+    }
 
     public static EventType from(String dbData) {
-        if (dbData == null) {
+        if(dbData == null) {
             return null;
         }
 
         for (EventType eventType : EventType.values()) {
-            if (dbData.equalsIgnoreCase(eventType.getDbValue())) {
+            if(dbData.equalsIgnoreCase(eventType.getDbValue())) {
                 return eventType;
             }
         }

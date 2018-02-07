@@ -19,21 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "name",
-        "otherNames",
-        "localId",
-        "otherIds",
-        "address",
-        "phoneNumber",
-        "otherPhoneNumbers",
-        "email",
-        "otherEmails",
-        "sex",
-        "employerType",
-        "relationships"
-})
+@JsonPropertyOrder({"refId", "name", "otherNames", "localId", "otherIds", "address", "phoneNumber", "otherPhoneNumbers", "email", "otherEmails", "sex", "employerType", "relationships"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XContact extends XWrapper {
@@ -234,20 +220,6 @@ public class XContact extends XWrapper {
 
     @Override
     public String toString() {
-        return "XContact{" +
-                "refId='" + refId + '\'' +
-                ", name=" + name +
-                ", otherNames=" + otherNames +
-                ", localId='" + localId + '\'' +
-                ", otherIds=" + otherIds +
-                ", address=" + address +
-                ", phoneNumber=" + phoneNumber +
-                ", otherPhoneNumbers=" + otherPhoneNumbers +
-                ", email=" + email +
-                ", otherEmails=" + otherEmails +
-                ", sex='" + sex + '\'' +
-                ", employerType='" + employerType + '\'' +
-                ", relationships=" + relationships +
-                '}';
+        return "XContact{" + "refId='" + refId + '\'' + ", name=" + name + ", otherNames=" + otherNames + ", localId='" + localId + '\'' + ", otherIds=" + otherIds + ", address=" + address + ", phoneNumber=" + phoneNumber + ", otherPhoneNumbers=" + otherPhoneNumbers + ", email=" + email + ", otherEmails=" + otherEmails + ", sex='" + sex + '\'' + ", employerType='" + employerType + '\'' + ", relationships=" + relationships + '}';
     }
 }

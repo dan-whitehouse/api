@@ -8,13 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "@refId",
-        "type",
-        "loginId",
-        "tempPassword",
-        "tempPasswordExpiryDate"
-})
+@JsonPropertyOrder({"@refId", "type", "loginId", "tempPassword", "tempPasswordExpiryDate"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XAppProvisioningInfo implements Serializable {

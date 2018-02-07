@@ -18,9 +18,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "language"
-})
+@JsonPropertyOrder({"language"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Languages {
@@ -51,9 +49,7 @@ public class Languages {
 
     @Override
     public String toString() {
-        return "Languages{" +
-                "language=" + language +
-                '}';
+        return "Languages{" + "language=" + language + '}';
     }
 
     @JsonIgnore

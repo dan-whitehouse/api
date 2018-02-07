@@ -5,12 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "version",
-        "status",
-        "started",
-        "uptime"
-})
+@JsonPropertyOrder({"version", "status", "started", "uptime"})
 public class Api {
 
     @JsonProperty("version")

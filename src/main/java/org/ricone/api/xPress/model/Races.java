@@ -18,9 +18,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "race"
-})
+@JsonPropertyOrder({"race"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Races {
@@ -51,9 +49,7 @@ public class Races {
 
     @Override
     public String toString() {
-        return "Races{" +
-                "race=" + race +
-                '}';
+        return "Races{" + "race=" + race + '}';
     }
 
     @JsonIgnore

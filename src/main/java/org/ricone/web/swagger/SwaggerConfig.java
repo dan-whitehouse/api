@@ -1,4 +1,4 @@
-package org.ricone.api.xPress.swagger;
+package org.ricone.web.swagger;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +37,7 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 //http://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
 
-public class SwaggerConfig
-{
+public class SwaggerConfig {
     @Resource
     private Environment env;
 
@@ -47,60 +46,39 @@ public class SwaggerConfig
 
     @Bean
     public Docket api() {
-        Docket d =  new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("org.ricone.api.xPress"))
+        Docket d = new Docket(DocumentationType.SWAGGER_2)
+                .select().apis(RequestHandlerSelectors
+                        .basePackage("org.ricone.api.xPress"))
                 .paths(PathSelectors.ant("/requests/**"))
-                .build()
-                .apiInfo(apiInfo())
-                .pathMapping("/")
+                .build().apiInfo(apiInfo()).pathMapping("/")
                 .directModelSubstitute(LocalDate.class, String.class)
                 .genericModelSubstitutes(ResponseEntity.class)
-                .alternateTypeRules
-                (
-                    newRule
-                    (
-                        typeResolver.resolve(DeferredResult.class,
-                        typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
-                        typeResolver.resolve(WildcardType.class)
-                    )
-                )
+                .alternateTypeRules(newRule(typeResolver.resolve(DeferredResult.class, typeResolver
+                        .resolve(ResponseEntity.class, WildcardType.class)), typeResolver
+                        .resolve(WildcardType.class)))
                 .useDefaultResponseMessages(false)
-                .globalResponseMessage(RequestMethod.GET, newArrayList(new ResponseMessageBuilder()
-                                .code(500)
-                                .message("500 message")
-                                .responseModel(new ModelRef("Error"))
-                                .build()))
-                .securitySchemes(newArrayList(apiKey()))
+                .globalResponseMessage(RequestMethod.GET, newArrayList(new ResponseMessageBuilder().code(500).message("500 message")
+                        .responseModel(new ModelRef("Error"))
+                        .build())).securitySchemes(newArrayList(apiKey()))
                 .securityContexts(newArrayList(securityContext()))
-                .enableUrlTemplating(true)
-        ;
+                .enableUrlTemplating(true);
         return d;
     }
 
     @Bean
     UiConfiguration uiConfig() {
-        return new UiConfiguration(
-                "validatorUrl",// url
+        return new UiConfiguration("validatorUrl",// url
                 "none",       // docExpansion          => none | list
                 "alpha",      // apiSorter             => alpha
                 "schema",     // defaultModelRendering => schema
-                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
-                false,        // enableJsonEditor      => true | false
+                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false,        // enableJsonEditor      => true | false
                 true,         // showRequestHeaders    => true | false
                 60000L);      // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
     }
 
     @Bean
     SecurityConfiguration security() {
-        return new SecurityConfiguration(
-                null,
-                null,
-                null,
-                null,
-                "apiKey",
-                ApiKeyVehicle.HEADER,
-                "api_key",
-                "," /*scope separator*/);
+        return new SecurityConfiguration(null, null, null, null, "apiKey", ApiKeyVehicle.HEADER, "api_key", "," /*scope separator*/);
     }
 
     private ApiKey apiKey() {
@@ -108,10 +86,7 @@ public class SwaggerConfig
     }
 
     private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("/anyPath.*"))
-                .build();
+        return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex("/anyPath.*")).build();
     }
 
     List<SecurityReference> defaultAuth() {
@@ -121,16 +96,9 @@ public class SwaggerConfig
         return newArrayList(new SecurityReference("Bearer", authorizationScopes));
     }
 
-    private ApiInfo apiInfo()
-    {
-        ApiInfo apiInfo = new ApiInfo(
-                "xPress",
-                "This is a sandbox that provides a preview of the RIC One xPress Roster API. <br/> <ol><li>Click the 'Authorize' button and select a token from the dropdown list and press 'Login'. Once signed in, click 'Explore'.</li>  <li>Explore the options with the various parameters you can set.</li></ol>",
-                env.getRequiredProperty("info.app.version"), //Version
-                null,
-                "",
-                null,
-                null);
+    private ApiInfo apiInfo() {
+        ApiInfo apiInfo = new ApiInfo("xPress", "This is a sandbox that provides a preview of the RIC One xPress Roster API. <br/> <ol><li>Click the 'Authorize' button and select a token from the dropdown list and press 'Login'. Once signed in, click 'Explore'.</li>  <li>Explore the options with the various parameters you can set.</li></ol>", env.getRequiredProperty("info.app.version"), //Version
+                null, "", null, null);
         return apiInfo;
     }
 }

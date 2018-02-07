@@ -19,22 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "courseRefId",
-        "courseTitle",
-        "sectionRefId",
-        "subject",
-        "schoolRefId",
-        "schoolSectionId",
-        "schoolYear",
-        "sessionCode",
-        "schoolCalendarRefId",
-        "meetingTimes",
-        "students",
-        "primaryStaff",
-        "otherStaffs"
-})
+@JsonPropertyOrder({"refId", "courseRefId", "courseTitle", "sectionRefId", "subject", "schoolRefId", "schoolSectionId", "schoolYear", "sessionCode", "schoolCalendarRefId", "meetingTimes", "students", "primaryStaff", "otherStaffs"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XRoster extends XWrapper {
@@ -249,21 +234,6 @@ public class XRoster extends XWrapper {
 
     @Override
     public String toString() {
-        return "XRoster{" +
-                "refId='" + refId + '\'' +
-                ", courseRefId='" + courseRefId + '\'' +
-                ", courseTitle='" + courseTitle + '\'' +
-                ", sectionRefId='" + sectionRefId + '\'' +
-                ", subject='" + subject + '\'' +
-                ", schoolRefId='" + schoolRefId + '\'' +
-                ", schoolSectionId='" + schoolSectionId + '\'' +
-                ", schoolYear='" + schoolYear + '\'' +
-                ", sessionCode='" + sessionCode + '\'' +
-                ", schoolCalendarRefId='" + schoolCalendarRefId + '\'' +
-                ", meetingTimes=" + meetingTimes +
-                ", students=" + students +
-                ", primaryStaff=" + primaryStaff +
-                ", otherStaffs=" + otherStaffs +
-                '}';
+        return "XRoster{" + "refId='" + refId + '\'' + ", courseRefId='" + courseRefId + '\'' + ", courseTitle='" + courseTitle + '\'' + ", sectionRefId='" + sectionRefId + '\'' + ", subject='" + subject + '\'' + ", schoolRefId='" + schoolRefId + '\'' + ", schoolSectionId='" + schoolSectionId + '\'' + ", schoolYear='" + schoolYear + '\'' + ", sessionCode='" + sessionCode + '\'' + ", schoolCalendarRefId='" + schoolCalendarRefId + '\'' + ", meetingTimes=" + meetingTimes + ", students=" + students + ", primaryStaff=" + primaryStaff + ", otherStaffs=" + otherStaffs + '}';
     }
 }

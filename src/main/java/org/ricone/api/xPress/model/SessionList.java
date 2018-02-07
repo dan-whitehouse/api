@@ -18,16 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "sessionType",
-        "sessionCode",
-        "description",
-        "markingTerm",
-        "schedulingTerm",
-        "linkedSessionCode",
-        "startDate",
-        "endDate"
-})
+@JsonPropertyOrder({"sessionType", "sessionCode", "description", "markingTerm", "schedulingTerm", "linkedSessionCode", "startDate", "endDate"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SessionList {
@@ -154,21 +145,11 @@ public class SessionList {
 
     @Override
     public String toString() {
-        return "SessionList{" +
-                "sessionType='" + sessionType + '\'' +
-                ", sessionCode='" + sessionCode + '\'' +
-                ", description='" + description + '\'' +
-                ", markingTerm='" + markingTerm + '\'' +
-                ", schedulingTerm='" + schedulingTerm + '\'' +
-                ", linkedSessionCode='" + linkedSessionCode + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                '}';
+        return "SessionList{" + "sessionType='" + sessionType + '\'' + ", sessionCode='" + sessionCode + '\'' + ", description='" + description + '\'' + ", markingTerm='" + markingTerm + '\'' + ", schedulingTerm='" + schedulingTerm + '\'' + ", linkedSessionCode='" + linkedSessionCode + '\'' + ", startDate='" + startDate + '\'' + ", endDate='" + endDate + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(sessionType, sessionCode, description, markingTerm, schedulingTerm, linkedSessionCode, startDate, endDate).allMatch(Objects::isNull);
     }
 }

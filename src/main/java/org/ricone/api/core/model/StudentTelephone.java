@@ -6,9 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "studenttelephone")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-public class StudentTelephone implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+public class StudentTelephone implements java.io.Serializable {
     private static final long serialVersionUID = 2259094736201878864L;
     private String studentPhoneRefId;
     private Student student;
@@ -16,18 +15,15 @@ public class StudentTelephone implements java.io.Serializable
     private Boolean primaryTelephoneNumberIndicator;
     private String telephoneNumberTypeCode;
 
-    public StudentTelephone()
-    {
+    public StudentTelephone() {
     }
 
-    public StudentTelephone(String studentPhoneRefId, Student student)
-    {
+    public StudentTelephone(String studentPhoneRefId, Student student) {
         this.studentPhoneRefId = studentPhoneRefId;
         this.student = student;
     }
 
-    public StudentTelephone(String studentPhoneRefId, Student student, String telephoneNumber, Boolean primaryTelephoneNumberIndicator, String telephoneNumberTypeCode)
-    {
+    public StudentTelephone(String studentPhoneRefId, Student student, String telephoneNumber, Boolean primaryTelephoneNumberIndicator, String telephoneNumberTypeCode) {
         this.studentPhoneRefId = studentPhoneRefId;
         this.student = student;
         this.telephoneNumber = telephoneNumber;
@@ -37,58 +33,48 @@ public class StudentTelephone implements java.io.Serializable
 
     @Id
     @Column(name = "StudentPhoneRefId", unique = true, nullable = false, length = 64)
-    public String getStudentPhoneRefId()
-    {
+    public String getStudentPhoneRefId() {
         return this.studentPhoneRefId;
     }
 
-    public void setStudentPhoneRefId(String studentPhoneRefId)
-    {
+    public void setStudentPhoneRefId(String studentPhoneRefId) {
         this.studentPhoneRefId = studentPhoneRefId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudentRefId", nullable = false)
-    public Student getStudent()
-    {
+    public Student getStudent() {
         return this.student;
     }
 
-    public void setStudent(Student student)
-    {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
     @Column(name = "TelephoneNumber", length = 24)
-    public String getTelephoneNumber()
-    {
+    public String getTelephoneNumber() {
         return this.telephoneNumber;
     }
 
-    public void setTelephoneNumber(String telephoneNumber)
-    {
+    public void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
 
     @Column(name = "PrimaryTelephoneNumberIndicator")
-    public Boolean getPrimaryTelephoneNumberIndicator()
-    {
+    public Boolean getPrimaryTelephoneNumberIndicator() {
         return this.primaryTelephoneNumberIndicator;
     }
 
-    public void setPrimaryTelephoneNumberIndicator(Boolean primaryTelephoneNumberIndicator)
-    {
+    public void setPrimaryTelephoneNumberIndicator(Boolean primaryTelephoneNumberIndicator) {
         this.primaryTelephoneNumberIndicator = primaryTelephoneNumberIndicator;
     }
 
     @Column(name = "TelephoneNumberTypeCode", length = 50)
-    public String getTelephoneNumberTypeCode()
-    {
+    public String getTelephoneNumberTypeCode() {
         return this.telephoneNumberTypeCode;
     }
 
-    public void setTelephoneNumberTypeCode(String telephoneNumberTypeCode)
-    {
+    public void setTelephoneNumberTypeCode(String telephoneNumberTypeCode) {
         this.telephoneNumberTypeCode = telephoneNumberTypeCode;
     }
 }

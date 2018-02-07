@@ -8,10 +8,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Util
-{
-    public static boolean isRefId(String refId)
-    {
+public class Util {
+    public static boolean isRefId(String refId) {
         return refId.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}");
     }
 
@@ -39,16 +37,14 @@ public class Util
         {
             return -3;
         }
-        else if(grade.equalsIgnoreCase("PK"))
-        {
+        else if(grade.equalsIgnoreCase("PK")) {
             return -2;
         }
         else if(grade.equalsIgnoreCase("TK")) //Transitional Kindergarten
         {
             return -1;
         }
-        else if(grade.equalsIgnoreCase("KG"))
-        {
+        else if(grade.equalsIgnoreCase("KG")) {
             return 0;
         }
         else if(grade.equalsIgnoreCase("PS")) //Postsecondary
@@ -63,39 +59,31 @@ public class Util
         {
             return Integer.parseInt(grade);
         }
-        else
-        {
+        else {
             return 16;
         }
     }
 
-    private static boolean isInteger(String s)
-    {
+    private static boolean isInteger(String s) {
         return isInteger(s, 10);
     }
 
     private static boolean isInteger(String s, int radix) {
-        if(s.isEmpty())
-        {
+        if(s.isEmpty()) {
             return false;
         }
 
-        for(int i = 0; i < s.length(); i++)
-        {
-            if(i == 0 && s.charAt(i) == '-')
-            {
-                if(s.length() == 1)
-                {
+        for (int i = 0; i < s.length(); i++) {
+            if(i == 0 && s.charAt(i) == '-') {
+                if(s.length() == 1) {
                     return false;
                 }
-                else
-                {
+                else {
                     continue;
                 }
             }
 
-            if(Character.digit(s.charAt(i),radix) < 0)
-            {
+            if(Character.digit(s.charAt(i), radix) < 0) {
                 return false;
             }
         }

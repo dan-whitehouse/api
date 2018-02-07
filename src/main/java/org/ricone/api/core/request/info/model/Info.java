@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "api",
-        "db",
-        "config"
-})
+@JsonPropertyOrder({"api", "db", "config"})
 public class Info {
 
     @JsonProperty("api")

@@ -19,19 +19,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-public abstract class AbstractController
-{
+public abstract class AbstractController {
     @Autowired
     private HttpServletRequest request;
 
     @Autowired
     private HttpServletResponse response;
 
-    public AbstractController(){
+    public AbstractController() {
     }
 
-    public MetaData getMetaData(Pageable pageRequest) throws Exception
-    {
+    public MetaData getMetaData(Pageable pageRequest) throws Exception {
         AuthRequest authRequest = new AuthRequest(request);
         DecodedToken token = TokenDecoder.decodeToken(authRequest.getToken());
         Session session = SessionManager.getInstance().getSession(token.getApplication_id());
@@ -48,13 +46,11 @@ public abstract class AbstractController
         return metaData;
     }
 
-    private Pageable getPaging(Pageable pageRequest) throws Exception
-    {
+    private Pageable getPaging(Pageable pageRequest) throws Exception {
         boolean hasPage = StringUtils.isNotBlank(request.getHeader("page"));
         boolean hasSize = StringUtils.isNotBlank(request.getHeader("size"));
 
-        if(hasPage && hasSize)
-        {
+        if(hasPage && hasSize) {
             Integer page = NumberUtils.toInt(request.getHeader("page"));
             Integer size = NumberUtils.toInt(request.getHeader("size"));
 

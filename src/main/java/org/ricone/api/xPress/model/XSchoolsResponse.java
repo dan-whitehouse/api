@@ -17,9 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xSchools"
-})
+@JsonPropertyOrder({"xSchools"})
 @XmlRootElement
 public class XSchoolsResponse {
 
@@ -47,8 +45,6 @@ public class XSchoolsResponse {
 
     @Override
     public String toString() {
-        return "XSchoolsResponse{" +
-                "xSchools=" + xSchools +
-                '}';
+        return "XSchoolsResponse{" + "xSchools=" + xSchools + '}';
     }
 }

@@ -11,8 +11,7 @@ import java.util.Set;
  * @project: ricone
  * @author: Dan on 9/12/2017.
  */
-public interface ICourseDAO
-{
+public interface ICourseDAO {
     List<CourseWrapper> findAll(MetaData metaData) throws Exception;
 
     List<CourseWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;

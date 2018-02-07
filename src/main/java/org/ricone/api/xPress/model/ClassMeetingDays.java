@@ -18,9 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "bellScheduleDay"
-})
+@JsonPropertyOrder({"bellScheduleDay"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ClassMeetingDays {
@@ -49,14 +47,11 @@ public class ClassMeetingDays {
 
     @Override
     public String toString() {
-        return "ClassMeetingDays{" +
-                "bellScheduleDay='" + bellScheduleDay + '\'' +
-                '}';
+        return "ClassMeetingDays{" + "bellScheduleDay='" + bellScheduleDay + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(bellScheduleDay).allMatch(Objects::isNull);
     }
 }

@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class InfoController
-{
+public class InfoController {
     @Autowired
     private InfoService infoService;
 
-    @RequestMapping(value= "/info", method = RequestMethod.GET)
-    public InfoResponse getSingle(HttpServletResponse response) throws Exception
-    {
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public InfoResponse getSingle(HttpServletResponse response) throws Exception {
         Api api = infoService.getAPI();
         Db db = infoService.getDB();
         Config config = infoService.getConfig();

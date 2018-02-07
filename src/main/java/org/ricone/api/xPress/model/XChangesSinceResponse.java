@@ -19,9 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xChangesSince"
-})
+@JsonPropertyOrder({"xChangesSince"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XChangesSinceResponse {
@@ -50,8 +48,6 @@ public class XChangesSinceResponse {
 
     @Override
     public String toString() {
-        return "XChangesSinceResponse{" +
-                "xChangesSince=" + xChangesSince +
-                '}';
+        return "XChangesSinceResponse{" + "xChangesSince=" + xChangesSince + '}';
     }
 }

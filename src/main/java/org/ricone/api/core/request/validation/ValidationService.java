@@ -15,125 +15,123 @@ import java.util.List;
 
 @Service("validationService")
 @Transactional
-public class ValidationService implements IValidationService
-{
-	@Autowired
-	private IValidationDAO dao;
+public class ValidationService implements IValidationService {
+    @Autowired
+    private IValidationDAO dao;
 
-	@Autowired
-	private ILeaService leaService;
+    @Autowired
+    private ILeaService leaService;
 
-	@Autowired
-	private ISchoolService schoolService;
+    @Autowired
+    private ISchoolService schoolService;
 
-	@Autowired
-	private ValidationMapper mapper;
+    @Autowired
+    private ValidationMapper mapper;
 
-	@Override
-	public ValidationResponse findAll(MetaData metaData) throws Exception {
-		List<LeaWrapper> leas = leaService.findAll(metaData);
+    @Override
+    public ValidationResponse findAll(MetaData metaData) throws Exception {
+        List<LeaWrapper> leas = leaService.findAll(metaData);
 
-		Districts districts = new Districts();
-		leas.forEach(lea -> {
+        Districts districts = new Districts();
+        leas.forEach(lea -> {
 
-			//Set Student & Staff Data
-			Students students = getStudents(lea.getLea().getLeaRefId());
-			Staff staff = getStaffs(lea.getLea().getLeaRefId());
+            //Set Student & Staff Data
+            Students students = getStudents(lea.getLea().getLeaRefId());
+            Staff staff = getStaffs(lea.getLea().getLeaRefId());
 
-			//Set District
-			District district = new District();
-			district.setRefId(lea.getLea().getLeaRefId());
-			district.setName(lea.getLea().getLeaName());
-			district.setStudents(students);
-			district.setStaff(staff);
+            //Set District
+            District district = new District();
+            district.setRefId(lea.getLea().getLeaRefId());
+            district.setName(lea.getLea().getLeaName());
+            district.setStudents(students);
+            district.setStaff(staff);
 
-			try {
-				List<SchoolWrapper> schools = schoolService.findAllByLea(metaData, lea.getLea().getLeaRefId());
-				if(CollectionUtils.isNotEmpty(schools)) {
-					Schools v_schools = new Schools();
-					schools.forEach(school -> {
-						final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(school.getSchool().getSchoolRefId());
-						final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(school.getSchool().getSchoolRefId());
-						final int courseCount = dao.countCoursesBySchoolRefId(school.getSchool().getSchoolRefId());
-						final int rosterCount = dao.countRostersBySchoolRefId(school.getSchool().getSchoolRefId());
+            try {
+                List<SchoolWrapper> schools = schoolService.findAllByLea(metaData, lea.getLea().getLeaRefId());
+                if(CollectionUtils.isNotEmpty(schools)) {
+                    Schools v_schools = new Schools();
+                    schools.forEach(school -> {
+                        final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(school.getSchool().getSchoolRefId());
+                        final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(school.getSchool().getSchoolRefId());
+                        final int courseCount = dao.countCoursesBySchoolRefId(school.getSchool().getSchoolRefId());
+                        final int rosterCount = dao.countRostersBySchoolRefId(school.getSchool().getSchoolRefId());
 
-						org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(school.getSchool(), studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
+                        org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(school.getSchool(), studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
 
-						//Add School to School List
-						v_schools.getSchool().add(v_school);
-					});
-					district.setSchools(v_schools);
-				}
-			}
-			catch (Exception e) {/*idk why a try catch is needed, shouldn't the method throws exception handle this?*/}
-			districts.getDistrict().add(district);
-		});
+                        //Add School to School List
+                        v_schools.getSchool().add(v_school);
+                    });
+                    district.setSchools(v_schools);
+                }
+            }
+            catch (Exception e) {/*idk why a try catch is needed, shouldn't the method throws exception handle this?*/}
+            districts.getDistrict().add(district);
+        });
 
-		ValidationResponse validation = new ValidationResponse();
-		validation.setDistricts(districts);
-		return validation;
-	}
+        ValidationResponse validation = new ValidationResponse();
+        validation.setDistricts(districts);
+        return validation;
+    }
 
-	@Override
-	public ValidationResponse findAllByLea(MetaData metaData, String refId) throws Exception {
-		LeaWrapper lea = leaService.findById(metaData, refId);
-		List<SchoolWrapper> schools = schoolService.findAllByLea(metaData, refId);
+    @Override
+    public ValidationResponse findAllByLea(MetaData metaData, String refId) throws Exception {
+        LeaWrapper lea = leaService.findById(metaData, refId);
+        List<SchoolWrapper> schools = schoolService.findAllByLea(metaData, refId);
 
-		//Set Student & Staff Data
-		Students students = getStudents(lea.getLea().getLeaRefId());
-		Staff staff = getStaffs(lea.getLea().getLeaRefId());
+        //Set Student & Staff Data
+        Students students = getStudents(lea.getLea().getLeaRefId());
+        Staff staff = getStaffs(lea.getLea().getLeaRefId());
 
-		//Set Validation Response
-		ValidationResponse validation = new ValidationResponse();
-		Districts districts = new Districts();
-		District district = new District();
-		district.setRefId(lea.getLea().getLeaRefId());
-		district.setName(lea.getLea().getLeaName());
-		district.setStudents(students);
-		district.setStaff(staff);
+        //Set Validation Response
+        ValidationResponse validation = new ValidationResponse();
+        Districts districts = new Districts();
+        District district = new District();
+        district.setRefId(lea.getLea().getLeaRefId());
+        district.setName(lea.getLea().getLeaName());
+        district.setStudents(students);
+        district.setStaff(staff);
 
-		if(CollectionUtils.isNotEmpty(schools)) {
-			Schools v_schools = new Schools();
-			for(SchoolWrapper sch : schools)
-			{
-				final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(sch.getSchool().getSchoolRefId());
-				final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(sch.getSchool().getSchoolRefId());
-				final int courseCount = dao.countCoursesBySchoolRefId(sch.getSchool().getSchoolRefId());
-				final int rosterCount = dao.countRostersBySchoolRefId(sch.getSchool().getSchoolRefId());
+        if(CollectionUtils.isNotEmpty(schools)) {
+            Schools v_schools = new Schools();
+            for (SchoolWrapper sch : schools) {
+                final int staffAssignmentCount = dao.countStaffPrimaryAssignmentsBySchoolRefId(sch.getSchool().getSchoolRefId());
+                final int studentEnrollmentCount = dao.countStudentPrimaryEnrollmentsBySchoolRefId(sch.getSchool().getSchoolRefId());
+                final int courseCount = dao.countCoursesBySchoolRefId(sch.getSchool().getSchoolRefId());
+                final int rosterCount = dao.countRostersBySchoolRefId(sch.getSchool().getSchoolRefId());
 
-				org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(sch.getSchool(), studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
+                org.ricone.api.core.request.validation.model.School v_school = mapper.mapSchool(sch.getSchool(), studentEnrollmentCount, staffAssignmentCount, courseCount, rosterCount);
 
-				//Add School to School List
-				v_schools.getSchool().add(v_school);
-			}
-			district.setSchools(v_schools);
-		}
+                //Add School to School List
+                v_schools.getSchool().add(v_school);
+            }
+            district.setSchools(v_schools);
+        }
 
-		districts.getDistrict().add(district);
-		validation.setDistricts(districts);
-		return validation;
-	}
+        districts.getDistrict().add(district);
+        validation.setDistricts(districts);
+        return validation;
+    }
 
-	private Students getStudents(String leaRefId) {
-		int studentCount = dao.countStudentsByLeaRefId(leaRefId);
-		int studentEmailCount = dao.countStudentPrimaryEmailsByLeaRefId(leaRefId);
-		String studentEmailPercentage = mapper.getPercentage(studentCount, studentEmailCount);
-		int studentLocalIdCount = dao.countStudentLocalIdsByLeaRefId(leaRefId);
-		String studentLocalIdPercentage = mapper.getPercentage(studentCount, studentLocalIdCount);
-		Email studentEmail = new Email(studentEmailCount, studentEmailPercentage);
-		LocalId studentLocalId = new LocalId(studentLocalIdCount, studentLocalIdPercentage);
-		return new Students(studentCount, studentEmail, studentLocalId);
-	}
+    private Students getStudents(String leaRefId) {
+        int studentCount = dao.countStudentsByLeaRefId(leaRefId);
+        int studentEmailCount = dao.countStudentPrimaryEmailsByLeaRefId(leaRefId);
+        String studentEmailPercentage = mapper.getPercentage(studentCount, studentEmailCount);
+        int studentLocalIdCount = dao.countStudentLocalIdsByLeaRefId(leaRefId);
+        String studentLocalIdPercentage = mapper.getPercentage(studentCount, studentLocalIdCount);
+        Email studentEmail = new Email(studentEmailCount, studentEmailPercentage);
+        LocalId studentLocalId = new LocalId(studentLocalIdCount, studentLocalIdPercentage);
+        return new Students(studentCount, studentEmail, studentLocalId);
+    }
 
-	private Staff getStaffs(String leaRefId) {
-		int staffCount = dao.countStaffByLeaRefId(leaRefId);
-		int staffEmailCount = dao.countStaffPrimaryEmailsByLeaRefId(leaRefId);
-		String staffEmailPercentage = mapper.getPercentage(staffCount, staffEmailCount);
-		int staffLocalIdCount = dao.countStaffLocalIdsByLeaRefId(leaRefId);
-		String staffLocalIdPercentage = mapper.getPercentage(staffCount, staffLocalIdCount);
-		Email staffEmail = new Email(staffEmailCount, staffEmailPercentage);
-		LocalId staffLocalId = new LocalId(staffLocalIdCount, staffLocalIdPercentage);
-		return new Staff(staffCount, staffEmail, staffLocalId);
-	}
+    private Staff getStaffs(String leaRefId) {
+        int staffCount = dao.countStaffByLeaRefId(leaRefId);
+        int staffEmailCount = dao.countStaffPrimaryEmailsByLeaRefId(leaRefId);
+        String staffEmailPercentage = mapper.getPercentage(staffCount, staffEmailCount);
+        int staffLocalIdCount = dao.countStaffLocalIdsByLeaRefId(leaRefId);
+        String staffLocalIdPercentage = mapper.getPercentage(staffCount, staffLocalIdCount);
+        Email staffEmail = new Email(staffEmailCount, staffEmailPercentage);
+        LocalId staffLocalId = new LocalId(staffLocalIdCount, staffLocalIdPercentage);
+        return new Staff(staffCount, staffEmail, staffLocalId);
+    }
 
 }

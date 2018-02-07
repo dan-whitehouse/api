@@ -21,13 +21,11 @@ public class XCourseMapper {
     public XCourseMapper() {
     }
 
-    public XCoursesResponse convert(List<CourseWrapper> instance)
-    {
+    public XCoursesResponse convert(List<CourseWrapper> instance) {
         List<XCourse> list = new ArrayList<>();
-        for(CourseWrapper wrapper : instance)
-        {
+        for (CourseWrapper wrapper : instance) {
             XCourse xCourse = map(wrapper.getCourse(), wrapper.getDistrictId());
-            if (xCourse != null) {
+            if(xCourse != null) {
                 list.add(xCourse);
             }
         }
@@ -40,19 +38,17 @@ public class XCourseMapper {
         return response;
     }
 
-    public XCourseResponse convert(CourseWrapper instance)
-    {
+    public XCourseResponse convert(CourseWrapper instance) {
         XCourseResponse response = new XCourseResponse();
         XCourse xCourse = map(instance.getCourse(), instance.getDistrictId());
-        if (xCourse != null) {
+        if(xCourse != null) {
             response.setXCourse(xCourse);
         }
         return response;
     }
 
 
-    public XCourse map(Course instance, String districtId)
-    {
+    public XCourse map(Course instance, String districtId) {
         XCourse xCourse = new XCourse();
         xCourse.setDistrictId(districtId); //Required by Filtering
         xCourse.setRefId(instance.getCourseRefId());
@@ -60,8 +56,7 @@ public class XCourseMapper {
         xCourse.setSubject(instance.getSubjectCode());
         xCourse.setDescription(instance.getDescription());
 
-        if(instance.getSchool() != null)
-        {
+        if(instance.getSchool() != null) {
             xCourse.setSchoolRefId(instance.getSchool().getSchoolRefId());
         }
 
@@ -72,18 +67,14 @@ public class XCourseMapper {
 
         //Identifiers
         List<OtherId> otherIdList = new ArrayList<>();
-        for(CourseIdentifier id : instance.getCourseIdentifiers())
-        {
-            if(LEA_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode()))
-            {
+        for (CourseIdentifier id : instance.getCourseIdentifiers()) {
+            if(LEA_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
                 xCourse.setLeaCourseId(id.getCourseId());
             }
-            else if(SCHOOL_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode()))
-            {
+            else if(SCHOOL_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
                 xCourse.setSchoolCourseId(id.getCourseId());
             }
-            else
-            {
+            else {
                 OtherId otherId = mapOtherId(id);
                 if(otherId != null) {
                     otherIdList.add(otherId);
@@ -92,8 +83,7 @@ public class XCourseMapper {
         }
 
         //Other Identifiers
-        if(CollectionUtils.isNotEmpty(otherIdList))
-        {
+        if(CollectionUtils.isNotEmpty(otherIdList)) {
             OtherIds otherIds = new OtherIds();
             otherIds.setOtherId(otherIdList);
             xCourse.setOtherIds(otherIds);
@@ -108,11 +98,9 @@ public class XCourseMapper {
         return xCourse;
     }
 
-    private ApplicableEducationLevels mapApplicableEducationLevels(Set<CourseGrade> courseGrades)
-    {
+    private ApplicableEducationLevels mapApplicableEducationLevels(Set<CourseGrade> courseGrades) {
         ApplicableEducationLevels applicableEducationLevels = new ApplicableEducationLevels();
-        for(CourseGrade grade : courseGrades)
-        {
+        for (CourseGrade grade : courseGrades) {
             applicableEducationLevels.getApplicableEducationLevel().add(grade.getGradeLevelCode());
         }
 
@@ -122,8 +110,7 @@ public class XCourseMapper {
         return applicableEducationLevels;
     }
 
-    private OtherId mapOtherId(CourseIdentifier id)
-    {
+    private OtherId mapOtherId(CourseIdentifier id) {
         OtherId otherId = new OtherId();
         otherId.setId(id.getCourseId());
         otherId.setType(id.getIdentificationSystemCode());

@@ -18,10 +18,7 @@ import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "type",
-        "code"
-})
+@JsonPropertyOrder({"type", "code"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Language {
@@ -64,15 +61,11 @@ public class Language {
 
     @Override
     public String toString() {
-        return "Language{" +
-                "type='" + type + '\'' +
-                ", code='" + code + '\'' +
-                '}';
+        return "Language{" + "type='" + type + '\'' + ", code='" + code + '\'' + '}';
     }
 
     @JsonIgnore
-    public boolean isEmptyObject()
-    {
+    public boolean isEmptyObject() {
         return Stream.of(type, code).allMatch(Objects::isNull);
     }
 }

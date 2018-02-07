@@ -3,19 +3,20 @@ package org.ricone.api.core.model;
 import org.apache.commons.lang3.StringUtils;
 
 public enum EntityType {
-    STUDENT("Student"),
-    STAFF("Staff")
-    ;
+    STUDENT("Student"), STAFF("Staff");
 
     String dbValue;
 
     EntityType(String dbValue) {
         this.dbValue = dbValue;
     }
-    public String getDbValue() { return this.dbValue; }
+
+    public String getDbValue() {
+        return this.dbValue;
+    }
 
     public static EntityType from(String dbData) {
-        if (dbData == null) {
+        if(dbData == null) {
             return null;
         }
 

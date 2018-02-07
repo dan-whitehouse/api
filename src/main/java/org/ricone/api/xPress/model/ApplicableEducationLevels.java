@@ -18,9 +18,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "applicableEducationLevel"
-})
+@JsonPropertyOrder({"applicableEducationLevel"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ApplicableEducationLevels {
@@ -52,9 +50,7 @@ public class ApplicableEducationLevels {
 
     @Override
     public String toString() {
-        return "ApplicableEducationLevels{" +
-                "applicableEducationLevel=" + applicableEducationLevel +
-                '}';
+        return "ApplicableEducationLevels{" + "applicableEducationLevel=" + applicableEducationLevel + '}';
     }
 
     @JsonIgnore

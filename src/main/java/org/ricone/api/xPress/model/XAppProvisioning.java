@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "xAppProvisioningInfo"
-})
+@JsonPropertyOrder({"xAppProvisioningInfo"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XAppProvisioning implements Serializable {

@@ -85,30 +85,14 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         final Join<StaffAssignment, School> school = staffAssignments.join("school", JoinType.LEFT);
         final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
         subquery.select(staff.get(STAFF_REF_ID));
-        subquery.where
-        (
-            cb.and
-            (
-                cb.equal(school.get(SCHOOL_REF_ID), refId),
-                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
-            )
-        );
+        subquery.where(cb.and(cb.equal(school.get(SCHOOL_REF_ID), refId), lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())));
 
         //Update
         update.set(LAST_RETRIEVED, new Date());
-        update.where
-        (
-            cb.and
-            (
-                cb.in(from.get(ENTITY_REF_ID)).value(subquery),
-                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
-                cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
-                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())
-            )
-        );
+        update.where(cb.and(cb.in(from.get(ENTITY_REF_ID)).value(subquery), cb.equal(from.get(APP_ID), metaData.getApp().getId()), cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF), cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())));
 
         Query<UserPassword> q = getSession().createQuery(update);
-        if (metaData.getPaging().isPaged()) {
+        if(metaData.getPaging().isPaged()) {
             q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
             q.setMaxResults(metaData.getPaging().getPageSize());
         }
@@ -129,30 +113,14 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
 
         subquery.select(student.get(STUDENT_REF_ID));
-        subquery.where
-        (
-            cb.and
-            (
-                cb.equal(school.get(SCHOOL_REF_ID), refId),
-                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
-            )
-        );
+        subquery.where(cb.and(cb.equal(school.get(SCHOOL_REF_ID), refId), lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())));
 
         //Update
         update.set(LAST_RETRIEVED, new Date());
-        update.where
-        (
-            cb.and
-            (
-                cb.in(from.get(ENTITY_REF_ID)).value(subquery),
-                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
-                cb.equal(from.get(ENTITY_TYPE), EntityType.STUDENT),
-                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())
-            )
-        );
+        update.where(cb.and(cb.in(from.get(ENTITY_REF_ID)).value(subquery), cb.equal(from.get(APP_ID), metaData.getApp().getId()), cb.equal(from.get(ENTITY_TYPE), EntityType.STUDENT), cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())));
 
         Query<UserPassword> q = getSession().createQuery(update);
-        if (metaData.getPaging().isPaged()) {
+        if(metaData.getPaging().isPaged()) {
             q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
             q.setMaxResults(metaData.getPaging().getPageSize());
         }
@@ -174,37 +142,11 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
 
         select.distinct(true);
-        select.select
-        (
-            cb.construct
-            (
-                UserPassword.class,
-                from.get( ENTITY_REF_ID ),
-                from.get( ENTITY_TYPE ),
-                from.get( APP_ID ),
-                from.get( TEMP_PASSWORD ),
-                from.get( EXPIRY_DATE ),
-                from.get( GEN_DATE ),
-                from.get( LAST_RETRIEVED ),
-                staff
-            )
-        );
-        select.where
-        (
-            cb.and
-            (
-                isOTA(metaData, cb, from, refId),
-                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
-                cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
-                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()),
-                cb.equal(from.get(ENTITY_REF_ID), staff.get(STAFF_REF_ID)),
-                cb.equal(school.get(SCHOOL_REF_ID), refId),
-                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
-            )
-        );
+        select.select(cb.construct(UserPassword.class, from.get(ENTITY_REF_ID), from.get(ENTITY_TYPE), from.get(APP_ID), from.get(TEMP_PASSWORD), from.get(EXPIRY_DATE), from.get(GEN_DATE), from.get(LAST_RETRIEVED), staff));
+        select.where(cb.and(isOTA(metaData, cb, from, refId), cb.equal(from.get(APP_ID), metaData.getApp().getId()), cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF), cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()), cb.equal(from.get(ENTITY_REF_ID), staff.get(STAFF_REF_ID)), cb.equal(school.get(SCHOOL_REF_ID), refId), lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())));
 
         Query<UserPassword> q = getSession().createQuery(select);
-        if(metaData.getPaging().isPaged()){
+        if(metaData.getPaging().isPaged()) {
             q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
             q.setMaxResults(metaData.getPaging().getPageSize());
         }
@@ -229,37 +171,11 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
 
         select.distinct(true);
-        select.select
-        (
-            cb.construct
-            (
-                UserPassword.class,
-                from.get( ENTITY_REF_ID ),
-                from.get( ENTITY_TYPE ),
-                from.get( APP_ID ),
-                from.get( TEMP_PASSWORD ),
-                from.get( EXPIRY_DATE ),
-                from.get( GEN_DATE ),
-                from.get( LAST_RETRIEVED ),
-                student
-            )
-        );
-        select.where
-        (
-            cb.and
-            (
-                isOTA(metaData, cb, from, refId),
-                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
-                cb.equal(from.get(ENTITY_TYPE), EntityType.STUDENT),
-                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()),
-                cb.equal(from.get(ENTITY_REF_ID), student.get(STUDENT_REF_ID)),
-                cb.equal(school.get("schoolRefId"), refId),
-                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
-            )
-        );
+        select.select(cb.construct(UserPassword.class, from.get(ENTITY_REF_ID), from.get(ENTITY_TYPE), from.get(APP_ID), from.get(TEMP_PASSWORD), from.get(EXPIRY_DATE), from.get(GEN_DATE), from.get(LAST_RETRIEVED), student));
+        select.where(cb.and(isOTA(metaData, cb, from, refId), cb.equal(from.get(APP_ID), metaData.getApp().getId()), cb.equal(from.get(ENTITY_TYPE), EntityType.STUDENT), cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date()), cb.equal(from.get(ENTITY_REF_ID), student.get(STUDENT_REF_ID)), cb.equal(school.get("schoolRefId"), refId), lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())));
 
         Query<UserPassword> q = getSession().createQuery(select);
-        if(metaData.getPaging().isPaged()){
+        if(metaData.getPaging().isPaged()) {
             q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
             q.setMaxResults(metaData.getPaging().getPageSize());
         }
@@ -285,29 +201,13 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
         final Join<StaffAssignment, School> school = staffAssignments.join("school", JoinType.LEFT);
         final Join<School, Lea> lea = school.join("lea", JoinType.LEFT);
         subquery.select(staff.get(STAFF_REF_ID));
-        subquery.where
-        (
-            cb.and
-            (
-                cb.equal(school.get(SCHOOL_REF_ID), refId),
-                lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())
-            )
-        );
+        subquery.where(cb.and(cb.equal(school.get(SCHOOL_REF_ID), refId), lea.get(MetaData.LEA_LOCAL_ID_KEY).in(metaData.getApp().getDistrictLocalIds())));
 
         //Update
-        delete.where
-        (
-            cb.and
-            (
-                cb.in(from.get(ENTITY_REF_ID)).value(subquery),
-                cb.equal(from.get(APP_ID), metaData.getApp().getId()),
-                cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF),
-                cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())
-            )
-        );
+        delete.where(cb.and(cb.in(from.get(ENTITY_REF_ID)).value(subquery), cb.equal(from.get(APP_ID), metaData.getApp().getId()), cb.equal(from.get(ENTITY_TYPE), EntityType.STAFF), cb.greaterThanOrEqualTo(from.get(EXPIRY_DATE), new Date())));
 
         Query<UserPassword> q = getSession().createQuery(delete);
-        if (metaData.getPaging().isPaged()) {
+        if(metaData.getPaging().isPaged()) {
             q.setFirstResult(metaData.getPaging().getPageNumber() * metaData.getPaging().getPageSize());
             q.setMaxResults(metaData.getPaging().getPageSize());
         }
@@ -335,8 +235,7 @@ public class UserPasswordDAO extends AbstractDAO<Integer, UserPassword> implemen
     }
 
 
-    private Predicate isOTA(MetaData metaData, CriteriaBuilder cb, Root<UserPassword> from, String refId)
-    {
+    private Predicate isOTA(MetaData metaData, CriteriaBuilder cb, Root<UserPassword> from, String refId) {
         HashMap<String, String> kv = metaData.getApp().getDistrictKVsBySchool(refId);
         if(kv != null) {
             boolean isOTA = BooleanUtils.toBoolean(kv.get("api.userpass.ota"));

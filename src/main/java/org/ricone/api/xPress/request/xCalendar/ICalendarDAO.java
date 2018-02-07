@@ -11,8 +11,7 @@ import java.util.Set;
  * @project: ricone
  * @author: Dan on 9/12/2017.
  */
-public interface ICalendarDAO
-{
+public interface ICalendarDAO {
     List<SchoolCalendarWrapper> findAll(MetaData metaData) throws Exception;
 
     List<SchoolCalendarWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;

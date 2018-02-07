@@ -7,9 +7,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "coursesectionschedule")
-@JsonInclude(value= JsonInclude.Include.NON_EMPTY)
-public class CourseSectionSchedule implements java.io.Serializable
-{
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+public class CourseSectionSchedule implements java.io.Serializable {
     private static final long serialVersionUID = 3034286521311489646L;
     private String courseSectionScheduleRefId;
     private CourseSection courseSection;
@@ -20,17 +19,14 @@ public class CourseSectionSchedule implements java.io.Serializable
     private String timeDayIdentifier;
     private String classroomIdentifier;
 
-    public CourseSectionSchedule()
-    {
+    public CourseSectionSchedule() {
     }
 
-    public CourseSectionSchedule(String courseSectionScheduleRefId)
-    {
+    public CourseSectionSchedule(String courseSectionScheduleRefId) {
         this.courseSectionScheduleRefId = courseSectionScheduleRefId;
     }
 
-    public CourseSectionSchedule(String courseSectionScheduleRefId, CourseSection courseSection, String classMeetingDays, Date classBeginningTime, Date classEndingTime, String classPeriod, String timeDayIdentifier, String classroomIdentifier)
-    {
+    public CourseSectionSchedule(String courseSectionScheduleRefId, CourseSection courseSection, String classMeetingDays, Date classBeginningTime, Date classEndingTime, String classPeriod, String timeDayIdentifier, String classroomIdentifier) {
         this.courseSectionScheduleRefId = courseSectionScheduleRefId;
         this.courseSection = courseSection;
         this.classMeetingDays = classMeetingDays;
@@ -43,93 +39,77 @@ public class CourseSectionSchedule implements java.io.Serializable
 
     @Id
     @Column(name = "CourseSectionScheduleRefId", unique = true, nullable = false, length = 64)
-    public String getCourseSectionScheduleRefId()
-    {
+    public String getCourseSectionScheduleRefId() {
         return this.courseSectionScheduleRefId;
     }
 
-    public void setCourseSectionScheduleRefId(String courseSectionScheduleRefId)
-    {
+    public void setCourseSectionScheduleRefId(String courseSectionScheduleRefId) {
         this.courseSectionScheduleRefId = courseSectionScheduleRefId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseSectionRefId")
-    public CourseSection getCourseSection()
-    {
+    public CourseSection getCourseSection() {
         return this.courseSection;
     }
 
-    public void setCourseSection(CourseSection courseSection)
-    {
+    public void setCourseSection(CourseSection courseSection) {
         this.courseSection = courseSection;
     }
 
     @Column(name = "ClassMeetingDays", length = 60)
-    public String getClassMeetingDays()
-    {
+    public String getClassMeetingDays() {
         return this.classMeetingDays;
     }
 
-    public void setClassMeetingDays(String classMeetingDays)
-    {
+    public void setClassMeetingDays(String classMeetingDays) {
         this.classMeetingDays = classMeetingDays;
     }
 
     @Temporal(TemporalType.TIME)
     @Column(name = "ClassBeginningTime", length = 8)
-    public Date getClassBeginningTime()
-    {
+    public Date getClassBeginningTime() {
         return this.classBeginningTime;
     }
 
-    public void setClassBeginningTime(Date classBeginningTime)
-    {
+    public void setClassBeginningTime(Date classBeginningTime) {
         this.classBeginningTime = classBeginningTime;
     }
 
     @Temporal(TemporalType.TIME)
     @Column(name = "ClassEndingTime", length = 8)
-    public Date getClassEndingTime()
-    {
+    public Date getClassEndingTime() {
         return this.classEndingTime;
     }
 
-    public void setClassEndingTime(Date classEndingTime)
-    {
+    public void setClassEndingTime(Date classEndingTime) {
         this.classEndingTime = classEndingTime;
     }
 
     @Column(name = "ClassPeriod", length = 30)
-    public String getClassPeriod()
-    {
+    public String getClassPeriod() {
         return this.classPeriod;
     }
 
-    public void setClassPeriod(String classPeriod)
-    {
+    public void setClassPeriod(String classPeriod) {
         this.classPeriod = classPeriod;
     }
 
     @Column(name = "TimeDayIdentifier", length = 30)
-    public String getTimeDayIdentifier()
-    {
+    public String getTimeDayIdentifier() {
         return this.timeDayIdentifier;
     }
 
-    public void setTimeDayIdentifier(String timeDayIdentifier)
-    {
+    public void setTimeDayIdentifier(String timeDayIdentifier) {
         this.timeDayIdentifier = timeDayIdentifier;
     }
 
     @Column(name = "ClassroomIdentifier", length = 30)
-    public String getClassroomIdentifier()
-    {
+    public String getClassroomIdentifier() {
         return this.classroomIdentifier;
     }
 
-    public void setClassroomIdentifier(String classroomIdentifier)
-    {
+    public void setClassroomIdentifier(String classroomIdentifier) {
         this.classroomIdentifier = classroomIdentifier;
     }
 }

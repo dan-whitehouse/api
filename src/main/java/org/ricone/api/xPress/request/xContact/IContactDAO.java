@@ -7,8 +7,7 @@ import org.ricone.authentication.MetaData;
 import java.util.List;
 import java.util.Set;
 
-public interface IContactDAO
-{
+public interface IContactDAO {
     List<StudentContactWrapper> findAll(MetaData metaData) throws Exception;
 
     List<StudentContactWrapper> findAllByLeaRefId(MetaData metaData, String refId) throws Exception;

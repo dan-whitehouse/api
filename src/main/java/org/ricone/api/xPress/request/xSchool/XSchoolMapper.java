@@ -23,13 +23,11 @@ public class XSchoolMapper {
     public XSchoolMapper() {
     }
 
-    public XSchoolsResponse convert(List<SchoolWrapper> instance)
-    {
+    public XSchoolsResponse convert(List<SchoolWrapper> instance) {
         List<XSchool> list = new ArrayList<>();
-        for(SchoolWrapper wrapper : instance)
-        {
+        for (SchoolWrapper wrapper : instance) {
             XSchool xSchool = map(wrapper.getSchool(), wrapper.getDistrictId());
-            if (xSchool != null) {
+            if(xSchool != null) {
                 list.add(xSchool);
             }
         }
@@ -42,19 +40,17 @@ public class XSchoolMapper {
         return response;
     }
 
-    public XSchoolResponse convert(SchoolWrapper instance)
-    {
+    public XSchoolResponse convert(SchoolWrapper instance) {
         XSchoolResponse response = new XSchoolResponse();
         XSchool xSchool = map(instance.getSchool(), instance.getDistrictId());
-        if (xSchool != null) {
+        if(xSchool != null) {
             response.setXSchool(xSchool);
         }
         return response;
     }
 
 
-    public XSchool map(School instance, String districtId)
-    {
+    public XSchool map(School instance, String districtId) {
         XSchool xSchool = new XSchool();
         xSchool.setDistrictId(districtId); //Required by Filtering
         xSchool.setRefId(instance.getSchoolRefId());
@@ -69,11 +65,9 @@ public class XSchoolMapper {
 
         //PhoneNumber - Primary
         List<PhoneNumber> phoneNumbers = new ArrayList<>();
-        for(SchoolTelephone telephone : instance.getSchoolTelephones())
-        {
+        for (SchoolTelephone telephone : instance.getSchoolTelephones()) {
             PhoneNumber phone = mapPhone(telephone);
-            if(phone != null)
-            {
+            if(phone != null) {
                 if(telephone.getPrimaryTelephoneNumberIndicator()) {
                     xSchool.setPhoneNumber(phone);
                 }
@@ -84,8 +78,7 @@ public class XSchoolMapper {
         }
 
         //PhoneNumbers - Other
-        if(CollectionUtils.isNotEmpty(phoneNumbers))
-        {
+        if(CollectionUtils.isNotEmpty(phoneNumbers)) {
             OtherPhoneNumbers otherPhoneNumbers = new OtherPhoneNumbers();
             otherPhoneNumbers.setPhoneNumber(phoneNumbers);
             xSchool.setOtherPhoneNumbers(otherPhoneNumbers);
@@ -93,32 +86,29 @@ public class XSchoolMapper {
 
         //Grade Levels
         GradeLevels gradeLevels = mapGrades(instance.getSchoolGrades());
-        if(gradeLevels != null){
+        if(gradeLevels != null) {
             xSchool.setGradeLevels(gradeLevels);
         }
 
         //Identifiers
         List<OtherId> otherIdList = new ArrayList<>();
-        for(SchoolIdentifier id : instance.getSchoolIdentifiers())
-        {
+        for (SchoolIdentifier id : instance.getSchoolIdentifiers()) {
             if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
                 xSchool.setLocalId(id.getSchoolId());
             }
             else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
                 xSchool.setStateProvinceId(id.getSchoolId());
             }
-            else
-            {
+            else {
                 OtherId otherId = mapOtherId(id);
-                if(otherId != null){
+                if(otherId != null) {
                     otherIdList.add(otherId);
                 }
             }
         }
 
         //Other Identifiers
-        if(CollectionUtils.isNotEmpty(otherIdList))
-        {
+        if(CollectionUtils.isNotEmpty(otherIdList)) {
             OtherIds otherIds = new OtherIds();
             otherIds.setOtherId(otherIdList);
             xSchool.setOtherIds(otherIds);
@@ -132,8 +122,7 @@ public class XSchoolMapper {
         otherId.setId(id.getSchoolId());
         otherId.setType(id.getIdentificationSystemCode());
 
-        if(otherId.isEmptyObject())
-        {
+        if(otherId.isEmptyObject()) {
             return null;
         }
         return otherId;
@@ -149,8 +138,7 @@ public class XSchoolMapper {
         address.setCountryCode(school.getCountryCode());
         address.setStateProvince(school.getStateCode());
 
-        if(address.isEmptyObject())
-        {
+        if(address.isEmptyObject()) {
             return null;
         }
         return address;
@@ -162,8 +150,7 @@ public class XSchoolMapper {
         phone.setPhoneNumberType(telephone.getTelephoneNumberTypeCode());
         phone.setPrimaryIndicator(BooleanUtils.toStringTrueFalse(telephone.getPrimaryTelephoneNumberIndicator()));
 
-        if(phone.isEmptyObject())
-        {
+        if(phone.isEmptyObject()) {
             return null;
         }
         return phone;
@@ -171,13 +158,11 @@ public class XSchoolMapper {
 
     private GradeLevels mapGrades(Set<SchoolGrade> grades) {
         GradeLevels gradeLevels = new GradeLevels();
-        for(SchoolGrade grade : grades)
-        {
+        for (SchoolGrade grade : grades) {
             gradeLevels.getGradeLevel().add(grade.getGradeLevelCode());
         }
 
-        if(gradeLevels.isEmptyObject())
-        {
+        if(gradeLevels.isEmptyObject()) {
             return null;
         }
         return gradeLevels;

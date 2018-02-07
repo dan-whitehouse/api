@@ -19,19 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "refId",
-        "localId",
-        "stateProvinceId",
-        "ncesId",
-        "leaName",
-        "address",
-        "phoneNumber",
-        "otherPhoneNumbers"
-})
+@JsonPropertyOrder({"refId", "localId", "stateProvinceId", "ncesId", "leaName", "address", "phoneNumber", "otherPhoneNumbers"})
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XLea extends XWrapper{
+public class XLea extends XWrapper {
 
     @JsonProperty("refId")
     @XmlElement(name = "refId")
@@ -159,15 +150,6 @@ public class XLea extends XWrapper{
 
     @Override
     public String toString() {
-        return "XLea{" +
-                "refId='" + refId + '\'' +
-                ", localId='" + localId + '\'' +
-                ", stateProvinceId='" + stateProvinceId + '\'' +
-                ", ncesId='" + ncesId + '\'' +
-                ", leaName='" + leaName + '\'' +
-                ", address=" + address +
-                ", phoneNumber=" + phoneNumber +
-                ", otherPhoneNumbers=" + otherPhoneNumbers +
-                '}';
+        return "XLea{" + "refId='" + refId + '\'' + ", localId='" + localId + '\'' + ", stateProvinceId='" + stateProvinceId + '\'' + ", ncesId='" + ncesId + '\'' + ", leaName='" + leaName + '\'' + ", address=" + address + ", phoneNumber=" + phoneNumber + ", otherPhoneNumbers=" + otherPhoneNumbers + '}';
     }
 }
